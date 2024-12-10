@@ -1,6 +1,6 @@
 import { apiUrl } from "@/app/shared/urls";
 
-import ElementSection from "@/components/ElementSection";
+import ElementSection from "@/app/(root)/a-root-comp/ElementSection";
 import { Metadata } from "next";
 
 import Link from "next/link";

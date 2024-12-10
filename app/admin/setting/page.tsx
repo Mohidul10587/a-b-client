@@ -4,14 +4,18 @@ import dynamic from "next/dynamic";
 import "suneditor/dist/css/suneditor.min.css";
 import { apiUrl } from "@/app/shared/urls";
 import Photo from "@/app/admin/setting/Photo.settings";
-import Modal from "@/app/admin/components/Modal";
+import Modal from "@/components/admin/Modal";
 import { fetchWithTokenRefresh } from "@/app/shared/fetchWithTokenRefresh";
 import Link from "next/link";
+import Keywords from "@/app/admin/setting/Kewords";
 
 // Dynamic import for SunEditor
 const SunEditor = dynamic(() => import("suneditor-react"), { ssr: false });
 
 const IndexPage: React.FC = () => {
+  const [tags, setTags] = useState<string[]>([]);
+  const [metaValue, setMetaValue] = useState("");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
 
@@ -48,6 +52,8 @@ const IndexPage: React.FC = () => {
   const [note, setNote] = useState("");
   const [order, setOrder] = useState("");
   const [orderText, setOrderText] = useState("");
+  const [phone, setPhone] = useState("");
+
   const [isInitialized, setIsInitialized] = useState(false); // Ensure state setup only after fetching
   const [isContentValid, setIsContentValid] = useState(false);
   const [loading, setLoading] = useState(true); // New loading state
@@ -99,7 +105,8 @@ const IndexPage: React.FC = () => {
           setLoto(responseData.loto || "");
           setFbImage(responseData.fbImage || "");
           setFavicon(responseData.favicon || "");
-          console.log(responseData);
+          setPhone(responseData.phone || "");
+          setTags(responseData.tags || []);
         }
       } catch (error) {
         console.error("Error fetching settings:", error);
@@ -186,6 +193,8 @@ const IndexPage: React.FC = () => {
     formData.append("privacyPolicies", privacyPolicies);
     formData.append("termsAndConditions", termsAndConditions);
     formData.append("otherPolicies", otherPolicies);
+    formData.append("phone", phone);
+    formData.append("tags", String(tags));
 
     const token = localStorage.getItem("accessToken");
     try {
@@ -468,13 +477,29 @@ const IndexPage: React.FC = () => {
               <div className="flex flex-col md:flex-row md:items-center">
                 <p className="md:w-60">Whatsapp</p>
                 <input
-                  type="text"
+                  type="number"
                   placeholder="Whatsapp"
                   className="p-2 mt-2 w-full outline-none rounded-md"
                   value={whatsapp}
                   onChange={(e) => setWhatsapp(e.target.value)}
                 />
               </div>
+              <div className="flex flex-col md:flex-row md:items-center">
+                <p className="md:w-60">Phone</p>
+                <input
+                  type="text"
+                  placeholder="Phone"
+                  className="p-2 mt-2 w-full outline-none rounded-md"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </div>
+              <Keywords
+                tags={tags}
+                setTags={setTags}
+                metaValue={metaValue}
+                setMetaValue={setMetaValue}
+              />
               <div className="flex flex-col md:flex-row md:items-center">
                 <p className="md:w-60">Telegram</p>
                 <input

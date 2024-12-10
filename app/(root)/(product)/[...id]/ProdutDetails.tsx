@@ -1,19 +1,18 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import Specifications from "@/app/(root)/(product)/[...id]/Specifications";
+import React, { useState } from "react";
+
 import ReadMore from "@/components/ReadMore";
 import Slider from "@/components/Slider";
 import Link from "next/link";
 import Image from "next/image";
 import Youtube from "@/components/Youtube";
 
-import SpecificationsDetails from "@/app/(root)/(product)/[...id]/SpecificationDetails";
-import Product from "@/app/(root)/(product)/[...id]/Product.details.";
+import Product from "@/components/Product.home";
 import { FC, Key } from "react";
 
 import SocialShare from "@/components/SocialShare";
-import Head from "next/head";
+
 interface ProductDetailsProps {
   product: any;
   settings: any;
@@ -29,8 +28,6 @@ interface ProductDetailsProps {
 export const ProductDetails = ({
   product,
   settings,
-  schema,
-  categoryId,
   slideImages,
   fullUrl,
   categorySlug,
@@ -38,103 +35,41 @@ export const ProductDetails = ({
   allProducts,
   productId,
 }: ProductDetailsProps) => {
-  const [variantPrice, setVariantPrice] = useState(0);
-  const [variantTitle, setVariantTitle] = useState("");
   const [discount, setDiscount] = useState(0); // Discount as a state
-  const [hasImage, setHasImage] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  useEffect(() => {
-    // Check if any item has a non-null variantImage URL
-    const imageExists = product.variantSectionInfo.some(
-      (item: any) => item.variantImage !== null
-    );
-    setHasImage(imageExists);
-  }, [product]);
 
   const { price, unprice } = product;
-  useEffect(() => {
-    // Check if any item has a non-null variantImage URL
-    const imageExists = product.variantSectionInfo.some(
-      (item: any) => item.variantImage !== null
-    );
-    setHasImage(imageExists);
-  }, [product]);
-
-  useEffect(() => {
-    // Calculate discount based on variantPrice or regular price
-    if (variantPrice > 0) {
-      setDiscount(
-        unprice > variantPrice
-          ? Math.round(((unprice - variantPrice) / unprice) * 100)
-          : 0
-      );
-    } else {
-      setDiscount(
-        unprice > price ? Math.round(((unprice - price) / unprice) * 100) : 0
-      );
-    }
-  }, [variantPrice, unprice, price]); // Recalculate discount whenever variantPrice, unprice, or price changes
-
-  console.log(variantPrice);
 
   // Format price and unprice with default of empty strings if NaN
-  const formattedPrice =
-    variantPrice > 0
-      ? isNaN(variantPrice)
-        ? ""
-        : new Intl.NumberFormat().format(variantPrice)
-      : isNaN(variantPrice)
-      ? ""
-      : new Intl.NumberFormat().format(price);
+
   const formattedUnprice = isNaN(unprice)
     ? ""
     : new Intl.NumberFormat().format(unprice);
 
   // Conditional check to hide the section if both price and unprice are invalid
-  if (!formattedPrice && !formattedUnprice) {
-    return null;
-  }
 
+  const addToCart = (product: any, quantity: number) => {
+    const existingCart = localStorage.getItem("cartData");
+    const cart: any[] = existingCart ? JSON.parse(existingCart) : [];
+
+    const existingItem = cart.find((item) => item._id === product._id);
+    if (existingItem) {
+      existingItem.quantity += quantity;
+    } else {
+      const sortedProduct = {
+        _id: product._id,
+        photo: product.photo,
+        price: product.price,
+        title: product.title,
+      };
+      cart.push({ ...sortedProduct, quantity });
+    }
+
+    localStorage.setItem("cartData", JSON.stringify(cart));
+    alert("Product added to cart!");
+    // router.push('/cart');
+  };
   return (
     <div>
-      <Head>
-        <meta itemProp="writer" content={product.writer} />
-        <meta
-          itemProp="name"
-          content={
-            product.metaTitle || `Buy ${product.title} - ${product.stockStatus}`
-          }
-        />
-        <meta
-          itemProp="description"
-          content={
-            product.metaDescription ||
-            `Order ${product.title} with fas delivery across ${settings.country}.`
-          }
-        />
-        <meta itemProp="productID" content={product.id} />
-        <meta
-          itemProp="url"
-          content={`${settings.siteUrl}/product/${product._id}`}
-        />
-        <meta itemProp="image" content={product.photo} />
-        <meta itemProp="value" content={product._id} />
-        {/* <link
-          itemProp="availability"
-          href={
-            product.stockStatus === "In Stock"
-              ? "https://schema.org/InStock"
-              : "https://schema.org/OutOfStock"
-          }
-        />
-        <link itemProp="itemCondition" href="https://schema.org/NewCondition" /> */}
-        <meta itemProp="price" content={product.price} />
-        {/* <meta itemProp="priceCurrency" content={settings.currency} /> */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      </Head>
       <div className="container mb-4">
         <ol className="hidden lg:flex items-center mb-1.5 pt-1.5 pb-0 px-4 flex-wrap gap-4 gap-y-1 bg-white rounded-b-md text-sm shadow-sm">
           <li>
@@ -231,145 +166,6 @@ export const ProductDetails = ({
                   </p>
                 </div>
               )}
-              {product.warranty && (
-                <div className="text-center px-3">
-                  <p className="font-medium text-gray-500">Warranty</p>
-                  <p className="text-main font-semibold uppercase">
-                    {product.warranty}
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {product.variantSectionInfo?.length > 0 && (
-              <div className="my-4 block w-full">
-                {product.variantTitle && (
-                  <h1 className="text-gray-700 font-bold mb-2">
-                    {product.variantTitle}
-                  </h1>
-                )}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {hasImage ? (
-                    <>
-                      {product.variantSectionInfo.map(
-                        (
-                          section: {
-                            title: string;
-                            variantPrice: number;
-                            img: string | null;
-                          },
-                          index: number
-                        ) => (
-                          <div
-                            key={index}
-                            onClick={() => {
-                              if (variantPrice === section.variantPrice) {
-                                setVariantPrice(product.price);
-                                setVariantTitle("");
-                                setSelectedIndex(null);
-                              } else {
-                                setVariantPrice(section.variantPrice);
-                                setVariantTitle(section.title);
-                                setSelectedIndex(index); // Set selected index
-                              }
-                            }}
-                            className={`flex flex-col items-center justify-center p-2 rounded-md ${
-                              selectedIndex === index
-                                ? "bg-main"
-                                : "bg-gray-200"
-                            } border w-full`}
-                          >
-                            <div className="">
-                              {section.img ? (
-                                <Image
-                                  src={section.img}
-                                  alt={section.title}
-                                  width={300}
-                                  height={300}
-                                  className="object-cover w-28 h-28 rounded-md mb-1"
-                                />
-                              ) : null}
-                            </div>
-                            {section.title && (
-                              <h3
-                                className={`font-bold ${
-                                  selectedIndex === index
-                                    ? "text-white"
-                                    : "text-gray-700"
-                                }`}
-                              >
-                                {section.title}
-                              </h3>
-                            )}
-                            {section.variantPrice && (
-                              <p
-                                className={`${
-                                  selectedIndex === index
-                                    ? "text-white"
-                                    : "text-gray-700"
-                                }`}
-                              >
-                                {settings.currencySymbol}{" "}
-                                {new Intl.NumberFormat().format(
-                                  section.variantPrice
-                                )}
-                              </p>
-                            )}
-                          </div>
-                        )
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {product.variantSectionInfo.map(
-                        (
-                          section: {
-                            title: string;
-                            variantPrice: number;
-                            img: string | null;
-                          },
-                          index: number
-                        ) => (
-                          <div
-                            key={index}
-                            onClick={() => {
-                              if (variantPrice === section.variantPrice) {
-                                setVariantPrice(product.price);
-                                setVariantTitle("");
-                                setSelectedIndex(null);
-                              } else {
-                                setVariantPrice(section.variantPrice);
-                                setVariantTitle(section.title);
-                                setSelectedIndex(index); // Set selected index
-                              }
-                            }}
-                            className={`text-center border ${
-                              selectedIndex === index
-                                ? "border-green-600"
-                                : "border-gray-500"
-                            } w-20`}
-                          >
-                            <h3 className="text-sm font-medium mb-2">
-                              {section.title || "No title"}
-                            </h3>
-
-                            <p className="text-sm mt-1">
-                              Price: ${section.variantPrice}
-                            </p>
-                          </div>
-                        )
-                      )}
-                    </>
-                  )}
-                </div>
-              </div>
-            )}
-            <div>
-              <Specifications
-                highlights={settings?.highlights}
-                title={product.title}
-                infoSectionsData={product.infoSectionsData}
-              />
             </div>
 
             {product.shortDescription && (
@@ -398,7 +194,7 @@ export const ProductDetails = ({
                     </del>
                   )}
                   <p className="font-bold text-main leading-tight text-xl">
-                    {settings.currencySymbol} {formattedPrice}
+                    {settings.currencySymbol} {product.price}
                     {discount > 0 && (
                       <span className="text-base text-gray-500 font-normal pl-2">
                         ( {discount}% OFF )
@@ -411,12 +207,12 @@ export const ProductDetails = ({
                 </div>
                 {product.stockStatus === "Out of Stock" ? null : (
                   <>
-                    <Link
-                      href={`/checkout/${product._id}/${variantPrice}/${variantTitle}/`}
+                    <button
+                      onClick={() => addToCart(product, 1)}
                       className="bg-main my-4 font-bold text-center text-white px-4 py-2 rounded-md block"
                     >
-                      BUY
-                    </Link>
+                      Add to curt
+                    </button>
                     <Link
                       href={whatsappUrl}
                       target="_blank"
@@ -430,7 +226,47 @@ export const ProductDetails = ({
             ) : (
               <p>{settings.priceZero}</p>
             )}
-
+            {product?.suggestion?.products?.length > 0 && (
+              <h2 className="text-sm text-gray-700 font-bold mb-2">
+                Frequently Bought Together:
+              </h2>
+            )}
+            {product?.suggestion?.products?.map((product: any, i: number) => {
+              <div
+                key={i}
+                className="relative border px-2 py-0.5 w-full rounded flex items-center mb-1"
+              >
+                <Link href={`/${product?.slug}`} className="w-full">
+                  <div className="flex items-center w-full">
+                    <div className="flex items-center justify-center w-12 h-12 mr-1">
+                      <Image
+                        src={product.photo}
+                        alt={product.title}
+                        width={80}
+                        height={80}
+                        className="object-cover h-full w-min rounded-md"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="w-full">
+                      <h1 className="text-sm font-semibold line-clamp-1 text-gray-700">
+                        {product.title}
+                      </h1>
+                      <div className="flex items-center gap-1 text-xs text-gray-500">
+                        <p>
+                          {settings.currencySymbol} {product.price}
+                        </p>
+                        {discount > 0 && (
+                          <div className="flex gap-1 items-center text-main text-xs">
+                            ( Off {discount}% )
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </div>;
+            })}
             <p className="text-sm mt-3">
               <strong>Kindly note </strong> {settings.note}
             </p>
@@ -495,14 +331,6 @@ export const ProductDetails = ({
         </div>
       )}
 
-      <div className="container my-4">
-        <h1 className="text-xl font-bold mb-1">Specifications</h1>
-        <p className="line-clamp-1 text-sm font-normal">
-          {product.title} full specifications, cost and availability{" "}
-          {settings.country}
-        </p>
-        <SpecificationsDetails infoSectionsData={product.infoSectionsData} />
-      </div>
       {product.youtubeVideo.length > 0 && (
         <Youtube videos={product.youtubeVideo} title={product.title} />
       )}

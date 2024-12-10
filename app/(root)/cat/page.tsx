@@ -1,7 +1,7 @@
 import Catagories from "@/app/(root)/cat/Catagories";
 import Link from "next/link";
 import { Metadata } from "next";
-import ElementSection from "@/components/ElementSection";
+import ElementSection from "@/app/(root)/a-root-comp/ElementSection";
 import CatWithSubcategories from "@/app/(root)/cat/CatWithSubcategories";
 
 export async function generateMetadata(): Promise<Metadata> {

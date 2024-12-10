@@ -2,9 +2,9 @@ import { fetchSettings } from "@/app/shared/fetchSettingsData";
 import { apiUrl } from "@/app/shared/urls"; // Assuming you have apiUrl defined
 import Image from "next/image";
 import Link from "next/link";
-import Search from "./Search";
+import Search from "../Search";
 import { ICategory, ISubcategory } from "@/types/category";
-import CategoriesItems from "./CategoriesItems";
+import CategoriesItems from "../CategoriesItems";
 
 // Assuming subcategories are part of ICategory
 
@@ -67,6 +67,12 @@ const Header: React.FC = async () => {
               className="hidden md:block md:px-4 py-2 rounded-md text-white md:hover:text-orange-600 hover:bg-white md:hover:text-main transition-colors duration-200"
             >
               Writers
+            </Link>
+            <Link
+              href="/cart"
+              className="hidden md:block md:px-4 py-2 rounded-md text-white md:hover:text-orange-600 hover:bg-white md:hover:text-main transition-colors duration-200"
+            >
+              cart
             </Link>
           </div>
         </div>

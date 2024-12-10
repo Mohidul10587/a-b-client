@@ -5,7 +5,7 @@ import CategoryProducts from "@/components/CategoryProduct";
 import { Metadata, ResolvingMetadata } from "next";
 import { fetchSettings } from "@/app/shared/fetchSettingsData";
 import { ISubcategory } from "@/types/category";
-import ElementSection from "@/components/ElementSection";
+import ElementSection from "@/app/(root)/a-root-comp/ElementSection";
 import { IProduct } from "@/types/product";
 import { IWriter } from "@/types/writer";
 import { ISettings } from "@/types/settings";

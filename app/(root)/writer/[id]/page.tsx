@@ -4,7 +4,7 @@ import ReadMore from "@/components/ReadMore";
 import { fetchSettings } from "@/app/shared/fetchSettingsData";
 import { Metadata, ResolvingMetadata } from "next";
 
-import ElementSection from "@/components/ElementSection";
+import ElementSection from "@/app/(root)/a-root-comp/ElementSection";
 import { FC } from "react";
 import { Props } from "@/types/pageProps";
 import WriterProducts from "./WriterPoducts";

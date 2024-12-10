@@ -1,22 +1,16 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { IProduct } from "@/types/product";
-import Product from "./Product.home";
-import Products from "./Product";
-
+import Product from "@/components/Product.home";
+import Products from "@/components/Product";
 interface ProductBoxProps {
   items: IProduct[];
   elementItem?: any;
 }
 
 const ProductBox: React.FC<ProductBoxProps> = ({ items, elementItem }) => {
-  const {
-    desktopGrid,
-    mobileGrid,
-    gridStyle,
-    margin,
-    imagePosition,
-  } = elementItem;
+  const { desktopGrid, mobileGrid, gridStyle, margin, imagePosition } =
+    elementItem;
 
   const [startIndex, setStartIndex] = useState(0);
   const [itemsToShow, setItemsToShow] = useState(desktopGrid);
@@ -46,8 +40,8 @@ const ProductBox: React.FC<ProductBoxProps> = ({ items, elementItem }) => {
     };
 
     updateItemsToShow();
-    window.addEventListener('resize', updateItemsToShow);
-    return () => window.removeEventListener('resize', updateItemsToShow);
+    window.addEventListener("resize", updateItemsToShow);
+    return () => window.removeEventListener("resize", updateItemsToShow);
   }, [desktopGrid, mobileGrid]);
 
   // Handling swipe functionality
@@ -75,7 +69,9 @@ const ProductBox: React.FC<ProductBoxProps> = ({ items, elementItem }) => {
 
   const displayedItems = items
     .slice(startIndex, startIndex + itemsToShow)
-    .concat(items.slice(0, Math.max(0, startIndex + itemsToShow - items.length)));
+    .concat(
+      items.slice(0, Math.max(0, startIndex + itemsToShow - items.length))
+    );
 
   const itemWidth = 100 / itemsToShow;
 
@@ -101,42 +97,43 @@ const ProductBox: React.FC<ProductBoxProps> = ({ items, elementItem }) => {
             ref={containerRef}
             onMouseDown={handleMouseDown}
             style={{ cursor: isSwiping ? "grabbing" : "grab" }}
-            className={`flex overflow-hidden w-full ${margin === 0
-            ? "gap-0"
-            : margin === 1
-            ? "gap-0.5"
-            : margin === 2
-            ? "gap-1"
-            : margin === 3
-            ? "gap-1.5"
-            : margin === 4
-            ? "gap-2"
-            : margin === 5
-            ? "gap-2.5"
-            : margin === 6
-            ? "gap-3"
-            : margin === 7
-            ? "gap-3.5"
-            : margin === 8
-            ? "gap-4"
-            : margin === 9
-            ? "gap-[18px]"
-            : margin === 10
-            ? "gap-5"
-            : null
+            className={`flex overflow-hidden w-full ${
+              margin === 0
+                ? "gap-0"
+                : margin === 1
+                ? "gap-0.5"
+                : margin === 2
+                ? "gap-1"
+                : margin === 3
+                ? "gap-1.5"
+                : margin === 4
+                ? "gap-2"
+                : margin === 5
+                ? "gap-2.5"
+                : margin === 6
+                ? "gap-3"
+                : margin === 7
+                ? "gap-3.5"
+                : margin === 8
+                ? "gap-4"
+                : margin === 9
+                ? "gap-[18px]"
+                : margin === 10
+                ? "gap-5"
+                : null
             }`}
           >
             {displayedItems.map((item, index) => (
               <div
                 key={index}
                 className="transition-opacity duration-500 w-full h-full"
-                style={{ flex: `0 0 ${itemWidth}%`}}
+                style={{ flex: `0 0 ${itemWidth}%` }}
               >
                 <Product key={index} {...item} />
               </div>
             ))}
           </div>
-    
+
           <div className="absolute -translate-y-1/2 top-1/2 flex md:group-hover:flex md:hidden justify-between w-full items-center gap-2">
             <div
               onClick={handlePrevious}
@@ -207,33 +204,9 @@ const ProductBox: React.FC<ProductBoxProps> = ({ items, elementItem }) => {
           ))}
         </div>
       ) : gridStyle === "3" ? (
-        <div className={`col-span-12 grid grid-cols-6 md:grid-cols-12 ${margin === 0
-          ? "gap-0"
-          : margin === 1
-          ? "gap-0.5"
-          : margin === 2
-          ? "gap-1"
-          : margin === 3
-          ? "gap-1.5"
-          : margin === 4
-          ? "gap-2"
-          : margin === 5
-          ? "gap-2.5"
-          : margin === 6
-          ? "gap-3"
-          : margin === 7
-          ? "gap-3.5"
-          : margin === 8
-          ? "gap-4"
-          : margin === 9
-          ? "gap-[18px]"
-          : margin === 10
-          ? "gap-5"
-          : null
-          }`}
-        >
-          <div className="col-span-12 md:col-span-3">
-            <div className={`grid grid-cols-2 md:grid-cols-1 ${margin === 0
+        <div
+          className={`col-span-12 grid grid-cols-6 md:grid-cols-12 ${
+            margin === 0
               ? "gap-0"
               : margin === 1
               ? "gap-0.5"
@@ -256,6 +229,34 @@ const ProductBox: React.FC<ProductBoxProps> = ({ items, elementItem }) => {
               : margin === 10
               ? "gap-5"
               : null
+          }`}
+        >
+          <div className="col-span-12 md:col-span-3">
+            <div
+              className={`grid grid-cols-2 md:grid-cols-1 ${
+                margin === 0
+                  ? "gap-0"
+                  : margin === 1
+                  ? "gap-0.5"
+                  : margin === 2
+                  ? "gap-1"
+                  : margin === 3
+                  ? "gap-1.5"
+                  : margin === 4
+                  ? "gap-2"
+                  : margin === 5
+                  ? "gap-2.5"
+                  : margin === 6
+                  ? "gap-3"
+                  : margin === 7
+                  ? "gap-3.5"
+                  : margin === 8
+                  ? "gap-4"
+                  : margin === 9
+                  ? "gap-[18px]"
+                  : margin === 10
+                  ? "gap-5"
+                  : null
               }`}
             >
               {items?.slice(1, 3).map((item, index) => (
@@ -263,35 +264,40 @@ const ProductBox: React.FC<ProductBoxProps> = ({ items, elementItem }) => {
               ))}
             </div>
           </div>
-          <div className={`col-span-12 md:col-span-6 ${imagePosition === "right"
-              ? "order-last"
-              : imagePosition === "left"
-              ? "order-first"
-              : ""
-              }`}>
-            <div className={`grid grid-cols-1 ${margin === 0
-              ? "gap-0"
-              : margin === 1
-              ? "gap-0.5"
-              : margin === 2
-              ? "gap-1"
-              : margin === 3
-              ? "gap-1.5"
-              : margin === 4
-              ? "gap-2"
-              : margin === 5
-              ? "gap-2.5"
-              : margin === 6
-              ? "gap-3"
-              : margin === 7
-              ? "gap-3.5"
-              : margin === 8
-              ? "gap-4"
-              : margin === 9
-              ? "gap-[18px]"
-              : margin === 10
-              ? "gap-5"
-              : ""
+          <div
+            className={`col-span-12 md:col-span-6 ${
+              imagePosition === "right"
+                ? "order-last"
+                : imagePosition === "left"
+                ? "order-first"
+                : ""
+            }`}
+          >
+            <div
+              className={`grid grid-cols-1 ${
+                margin === 0
+                  ? "gap-0"
+                  : margin === 1
+                  ? "gap-0.5"
+                  : margin === 2
+                  ? "gap-1"
+                  : margin === 3
+                  ? "gap-1.5"
+                  : margin === 4
+                  ? "gap-2"
+                  : margin === 5
+                  ? "gap-2.5"
+                  : margin === 6
+                  ? "gap-3"
+                  : margin === 7
+                  ? "gap-3.5"
+                  : margin === 8
+                  ? "gap-4"
+                  : margin === 9
+                  ? "gap-[18px]"
+                  : margin === 10
+                  ? "gap-5"
+                  : ""
               }`}
             >
               {items?.slice(0, 1).map((item, index) => (
@@ -300,29 +306,31 @@ const ProductBox: React.FC<ProductBoxProps> = ({ items, elementItem }) => {
             </div>
           </div>
           <div className="col-span-12 md:col-span-3">
-            <div className={`grid grid-cols-2 md:grid-cols-1 ${margin === 0
-              ? "gap-0"
-              : margin === 1
-              ? "gap-0.5"
-              : margin === 2
-              ? "gap-1"
-              : margin === 3
-              ? "gap-1.5"
-              : margin === 4
-              ? "gap-2"
-              : margin === 5
-              ? "gap-2.5"
-              : margin === 6
-              ? "gap-3"
-              : margin === 7
-              ? "gap-3.5"
-              : margin === 8
-              ? "gap-4"
-              : margin === 9
-              ? "gap-[18px]"
-              : margin === 10
-              ? "gap-5"
-              : null
+            <div
+              className={`grid grid-cols-2 md:grid-cols-1 ${
+                margin === 0
+                  ? "gap-0"
+                  : margin === 1
+                  ? "gap-0.5"
+                  : margin === 2
+                  ? "gap-1"
+                  : margin === 3
+                  ? "gap-1.5"
+                  : margin === 4
+                  ? "gap-2"
+                  : margin === 5
+                  ? "gap-2.5"
+                  : margin === 6
+                  ? "gap-3"
+                  : margin === 7
+                  ? "gap-3.5"
+                  : margin === 8
+                  ? "gap-4"
+                  : margin === 9
+                  ? "gap-[18px]"
+                  : margin === 10
+                  ? "gap-5"
+                  : null
               }`}
             >
               {items?.slice(3).map((item, index) => (

@@ -17,7 +17,7 @@ interface ICounts {
 }
 
 const IndexPage: React.FC = () => {
-  const [orders, setOrders] = useState<IOrder[]>([]);
+  const [orders, setOrders] = useState<any[]>([]);
   const [counts, setCounts] = useState<ICounts | null>(null);
 
   const token = localStorage.getItem("accessToken"); // Get the token from localStorage
@@ -30,8 +30,8 @@ const IndexPage: React.FC = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-        setOrders(data);
+        console.log(data.orders);
+        setOrders(data.orders);
       })
       .catch((error) => {
         console.log(error);
@@ -149,15 +149,15 @@ const IndexPage: React.FC = () => {
                   <tr key={order._id}>
                     <td className="p-2">
                       <Image
-                        src={order.product?.photo}
+                        src={order.firstProduct?.photo}
                         width={50}
                         height={50}
                         alt="Photo"
                       />
                     </td>
-                    <td className="p-2">{order.name}</td>
+                    <td className="p-2">{order.firstProduct.title}</td>
                     <td className="p-2">{order.address}</td>
-                    <td className="p-2">{order.phoneNumber}</td>
+                    <td className="p-2">{order.phone}</td>
                     <td className="p-2">
                       <select
                         value={order.status}

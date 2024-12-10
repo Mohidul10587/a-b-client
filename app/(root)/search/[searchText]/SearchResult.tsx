@@ -1,9 +1,8 @@
-
-'use client'
+"use client";
 import { apiUrl } from "@/app/shared/urls";
 import { IProduct } from "@/types/product";
 import React, { useEffect, useState } from "react";
-import ProductBox from "../../../../components/ProductBox"; // Adjust the path as needed
+import ProductBox from "../../a-root-comp/ProductBox"; // Adjust the path as needed
 
 interface ProductFetcherProps {
   searchText: string;

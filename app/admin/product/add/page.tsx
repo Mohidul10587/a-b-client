@@ -10,6 +10,7 @@ import { ICategory, InfoSection } from "@/types/category";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Meta from "@/app/admin/components/Meta";
+import { ISuggestion } from "@/types/suggestion";
 const IndexPage: React.FC = () => {
   const [publisher, setSupplier] = useState("");
   const [summary, setSummary] = useState("");
@@ -54,6 +55,8 @@ const IndexPage: React.FC = () => {
     []
   );
   const [selectedImage, setSelectedImage] = useState<string | null>("");
+  const [suggestions, setSuggestions] = useState<ISuggestion[]>([]);
+  const [suggestionId, setSuggestionId] = useState("");
   // varity section end here
 
   const openModal = (content: string) => {
@@ -67,6 +70,20 @@ const IndexPage: React.FC = () => {
   };
 
   useEffect(() => {
+    const fetchSuggestion = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/suggestion`);
+        if (response.ok) {
+          const data = await response.json();
+
+          setSuggestions(data.suggestions);
+        } else {
+          throw new Error("Failed to fetch brands");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
     const fetchWriters = async () => {
       try {
         const response = await fetch(`${apiUrl}/writer/all`);
@@ -95,7 +112,7 @@ const IndexPage: React.FC = () => {
         console.log(error);
       }
     };
-
+    fetchSuggestion();
     fetchWriters();
     fetchCategories();
   }, []);
@@ -195,6 +212,7 @@ const IndexPage: React.FC = () => {
     formData.append("orderType", orderType);
     formData.append("titleEnglish", titleEnglish);
     formData.append("subTitle", subTitle);
+    formData.append("suggestion", suggestionId);
 
     if (photo) {
       formData.append("photo", photo);
@@ -229,7 +247,20 @@ const IndexPage: React.FC = () => {
       openModal("Failed to upload product due to an unexpected error");
     }
   };
+  // Function to generate a slug from the title
+  const generateSlug = (title: string) => {
+    return title
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, "") // Remove special characters except dashes
+      .replace(/\s+/g, "-") // Replace spaces with dashes
+      .replace(/--+/g, "-") // Replace multiple dashes with a single dash
+      .trim();
+  };
 
+  // Update slug whenever the title changes
+  useEffect(() => {
+    setSlug(generateSlug(title));
+  }, [title]);
   return (
     <>
       <div className="container my-4 flex justify-center">
@@ -263,6 +294,7 @@ const IndexPage: React.FC = () => {
                     className="mt-1 p-2 w-full border rounded-md border-black"
                   />
                 </div>
+
                 <div className="mb-4 ">
                   <label
                     htmlFor="productType"
@@ -301,19 +333,6 @@ const IndexPage: React.FC = () => {
                     onChange={(e) => setSubTitle(e.target.value)}
                     className="mt-1 p-2 w-full border rounded-md border-black"
                     required
-                  />
-                </div>
-                <div className="mb-4">
-                  <p>
-                    Slug for url <sup className="text-red-700">*</sup>
-                  </p>
-                  <input
-                    type="text"
-                    placeholder="Slug for url"
-                    name="slug"
-                    value={slug}
-                    onChange={(e) => setSlug(e.target.value)}
-                    className="mt-1 p-2 w-full border rounded-md border-black"
                   />
                 </div>
 
@@ -730,6 +749,24 @@ const IndexPage: React.FC = () => {
                       }
                       className="mt-1 p-2 w-full border rounded-md border-black"
                     />
+                  </div>
+                  <div className="mb-4">
+                    <p>Suggestion</p>
+                    <select
+                      className="p-2 mt-2 w-full outline-none rounded-md"
+                      value={suggestionId}
+                      onChange={(e) => setSuggestionId(e.target.value)}
+                    >
+                      {" "}
+                      <option value="" disabled>
+                        Add Suggestion products
+                      </option>
+                      {suggestions?.map((suggestion) => (
+                        <option key={suggestion._id} value={suggestion._id}>
+                          {suggestion.title}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </>
               </div>

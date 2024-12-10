@@ -1,5 +1,5 @@
 import NewBanner from "@/components/NewBanner";
-import ProductBox from "@/components/ProductBox";
+import ProductBox from "./ProductBox";
 import { apiUrl } from "@/app/shared/urls";
 import Link from "next/link";
 

@@ -3,7 +3,7 @@ import { fetchSettings } from "@/app/shared/fetchSettingsData";
 import { Metadata } from "next";
 import React from "react";
 
-import ElementSection from "@/components/ElementSection";
+import ElementSection from "@/app/(root)/a-root-comp/ElementSection";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await fetchSettings();

@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import React, { useState, useEffect } from "react";
 
 interface PhotoProps {
@@ -48,7 +48,7 @@ const Photo: React.FC<PhotoProps> = ({
           className="cursor-pointer w-full flex items-center justify-center"
         >
           {preview ? (
-            <img
+            <Image
               src={preview as string}
               width={600}
               height={600}

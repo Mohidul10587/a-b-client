@@ -4,7 +4,7 @@ import { apiUrl } from "@/app/shared/urls";
 import CategoryProducts from "@/components/CategoryProduct";
 import { Metadata, ResolvingMetadata } from "next";
 import { fetchSettings } from "@/app/shared/fetchSettingsData";
-import ElementSection from "@/components/ElementSection";
+import ElementSection from "@/app/(root)/a-root-comp/ElementSection";
 import { FC } from "react";
 import { Props } from "@/types/pageProps";
 
