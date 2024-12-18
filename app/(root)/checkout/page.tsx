@@ -200,6 +200,17 @@ const Checkout = () => {
         </label>
       </div>
 
+      <div className="flex justify-center">
+        <PaymentButton
+          amount={500}
+          name="John Doe"
+          email="john.doe@example.com"
+          phone="01712345678"
+          transactionId="txn_12345" // Generate unique ID
+          redirectUrl={"http://localhost:3000/payment-status"}
+        />
+      </div>
+
       <div className="text-right">
         <button
           className={`px-4 py-2 bg-blue-500 text-white rounded ${
@@ -211,15 +222,6 @@ const Checkout = () => {
           {isSubmitting ? "Processing..." : "Place Order"}
         </button>
       </div>
-
-      <PaymentButton
-        amount={500}
-        name="John Doe"
-        email="john.doe@example.com"
-        phone="01712345678"
-        transactionId="txn_12345" // Generate unique ID
-        redirectUrl={"http://localhost:3000/payment-status"}
-      />
     </div>
   );
 };

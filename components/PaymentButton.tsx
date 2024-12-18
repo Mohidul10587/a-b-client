@@ -32,7 +32,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
           redirectUrl,
         }
       );
-
+      console.log(response.data);
       if (response.data.paymentUrl) {
         // Redirect to AmarPay's payment URL
         window.location.href = response.data.paymentUrl;
@@ -43,7 +43,14 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
     }
   };
 
-  return <button onClick={handlePayment}>Pay Now</button>;
+  return (
+    <button
+      onClick={handlePayment}
+      className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out"
+    >
+      Pay Now
+    </button>
+  );
 };
 
 export default PaymentButton;
