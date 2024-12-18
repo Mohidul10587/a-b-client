@@ -209,10 +209,11 @@ export const ProductDetails = ({
                   <>
                     <button
                       onClick={() => addToCart(product, 1)}
-                      className="bg-main my-4 font-bold text-center text-white px-4 py-2 rounded-md block"
+                      className="bg-main my-4 font-bold text-center text-white px-4 py-2 w-full rounded-md block"
                     >
                       Add to curt
                     </button>
+
                     <Link
                       href={whatsappUrl}
                       target="_blank"

@@ -96,7 +96,7 @@ const IndexPage: React.FC = () => {
       })
       .catch((error) => console.error("Error updating order status:", error));
   };
-
+  console.log(orders);
   return (
     <>
       <div className="container my-4">
@@ -127,7 +127,7 @@ const IndexPage: React.FC = () => {
           </div>
         </div>
       </div>
-      {orders.length > 0 && (
+      {orders?.length > 0 && (
         <div className="container my-4">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-xl font-bold">Order List</h1>
@@ -145,7 +145,7 @@ const IndexPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {orders.map((order) => (
+                {orders?.map((order) => (
                   <tr key={order._id}>
                     <td className="p-2">
                       <Image

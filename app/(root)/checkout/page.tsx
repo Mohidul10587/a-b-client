@@ -1,6 +1,7 @@
 "use client";
 
 import { apiUrl } from "@/app/shared/urls";
+import PaymentButton from "@/components/PaymentButton";
 import { useEffect, useState } from "react";
 
 const Checkout = () => {
@@ -69,9 +70,9 @@ const Checkout = () => {
 
       alert("Order placed successfully!");
 
-      // // Clear cart after successful order placement
-      // localStorage.removeItem("cartData");
-      // setCart([]);
+      // Clear cart after successful order placement
+      localStorage.removeItem("cartData");
+      setCart([]);
     } catch (error) {
       console.error("Error submitting order:", error);
       alert("There was a problem submitting your order.");
@@ -210,6 +211,15 @@ const Checkout = () => {
           {isSubmitting ? "Processing..." : "Place Order"}
         </button>
       </div>
+
+      <PaymentButton
+        amount={500}
+        name="John Doe"
+        email="john.doe@example.com"
+        phone="01712345678"
+        transactionId="txn_12345" // Generate unique ID
+        redirectUrl={"http://localhost:3000/payment-status"}
+      />
     </div>
   );
 };

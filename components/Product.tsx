@@ -35,7 +35,7 @@ const Products: React.FC<IProduct> = ({
             height={600}
             alt={title}
             quality={100}
-            className="h-full w-full cursor-pointer object-cover hover:opacity-80"
+            className="h-full w-full cursor-pointer object-cover "
           />
           {featured && (
             <p className="absolute left-0 top-0 text-xs bg-main opacity-50 rounded-br leading-none text-white px-2 py-1">
