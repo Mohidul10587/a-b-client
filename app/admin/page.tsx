@@ -76,7 +76,7 @@ const IndexPage: React.FC = () => {
   };
   const handleStatusUpdate = (orderId: string, newStatus: string) => {
     fetchWithTokenRefresh(`${apiUrl}/order/updateOrderStatus/${orderId}`, {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

@@ -39,8 +39,17 @@ const OrderDetails: React.FC<{ id: string }> = ({ id }) => {
     return <p>Loading...</p>;
   }
 
-  const { deliveryInfo, _id, cart, paymentMethod, status, createdAt } = order;
-
+  const {
+    deliveryInfo,
+    _id,
+    cart,
+    paymentMethod,
+    status,
+    createdAt,
+    paymentStatus,
+    paymentTnxId,
+  } = order;
+  console.log(order);
   return (
     <div className="p-6 bg-gray-100 min-h-screen flex justify-center items-center">
       <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6">
@@ -129,6 +138,15 @@ const OrderDetails: React.FC<{ id: string }> = ({ id }) => {
             <p>
               <span className="font-medium">Order ID:</span> {_id}
             </p>
+            <p>
+              <span className="font-medium">Order payment Status:</span>{" "}
+              {paymentStatus ? "Paid" : "Unpaid"}
+            </p>
+            <p>
+              <span className="font-medium">Order payment TnxId:</span>{" "}
+              {paymentTnxId}
+            </p>
+            ,
             <p>
               <span className="font-medium">Created At:</span>{" "}
               {new Date(createdAt).toLocaleString()}
