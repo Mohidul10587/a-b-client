@@ -137,10 +137,12 @@ const IndexPage: React.FC = () => {
               <thead>
                 <tr>
                   <th>Image</th>
-                  <th>Name</th>
+                  <th>Customers Name</th>
                   <th>Address</th>
                   <th>Phone Number</th>
-                  <th>Status</th>
+                  <th>Payment Status</th>
+                  <th>Order Status</th>
+
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -155,9 +157,10 @@ const IndexPage: React.FC = () => {
                         alt="Photo"
                       />
                     </td>
-                    <td className="p-2">{order.firstProduct.title}</td>
+                    <td className="p-2">{order.customersName}</td>
                     <td className="p-2">{order.address}</td>
                     <td className="p-2">{order.phone}</td>
+                    <td className="p-2">{order.paymentStatus}</td>
                     <td className="p-2">
                       <select
                         value={order.status}
@@ -171,9 +174,7 @@ const IndexPage: React.FC = () => {
                         <option className="bg-white text-black" value="Pending">
                           Pending
                         </option>
-                        <option className="bg-white text-black" value="Shipped">
-                          Shipped
-                        </option>
+
                         <option
                           className="bg-white text-black"
                           value="Delivered"

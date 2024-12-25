@@ -1,6 +1,9 @@
+"use client";
+
 import React from "react";
 import axios from "axios";
 import { apiUrl } from "@/app/shared/urls";
+import { useRouter } from "next/navigation";
 
 interface PaymentButtonProps {
   amount: number;
@@ -19,6 +22,8 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
   transactionId,
   redirectUrl,
 }) => {
+  const router = useRouter();
+
   const handlePayment = async () => {
     try {
       const response = await axios.post(
@@ -32,9 +37,8 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
           redirectUrl,
         }
       );
-      console.log(response.data);
+      console.log(response);
       if (response.data.paymentUrl) {
-        // Redirect to AmarPay's payment URL
         window.location.href = response.data.paymentUrl;
       }
     } catch (error) {
