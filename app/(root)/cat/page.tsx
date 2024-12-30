@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const IndexPage: React.FC = async () => {
-  const element = await fetchElement("home-main", "home-main");
+  const element = await fetchElement("category-main", "category-main");
   return (
     <>
       <div className="container mb-4">
@@ -46,11 +46,11 @@ const IndexPage: React.FC = async () => {
         <Catagories width={60} height={60} />
       </div>
 
-      <div className="container my-4">
+      {/* <div className="container my-4">
         <h2 className="text-xl font-semibold">All Deal Categories</h2>
         <p>Latest deals from Price in Kenya</p>
         <CatWithSubcategories width={60} height={60} />
-      </div>
+      </div> */}
     </>
   );
 };

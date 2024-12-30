@@ -67,7 +67,7 @@ const IndexPage: FC<Props> = async ({ params }) => {
   // Destructure the object returned by getData
   const {
     products = [],
-    brands = [],
+    writers = [],
     category = null,
     settings,
   } = await fetchData(slug);
@@ -116,16 +116,15 @@ const IndexPage: FC<Props> = async ({ params }) => {
       )}
       {/* <ElementSection id={category._id} page="category" /> */}
 
-      {/*
       <div className="container">
         <CategoryProducts
           country={settings.country}
           categoryName={category?.categoryName}
           products={products}
-          brands={brands}
+          writers={writers}
         />
       </div>
-      */}
+
       {category?.description && (
         <div className="container my-4">
           <div className="bg-white p-4 border text-lg leading-7">
@@ -160,12 +159,12 @@ async function fetchData(slug: string) {
     ]);
 
     const products = data.products;
-    const brands = data.brands;
+    const writers = data.writers;
     const category = data.category;
 
     return {
       products,
-      brands,
+      writers,
       category,
       settings,
     };
@@ -173,7 +172,7 @@ async function fetchData(slug: string) {
     console.error("Error fetching category data:", error);
     return {
       products: [],
-      brands: [],
+      writers: [],
       category: null,
       settings: null,
       elementsData: null,

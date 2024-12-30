@@ -9,7 +9,7 @@ interface CategoryProductsProps {
   country: string;
   categoryName: string;
   products: IProduct[];
-  brands: IWriter[];
+  writers: IWriter[];
   suggestions?: any[];
 }
 
@@ -17,7 +17,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({
   country,
   categoryName,
   products,
-  brands,
+  writers,
   suggestions,
 }) => {
   const [displayedProducts, setDisplayedProducts] = useState<IProduct[]>([]);
@@ -92,8 +92,8 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({
             defaultValue=""
             onChange={(e) => setSelectedBrandId(e.target.value)}
           >
-            <option value="">All Brands</option>
-            {brands.map((brand) => (
+            <option value="">All writers</option>
+            {writers.map((brand) => (
               <option key={brand._id} value={brand._id}>
                 {brand.title}
               </option>

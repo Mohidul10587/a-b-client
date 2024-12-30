@@ -11,9 +11,12 @@ interface CatProps {
 }
 
 async function fetchCategories(): Promise<ICategory[]> {
-  const response = await fetch(`${apiUrl}/category/all`, {
-    next: { revalidate: 100 }, // This ensures revalidation every 100 seconds
-  });
+  const response = await fetch(
+    `${apiUrl}/category/getAllCategoriesForCatMainPage`,
+    {
+      next: { revalidate: 100 }, // This ensures revalidation every 100 seconds
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Failed to fetch categories");
@@ -25,7 +28,7 @@ async function fetchCategories(): Promise<ICategory[]> {
 
 const Catagories = async ({ width, height }: CatProps) => {
   const categories = await fetchCategories();
-
+  console.log("This is categories", categories);
   return (
     <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-2">
       {categories.map((item, index) => (

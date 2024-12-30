@@ -10,7 +10,7 @@ interface ElementSectionProps {
 const ElementSection = async ({ elementsData }: ElementSectionProps) => {
   return (
     <div className="container my-4">
-      {elementsData.map((item: any, index: number) => (
+      {elementsData?.map((item: any, index: number) => (
         <div
           key={index}
           className={`mb-4 ${
