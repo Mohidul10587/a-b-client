@@ -7,10 +7,8 @@ interface ModalProps {
 
 const EditElementModal: React.FC<ModalProps> = ({ children, onClose }) => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-50">
-      <div className="bg-white p-6 w-[900px] rounded-md shadow-lg">
-        {children}
-      </div>
+    <div className="fixed md:py-12 top-0 bottom-0 left-0 right-0 bg-black/50 z-[100]">
+      {children}
     </div>
   );
 };

@@ -1,7 +1,8 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-// pages/cart.tsx
+import { FaTrashAlt, FaHeart } from "react-icons/fa";
+
 import { useEffect, useState } from "react";
 
 const Cart = () => {
@@ -43,53 +44,73 @@ const Cart = () => {
         {cart.length === 0 ? (
           <p className="text-gray-600">Your cart is empty.</p>
         ) : (
-          cart.map((item) => (
-            <div
-              key={item._id}
-              className="flex items-center justify-between border-b border-gray-300 py-4"
-            >
-              <div>
-                <div className="flex items-center justify-center w-12 h-12 mr-1">
-                  <Image
-                    src={item.photo}
-                    alt={item.title}
-                    width={80}
-                    height={80}
-                    className="object-cover h-full w-min rounded-md"
-                    loading="lazy"
-                  />
+          <div className="container mx-auto p-4">
+            {cart.map((item, index) => (
+              <div key={index}>
+                <div className="flex border-b border-gray-300 p-4 items-center">
+                  {/* Product Image */}
+                  <div className="w-20 h-28 relative flex-shrink-0">
+                    <Image
+                      src={item.photo}
+                      alt={item.title}
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded"
+                    />
+                  </div>
+
+                  {/* item Details */}
+                  <div className="ml-4 flex-grow">
+                    <h3 className="font-semibold text-lg">{item.title}</h3>
+                    <p className="text-sm text-gray-500">{item.author}</p>
+                    <p className="text-red-600 text-sm mt-1">
+                      Only {item.stock} copies available
+                    </p>
+
+                    {/* Actions */}
+                    <div className="flex items-center mt-2">
+                      <button
+                        className="flex items-center text-gray-600 hover:text-red-600"
+                        onClick={() => deleteItem(item._id)}
+                      >
+                        <FaTrashAlt className="mr-1" />
+                        Remove
+                      </button>
+                      <button className="flex items-center text-gray-600 hover:text-red-600 ml-4">
+                        <FaHeart className="mr-1" />
+                        Wishlist
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Quantity and Price */}
+                  <div className="text-right">
+                    <div className="flex items-center mb-2">
+                      <button
+                        className="px-2 py-1 border border-gray-400"
+                        onClick={() => decreaseQuantity(item._id)}
+                      >
+                        -
+                      </button>
+                      <span className="px-3">{item.quantity}</span>
+                      <button
+                        className="px-2 py-1 border border-gray-400"
+                        onClick={() => increaseQuantity(item._id)}
+                      >
+                        +
+                      </button>
+                    </div>
+                    <p className="font-semibold text-lg">
+                      {item.price * item.quantity} Tk.
+                    </p>
+                    <p className="text-gray-400 line-through text-sm">
+                      {item.price * item.quantity} Tk.
+                    </p>
+                  </div>
                 </div>
-                <h4 className="text-lg font-semibold">{item.name}</h4>
-                <p className="text-gray-700">Price: ${item.price}</p>
               </div>
-              <div className="flex items-center gap-4">
-                <button
-                  className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
-                  onClick={() => decreaseQuantity(item._id)}
-                >
-                  -
-                </button>
-                <input
-                  type="number"
-                  value={item.quantity}
-                  readOnly
-                  className="w-12 text-center border border-gray-300 rounded"
-                />
-                <button
-                  className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
-                  onClick={() => increaseQuantity(item._id)}
-                >
-                  +
-                </button>
-              </div>
-              <button
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                onClick={() => deleteItem(item._id)}
-              >
-                Remove
-              </button>
-            </div>
-          ))
+            ))}
+          </div>
         )}
       </div>
       <div>

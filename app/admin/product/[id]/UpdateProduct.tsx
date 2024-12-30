@@ -42,6 +42,8 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
 
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [price, setPrice] = useState(100);
+  const [rating, setRating] = useState(100);
+
   const [unprice, setunPrice] = useState(0);
   const [stockStatus, setStockStatus] = useState("In Stock");
   const [writer, setWriter] = useState("");
@@ -118,6 +120,8 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
           setCategoryId(data.category._id);
           setSubcategory(data.subCategory);
           setPrice(data.price);
+          setRating(data.rating);
+
           setunPrice(data.unprice);
           setStockStatus(data.stockStatus);
           setWriter(data.writer);
@@ -173,6 +177,8 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
     formData.append("category", categoryId);
     formData.append("subCategory", subcategory);
     formData.append("price", String(price));
+    formData.append("rating", String(rating));
+
     formData.append("unprice", String(unprice));
     formData.append("stockStatus", stockStatus);
     formData.append("writer", writerId);
@@ -364,6 +370,16 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
                   placeholder="100"
                   value={price}
                   onChange={(e) => setPrice(Number(e.target.value))}
+                  className="p-2 mt-2 w-full outline-none rounded-md"
+                />
+              </div>
+              <div className="mb-4">
+                <p>Rating</p>
+                <input
+                  type="number"
+                  placeholder="100"
+                  value={rating || 0}
+                  onChange={(e) => setRating(Number(e.target.value))}
                   className="p-2 mt-2 w-full outline-none rounded-md"
                 />
               </div>

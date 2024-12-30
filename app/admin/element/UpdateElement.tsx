@@ -400,8 +400,8 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
 
   return (
     <>
-      <div className="flex justify-center items-center h-full max-w-3xl mx-auto overflow-y-auto">
-        <div className="bg-white p-4 w-full relative">
+      <div className="flex justify-center h-full max-w-3xl mx-auto rounded-md overflow-hidden">
+        <div className="bg-white p-4 w-full h-full relative overflow-y-auto">
           <form onSubmit={handleSubmit}>
             <div className="flex justify-between">
               <h2 className="text-xl">Update Element Page</h2>
@@ -417,31 +417,28 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
             <>
               {/* Targeted Page ID */}
               <>
-                {/* Section Title */}
-                <div className="flex items-center mb-2">
+                <div className="flex mb-2">
                   <div className="w-full">
-                    <label className="block text-gray-700 font-medium mb-2">
-                      Title
-                    </label>
+                    <label className="block font-medium mb-2">Title</label>
                     <input
                       type="text"
                       name="sectionTitle"
                       value={formData.sectionTitle}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      className="w-full px-3 py-2 border rounded-md outline-0"
                       placeholder="Enter the Section Title"
                     />
                   </div>
                   {/* Show Title Checkbox */}
                   <div className="flex flex-col items-center">
-                    <label className="block" htmlFor="showTitle">
-                      hidden
+                    <label className="block mb-2" htmlFor="showTitle">
+                      Hidden
                     </label>
                     <div>
                       <input
                         id="showTitle"
                         type="checkbox"
-                        className="form-checkbox h-6 w-6 text-green-500 transition duration-300"
+                        className="w-10 h-10 border outline-0"
                         checked={formData.isTitle}
                         onChange={() =>
                           setFormData({
@@ -450,9 +447,6 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                           })
                         }
                       />
-                      <span className="ml-2 text-gray-700">
-                        {formData.isTitle ? "Yes" : "No"}
-                      </span>
                     </div>
                   </div>
                 </div>
@@ -465,7 +459,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                       name="position"
                       value={formData.position}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border"
+                      className="w-full px-3 py-2 border outline-0"
                       placeholder="Enter the position value"
                     />
                   </div>
@@ -476,7 +470,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                       name="postLimit"
                       value={formData.postLimit}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border"
+                      className="w-full px-3 py-2 border outline-0"
                       placeholder="Enter the position value"
                     />
                   </div>
@@ -488,7 +482,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                       name="desktopGrid"
                       value={formData.desktopGrid}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border"
+                      className="w-full px-3 py-2 border outline-0"
                       placeholder="Enter the number of grid columns for desktop"
                     />
                   </div>
@@ -501,13 +495,13 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                       name="mobileGrid"
                       value={formData.mobileGrid}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border"
+                      className="w-full px-3 py-2 border outline-0"
                       placeholder="Enter the number of grid columns for mobile"
                     />
                   </div>
                 </div>
                 {/* Title Link */}
-                <div className="flex items-center mb-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
                   <div>
                     <label className="block">Title Link</label>
                     <input
@@ -515,7 +509,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                       name="titleLink"
                       value={formData.titleLink}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border"
+                      className="w-full px-3 py-2 border outline-0"
                       placeholder="Enter the Title Link"
                     />
                   </div>
@@ -526,7 +520,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                       name="titleAlignment"
                       value={formData.titleAlignment}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border"
+                      className="w-full px-3 py-2 border outline-0"
                     >
                       <option value="left">Left</option>
                       <option value="center">Center</option>
@@ -543,7 +537,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                       name="margin"
                       value={formData.margin}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border"
+                      className="w-full px-3 py-2 border outline-0"
                       placeholder="Enter the margin value"
                     />
                   </div>
@@ -556,7 +550,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                       name="padding"
                       value={formData.padding}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border"
+                      className="w-full px-3 py-2 border outline-0"
                       placeholder="Enter the padding value"
                     />
                   </div>
@@ -569,7 +563,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                       name="width"
                       value={formData.width}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border"
+                      className="w-full px-3 py-2 border outline-0"
                       placeholder="Enter the width value"
                     />
                   </div>
@@ -582,33 +576,33 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                       name="height"
                       value={formData.height}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border"
+                      className="w-full px-3 py-2 border outline-0"
                       placeholder="Enter the height value"
                     />
                   </div>
                 </div>
 
-                {/* Title Background Color */}
-                <div className="mb-4">
-                  <label className="block">Title BG Color</label>
-                  <input
-                    type="color"
-                    name="titleBackgroundColor"
-                    value={formData.titleBackgroundColor}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border h-8"
-                  />
-                </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-2">
+                  {/* Title Background Color */}
+                  <div className="mb-4">
+                    <label className="block">Title text color</label>
+                    <input
+                      type="color"
+                      name="titleBackgroundColor"
+                      value={formData.titleBackgroundColor}
+                      onChange={handleChange}
+                      className="w-full border h-8 outline-0"
+                    />
+                  </div>
                   {/* Section Background Color */}
                   <div>
-                    <label className="block">Title text Color</label>
+                    <label className="block">Title BG color</label>
                     <input
                       type="color"
                       name="sectionBackgroundColor"
                       value={formData.sectionBackgroundColor}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border h-8"
+                      className="w-full border h-8 outline-0"
                     />
                   </div>
                   {/* Title Background Color */}
@@ -619,7 +613,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                       name="boxText"
                       value={formData.boxText}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border h-8"
+                      className="w-full border h-8 outline-0"
                     />
                   </div>
 
@@ -631,7 +625,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                       name="boxBg"
                       value={formData.boxBg}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border h-8"
+                      className="w-full border h-8 outline-0"
                     />
                   </div>
                 </div>
@@ -644,7 +638,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                       name="gridStyle"
                       value={formData.gridStyle}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border"
+                      className="w-full px-3 py-2 border outline-0"
                       placeholder="Enter the grid style"
                     />
                   </div>
@@ -657,7 +651,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                       name="productStyle"
                       value={formData.productStyle}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border"
+                      className="w-full px-3 py-2 border outline-0"
                       placeholder="Enter the product style"
                     />
                   </div>
@@ -668,7 +662,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                       name="display"
                       value={formData.display}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border"
+                      className="w-full px-3 py-2 border outline-0"
                     >
                       <option value="block">Block</option>
                       <option value="none">None</option>
@@ -681,7 +675,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                       name="imagePosition"
                       value={formData.imagePosition}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border"
+                      className="w-full px-3 py-2 border outline-0"
                     >
                       <option value="left">Left</option>
                       <option value="center">Center</option>
