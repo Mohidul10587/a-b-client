@@ -294,6 +294,17 @@ const IndexPage: React.FC = () => {
                     className="mt-1 p-2 w-full border rounded-md border-black"
                   />
                 </div>
+                <div className="mb-4">
+                  <p>Slug</p>
+                  <input
+                    type="text"
+                    placeholder="Slug"
+                    name="slug"
+                    value={slug}
+                    onChange={(e) => setSlug(e.target.value)}
+                    className="mt-1 p-2 w-full border rounded-md border-black"
+                  />
+                </div>
 
                 <div className="mb-4 ">
                   <label

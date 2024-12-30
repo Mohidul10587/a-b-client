@@ -26,6 +26,8 @@ const UpdateWriter: React.FC<WriterProps> = ({ writerId }) => {
   const [description, setDescription] = useState("");
   const [rating, setRating] = useState<number | string>(3.5);
   const [photo, setPhoto] = useState<string | File | null>(null);
+  const [previousPhoto, setPreviousPhoto] = useState<string>("");
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
@@ -40,19 +42,20 @@ const UpdateWriter: React.FC<WriterProps> = ({ writerId }) => {
           `${apiUrl}/writer/singleWriter/${writerId}`
         );
         if (response.ok) {
-          const data = await response.json();
-          setSelectedMetaImage(data.writer.metaImage);
-          setMetaTitle(data.writer.metaTitle);
-          setMetaDescription(data.writer.metaDescription);
-          setTags(data.writer.tags);
-          setId(data.writer._id);
-          setTitle(data.writer.title);
-          setSlug(data.writer.slug);
-          setDescription(data.writer.description);
-          setRating(data.writer.rating);
-          setPhoto(data.writer.photo);
-          setSelectedImage(data.writer.photo);
-          setIsContentValid(data.writer.description.trim() !== ""); // Ensure initial content validity
+          const { writer } = await response.json();
+          setSelectedMetaImage(writer.metaImage);
+          setMetaTitle(writer.metaTitle);
+          setMetaDescription(writer.metaDescription);
+          setTags(writer.tags);
+          setId(writer._id);
+          setTitle(writer.title);
+          setSlug(writer.slug);
+          setDescription(writer.description);
+          setRating(writer.rating);
+          setPhoto(writer.photo);
+          setSelectedImage(writer.photo);
+          setPreviousPhoto(writer.photo);
+          setIsContentValid(writer.description.trim() !== ""); // Ensure initial content validity
         } else {
           alert("Failed to fetch writer");
         }
@@ -113,6 +116,7 @@ const UpdateWriter: React.FC<WriterProps> = ({ writerId }) => {
     if (photo) {
       formData.append("photo", photo);
     }
+    formData.append("previousPhoto", previousPhoto);
 
     formData.append("metaTitle", metaTitle);
     formData.append("metaDescription", metaDescription);

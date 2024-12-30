@@ -5,6 +5,7 @@ import { Metadata } from "next";
 
 import Link from "next/link";
 import Writers from "./Writers";
+import { fetchElement } from "@/app/shared/fetchElements";
 export const generateMetadata = (): Metadata => {
   return {
     title: "Writers | Price in Kenya",
@@ -15,6 +16,7 @@ export const generateMetadata = (): Metadata => {
 
 const IndexPage: React.FC = async () => {
   const { writers }: any = await getData();
+  const element = await fetchElement("home-main", "home-main");
   return (
     <>
       <div className="container mb-4">
@@ -39,7 +41,8 @@ const IndexPage: React.FC = async () => {
           </li>
         </ol>
       </div>
-      <ElementSection id="writer-main" page="writer-main" />
+
+      <ElementSection elementsData={element} />
       <div className="container my-4">
         <h2 className="text-xl font-semibold">Writers</h2>
         <p>Find products by writer</p>

@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import React from "react";
 
 import ElementSection from "@/app/(root)/a-root-comp/ElementSection";
+import { fetchElement } from "../shared/fetchElements";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await fetchSettings();
@@ -18,9 +19,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const IndexPage = async () => {
   const settings = await fetchSettings();
+  const element = await fetchElement("home-main", "home-main");
   return (
     <>
-      <ElementSection id="home-main" page="home-main" />
+      <ElementSection elementsData={element} />
       {settings.description && (
         <div className="container my-4">
           <div className="bg-white p-4 border leading-normal">

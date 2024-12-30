@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 import ElementSection from "@/app/(root)/a-root-comp/ElementSection";
 import CatWithSubcategories from "@/app/(root)/cat/CatWithSubcategories";
+import { fetchElement } from "@/app/shared/fetchElements";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -13,6 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const IndexPage: React.FC = async () => {
+  const element = await fetchElement("home-main", "home-main");
   return (
     <>
       <div className="container mb-4">
@@ -37,7 +39,7 @@ const IndexPage: React.FC = async () => {
           </li>
         </ol>
       </div>
-      <ElementSection id="category-main" page="category-main" />
+      <ElementSection elementsData={element} />
       <div className="container my-4">
         <h2 className="text-xl font-semibold">Featured</h2>
         <p>Latest deals from Price in Kenya</p>

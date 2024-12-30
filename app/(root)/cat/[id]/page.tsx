@@ -1,12 +1,14 @@
 import Link from "next/link";
 import ReadMore from "@/components/ReadMore";
-import { apiUrl } from "@/app/shared/urls";
-import CategoryProducts from "@/components/CategoryProduct";
+import { apiUrl, clientSideUrl } from "@/app/shared/urls";
+import CategoryProducts from "./CategoryProduct";
 import { Metadata, ResolvingMetadata } from "next";
 import { fetchSettings } from "@/app/shared/fetchSettingsData";
-import ElementSection from "@/app/(root)/a-root-comp/ElementSection";
+import ElementSection from "../../a-root-comp/ElementSection";
 import { FC } from "react";
 import { Props } from "@/types/pageProps";
+
+import { fetchElement } from "@/app/shared/fetchElements";
 
 export async function generateMetadata(
   { params }: Props,
@@ -20,8 +22,8 @@ export async function generateMetadata(
 
   // Extracting relevant information for metadata
   const title =
-    category.metaDescription ||
-    `Buy ${category?.categoryName} - Category @${settings?.country}` ||
+    category.metaTitle ||
+    `Buy ${category?.categoryName} | Category | @${settings?.country}` ||
     "Category Title";
   const description =
     category.metaDescription ||
@@ -49,8 +51,11 @@ export async function generateMetadata(
       description,
       images: [image],
     },
-    icons: {
-      icon: image,
+    // icons: {
+    //   icon: image,
+    // },
+    alternates: {
+      canonical: `${clientSideUrl}/cat/${category.slug}`,
     },
   };
 }
@@ -62,10 +67,11 @@ const IndexPage: FC<Props> = async ({ params }) => {
   // Destructure the object returned by getData
   const {
     products = [],
-    writers = [],
+    brands = [],
     category = null,
     settings,
   } = await fetchData(slug);
+  const element = await fetchElement(category._id, "category");
 
   return (
     <>
@@ -90,26 +96,36 @@ const IndexPage: FC<Props> = async ({ params }) => {
             </Link>
           </li>
           <li>
-            <Link
-              href={`/cat/${category?.slug}`}
-              title="All categories"
-              className="hover:text-gray-600 bg-gray-200 px-3 py-1 rounded max-w-sm inline-block truncate"
-            >
+            <p className="hover:text-gray-600 py-1 rounded max-w-sm inline-block truncate">
               {category?.categoryName}
-            </Link>
+            </p>
           </li>
         </ol>
       </div>
-      <ElementSection id={category._id} page="category" />
+      <ElementSection elementsData={element} />
+      {category?.shortDescription && (
+        <div className="container my-4">
+          <div className="bg-white p-4 border text-lg leading-7">
+            <div
+              dangerouslySetInnerHTML={{
+                __html: category.shortDescription,
+              }}
+            />
+          </div>
+        </div>
+      )}
+      {/* <ElementSection id={category._id} page="category" /> */}
 
+      {/*
       <div className="container">
         <CategoryProducts
           country={settings.country}
           categoryName={category?.categoryName}
           products={products}
-          writers={writers}
+          brands={brands}
         />
       </div>
+      */}
       {category?.description && (
         <div className="container my-4">
           <div className="bg-white p-4 border text-lg leading-7">
@@ -136,22 +152,20 @@ export default IndexPage;
 
 async function fetchData(slug: string) {
   try {
-    const [products, writers, category, settings] = await Promise.all([
+    const [data, settings] = await Promise.all([
       fetch(`${apiUrl}/product/products_by_category_slug/${slug}`, {
-        next: { revalidate: 30 },
-      }).then((res) => res.json()),
-      fetch(`${apiUrl}/writer/all2`, { next: { revalidate: 30 } }).then((res) =>
-        res.json()
-      ),
-      fetch(`${apiUrl}/category/category_by_slug/${slug}`, {
         next: { revalidate: 30 },
       }).then((res) => res.json()),
       fetchSettings(),
     ]);
 
+    const products = data.products;
+    const brands = data.brands;
+    const category = data.category;
+
     return {
       products,
-      writers,
+      brands,
       category,
       settings,
     };
@@ -159,7 +173,7 @@ async function fetchData(slug: string) {
     console.error("Error fetching category data:", error);
     return {
       products: [],
-      writers: [],
+      brands: [],
       category: null,
       settings: null,
       elementsData: null,

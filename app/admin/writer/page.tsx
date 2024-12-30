@@ -78,9 +78,10 @@ const IndexPage: React.FC = () => {
             <thead>
               <tr className="flex justify-between gap-x-4 p-2 bg-gray-300 font-bold mb-2">
                 <th className="text-center w-1/12">Photo</th>
-                <th className="text-center w-1/12">Title</th>
-                <th className="text-center w-7/12">Description</th>
+                <th className="text-center w-1/12">Name</th>
+
                 <th className="text-center w-1/12">Rating</th>
+                <th className="text-center w-1/12">Action</th>
                 <th className="text-center w-1/12 text-gray-300">.</th>
               </tr>
             </thead>
@@ -100,15 +101,12 @@ const IndexPage: React.FC = () => {
                         alt={writer.title}
                         width={90}
                         height={40}
+                        className="w-16 h-20 rounded-full"
                       />
                     </div>
                   </td>
                   <td className="text-center w-1/12">{writer.title}</td>
-                  <td className="text-justify w-6/12">
-                    <div
-                      dangerouslySetInnerHTML={{ __html: writer.description }}
-                    />
-                  </td>
+
                   <td className="text-center w-1/12">{writer.rating}</td>
                   <td className="text-center w-2/12 space-x-1 flex items-center">
                     <button
@@ -123,12 +121,12 @@ const IndexPage: React.FC = () => {
                     >
                       Edit
                     </Link>
-                    <Link
+                    {/* <Link
                       className="text-green-500  border border-green-500 rounded-md px-1"
                       href={`/admin/manageElement/showElement/${writer._id}/writer`}
                     >
                       Manage page
-                    </Link>
+                    </Link> */}
                   </td>
                 </tr>
               ))}

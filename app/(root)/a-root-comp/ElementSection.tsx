@@ -4,23 +4,10 @@ import { apiUrl } from "@/app/shared/urls";
 import Link from "next/link";
 
 interface ElementSectionProps {
-  id: string;
-  page: string;
+  elementsData: any[];
 }
 
-const ElementSection = async ({ id, page }: ElementSectionProps) => {
-  // Fetch elements data on the server side
-
-  const res = await fetch(
-    `${apiUrl}/element/elementByIdAndPage/${id}/${page}`,
-    {
-      cache: "no-cache", // Enable ISR for revalidation after 30 seconds
-    }
-  );
-
-  const data = await res.json();
-  const elementsData = data?.data || [];
-  console.log(elementsData);
+const ElementSection = async ({ elementsData }: ElementSectionProps) => {
   return (
     <div className="container my-4">
       {elementsData.map((item: any, index: number) => (

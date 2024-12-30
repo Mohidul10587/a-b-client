@@ -11,6 +11,7 @@ import { IWriter } from "@/types/writer";
 import { ISettings } from "@/types/settings";
 import { FC } from "react";
 import { Props } from "@/types/pageProps";
+import { fetchElement } from "@/app/shared/fetchElements";
 
 type FetchResponse = {
   products: IProduct[];
@@ -80,6 +81,8 @@ const IndexPage: FC<Props> = async ({ params }) => {
   if (!subcategory) {
     return <div>Failed to load category data.</div>;
   }
+  const element = await fetchElement("home-main", "home-main");
+  // <ElementSection elementsData={element} />
   return (
     <>
       <div className="container mb-4">
@@ -102,8 +105,7 @@ const IndexPage: FC<Props> = async ({ params }) => {
           </li>
         </ol>
       </div>
-
-      <ElementSection id={subcategory._id} page="subcategory" />
+      <ElementSection elementsData={element} />
 
       <div className="container">
         <CategoryProducts

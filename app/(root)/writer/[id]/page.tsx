@@ -8,6 +8,7 @@ import ElementSection from "@/app/(root)/a-root-comp/ElementSection";
 import { FC } from "react";
 import { Props } from "@/types/pageProps";
 import WriterProducts from "./WriterPoducts";
+import { fetchElement } from "@/app/shared/fetchElements";
 
 // Utility function to fetch all necessary data
 async function getData(slug: string) {
@@ -98,7 +99,7 @@ const IndexPage: FC<Props> = async ({ params }) => {
   if (!writer || !settings) {
     return <div>Failed to load writer data or settings data.</div>;
   }
-
+  const element = await fetchElement("home-main", "home-main");
   return (
     <>
       <div className="container mb-4">
@@ -132,7 +133,8 @@ const IndexPage: FC<Props> = async ({ params }) => {
           </li>
         </ol>
       </div>
-      <ElementSection id={writerId} page="writer" />
+
+      <ElementSection elementsData={element} />
       {/* <Banner items={banners} /> */}
       <div className="container">
         <WriterProducts

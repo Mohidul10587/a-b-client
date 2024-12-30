@@ -99,7 +99,7 @@ const IndexPage: React.FC = () => {
       openModal("An unexpected error occurred. Please try again later.");
     }
   };
-
+  console.log(photo);
   return (
     <>
       <div className="container my-4">
