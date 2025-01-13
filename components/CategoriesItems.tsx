@@ -13,7 +13,7 @@ const Categories: React.FC<CategoriesProps> = ({ items }) => {
   return (
     <div className="relative group">
       <Link
-        className="hidden cursor-pointer md:block md:px-4 py-2 rounded-md text-white hover:text-orange-600 md:hover:bg-white md:group-hover:bg-white md:group-hover:text-black md:hover:text-main transition-colors duration-200"
+        className="hidden cursor-pointer md:block md:px-4 py-2 rounded-md  hover:text-orange-600 md:hover:bg-white md:group-hover:bg-white  md:hover:text-main transition-colors duration-200"
         href="/cat"
       >
         Categories

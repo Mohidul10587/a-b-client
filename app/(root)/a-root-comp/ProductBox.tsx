@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { IProduct } from "@/types/product";
 import Product from "@/components/Product.home";
-import Products from "@/components/Product";
+
 interface ProductBoxProps {
   items: IProduct[];
   elementItem?: any;
@@ -260,7 +260,7 @@ const ProductBox: React.FC<ProductBoxProps> = ({ items, elementItem }) => {
               }`}
             >
               {items?.slice(1, 3).map((item, index) => (
-                <Products key={index} {...item} />
+                <Product key={index} {...item} />
               ))}
             </div>
           </div>
@@ -301,7 +301,7 @@ const ProductBox: React.FC<ProductBoxProps> = ({ items, elementItem }) => {
               }`}
             >
               {items?.slice(0, 1).map((item, index) => (
-                <Products key={index} {...item} />
+                <Product key={index} {...item} />
               ))}
             </div>
           </div>
@@ -334,7 +334,7 @@ const ProductBox: React.FC<ProductBoxProps> = ({ items, elementItem }) => {
               }`}
             >
               {items?.slice(3).map((item, index) => (
-                <Products key={index} {...item} />
+                <Product key={index} {...item} />
               ))}
             </div>
           </div>
