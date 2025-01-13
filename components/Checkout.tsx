@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import React, { useState } from 'react';
-import Location from './Location';
+
 
 const Checkout: React.FC = () => {
   const [shippingCost, setShippingCost] = useState<number>(50); // Default shipping cost
