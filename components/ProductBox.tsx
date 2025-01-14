@@ -22,6 +22,30 @@ const ProductDiv: React.FC<ProductDivProps> = ({
       {products?.map((product, index) => (
         <Product key={index} {...product} />
       ))}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}{" "}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}{" "}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}{" "}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}{" "}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}{" "}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}{" "}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}{" "}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}{" "}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}{" "}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}
+      {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}
       {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct} {fakeProduct}
     </div>
   );
