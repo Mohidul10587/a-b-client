@@ -168,8 +168,6 @@ const UpdateSubcategory: React.FC<{ id: string[] }> = ({ id }) => {
               <p>Description</p>
               <Content
                 onChange={(content) => setDescription(content)}
-                required
-                setContentValidity={setIsContentValid}
                 initialContent={description}
               />
             </div>

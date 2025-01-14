@@ -185,8 +185,6 @@ const UpdateWriter: React.FC<WriterProps> = ({ writerId }) => {
                 <p>Description</p>
                 <Content
                   onChange={(content) => setDescription(content)}
-                  required
-                  setContentValidity={setIsContentValid}
                   initialContent={description} // Pass the initialContent prop here
                 />
               </div>

@@ -127,11 +127,7 @@ const IndexPage: React.FC = () => {
               </div>
               <div className="mb-4">
                 <p>Description</p>
-                <Content
-                  onChange={(content) => setDescription(content)}
-                  required
-                  setContentValidity={setIsContentValid}
-                />
+                <Content onChange={(content) => setDescription(content)} />
               </div>
 
               <Meta

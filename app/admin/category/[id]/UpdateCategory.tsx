@@ -216,8 +216,6 @@ const UpdateCategory: React.FC<{
               <p>Description</p>
               <Content
                 onChange={(content) => setDescription(content)}
-                required
-                setContentValidity={setIsContentValid}
                 initialContent={description}
               />
             </div>
