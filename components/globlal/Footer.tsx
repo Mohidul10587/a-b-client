@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import FooterMenu from "./FooterMenu";
+import FooterMenu from "../FooterMenu";
 import { fetchSettings } from "@/app/shared/fetchSettingsData";
 
 // Server component
