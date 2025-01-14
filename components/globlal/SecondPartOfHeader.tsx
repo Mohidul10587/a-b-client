@@ -1,36 +1,11 @@
 import { fetchSettings } from "@/app/shared/fetchSettingsData";
-import { apiUrl } from "@/app/shared/urls"; // Assuming you have apiUrl defined
 import Image from "next/image";
 import Link from "next/link";
 import Search from "../Search";
-import { ICategory, ISubcategory } from "@/types/category";
 import CategoriesItems from "../CategoriesItems";
+import { fetchCategories } from "@/app/shared/fetchData";
 
 // Assuming subcategories are part of ICategory
-
-interface ICategoryWithSubcategories extends ICategory {
-  subcategories: ISubcategory[];
-}
-
-async function fetchCategories(): Promise<ICategoryWithSubcategories[]> {
-  try {
-    const response = await fetch(`${apiUrl}/category/all`);
-    if (!response.ok) {
-      console.error(
-        "Failed to fetch categories:",
-        response.status,
-        response.statusText
-      );
-      throw new Error("Failed to fetch categories");
-    }
-    const data = await response.json();
-    return data.categories;
-  } catch (error) {
-    console.error("Error in fetchCategories:", error);
-    throw error;
-  }
-}
-
 const SecondPartOfHeader: React.FC = async () => {
   // Fetch settings and categories concurrently
   const [settings, categories] = await Promise.all([

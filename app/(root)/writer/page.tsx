@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Writers from "./Writers";
 import { fetchElement } from "@/app/shared/fetchElements";
+import { getWriters } from "@/app/shared/fetchData";
 export const generateMetadata = (): Metadata => {
   return {
     title: "Writers | Price in Kenya",
@@ -15,7 +16,7 @@ export const generateMetadata = (): Metadata => {
 };
 
 const IndexPage: React.FC = async () => {
-  const { writers }: any = await getData();
+  const writers: any = await getWriters();
   const element = await fetchElement("home-main", "home-main");
   return (
     <>
@@ -52,18 +53,3 @@ const IndexPage: React.FC = async () => {
   );
 };
 export default IndexPage;
-
-async function getData() {
-  const writersResponse = await fetch(`${apiUrl}/writer/all`, {
-    next: { revalidate: 30 },
-  });
-
-  if (!writersResponse.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    alert("Please check your internet connection");
-  }
-
-  const { writers } = await writersResponse.json();
-
-  return { writers };
-}

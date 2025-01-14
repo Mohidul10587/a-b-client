@@ -37,7 +37,7 @@ async function RootLayout({ children }: RootLayoutProps) {
   } !important} /* Fallback color for borders */
 `}</style>
       </head>
-      <body className="bg-gray-200" cz-shortcut-listen="true">
+      <body className="bg-gray-300" cz-shortcut-listen="true">
         {/* Provide settings globally */}
         <SettingsProvider value={settings}>{children}</SettingsProvider>
       </body>

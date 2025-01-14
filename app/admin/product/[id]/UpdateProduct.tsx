@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { ICategory, InfoSection } from "@/types/category";
 import Meta from "@/app/admin/components/Meta";
 import { IProduct } from "@/types/product";
+import { generateSlug } from "@/app/shared/gennerateSlug";
 
 interface Writer {
   _id: string;
@@ -167,7 +168,7 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
 
     const formData = new FormData();
     formData.append("title", title);
-    formData.append("slug", slug);
+    formData.append("slug", generateSlug(title));
 
     formData.append("description", finalDescription);
     formData.append("shortDescription", finalShortDescription);
@@ -255,7 +256,6 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
                 <p>Description</p>
                 <Content
                   onChange={(content) => setDescription(content)}
-                  setContentValidity={setIsContentValid}
                   initialContent={description} // Pass the initialContent prop here
                 />
               </div>
@@ -263,7 +263,6 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
                 <p>Short Description</p>
                 <Content
                   onChange={(content) => setShortDescription(content)}
-                  setContentValidity={setIsContentValid}
                   initialContent={shortDescription}
                 />
               </div>

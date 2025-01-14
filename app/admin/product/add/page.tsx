@@ -11,6 +11,7 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Meta from "@/app/admin/components/Meta";
 import { ISuggestion } from "@/types/suggestion";
+import { generateSlug } from "@/app/shared/gennerateSlug";
 const IndexPage: React.FC = () => {
   const [publisher, setSupplier] = useState("");
   const [summary, setSummary] = useState("");
@@ -31,12 +32,9 @@ const IndexPage: React.FC = () => {
   const [title, setTitle] = useState("");
   const [titleEnglish, setTitleEnglish] = useState("");
   const [subTitle, setSubTitle] = useState("");
-  const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
   const [shortDescription, setShortDescription] = useState("");
-  const [isContentValid, setIsContentValid] = useState(false);
   const [category, setCategory] = useState("");
-
   const [price, setPrice] = useState(0);
   const [unprice, setunPrice] = useState(0);
   const [stockStatus, setStockStatus] = useState("In Stock");
@@ -46,7 +44,6 @@ const IndexPage: React.FC = () => {
   const [shippingOutside, setShippingOutside] = useState(100);
   const [writers, setWriters] = useState<IWriter[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
-
   const [photo, setPhoto] = useState<File | null>(null);
   const [metaImageFile, setMetaImageFile] = useState<File | null>(null);
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
@@ -185,7 +182,7 @@ const IndexPage: React.FC = () => {
 
     const formData = new FormData();
     formData.append("title", title);
-    formData.append("slug", slug);
+    formData.append("slug", generateSlug(title));
     formData.append("description", finalDescription);
     formData.append("shortDescription", finalShortDescription);
     formData.append("category", category);
@@ -247,20 +244,9 @@ const IndexPage: React.FC = () => {
       openModal("Failed to upload product due to an unexpected error");
     }
   };
-  // Function to generate a slug from the title
-  const generateSlug = (title: string) => {
-    return title
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, "") // Remove special characters except dashes
-      .replace(/\s+/g, "-") // Replace spaces with dashes
-      .replace(/--+/g, "-") // Replace multiple dashes with a single dash
-      .trim();
-  };
 
   // Update slug whenever the title changes
-  useEffect(() => {
-    setSlug(generateSlug(title));
-  }, [title]);
+
   return (
     <>
       <div className="container my-4 flex justify-center">
@@ -291,17 +277,6 @@ const IndexPage: React.FC = () => {
                     name="title"
                     value={titleEnglish}
                     onChange={(e) => setTitleEnglish(e.target.value)}
-                    className="mt-1 p-2 w-full border rounded-md border-black"
-                  />
-                </div>
-                <div className="mb-4">
-                  <p>Slug</p>
-                  <input
-                    type="text"
-                    placeholder="Slug"
-                    name="slug"
-                    value={slug}
-                    onChange={(e) => setSlug(e.target.value)}
                     className="mt-1 p-2 w-full border rounded-md border-black"
                   />
                 </div>
@@ -558,18 +533,12 @@ const IndexPage: React.FC = () => {
                 </div>
                 <div className="mb-4">
                   <p>Description</p>
-                  <Content
-                    onChange={(content) => setDescription(content)}
-                    required
-                    setContentValidity={setIsContentValid}
-                  />
+                  <Content onChange={(content) => setDescription(content)} />
                 </div>
                 <div className="mb-4">
                   <p>Short Description</p>
                   <Content
                     onChange={(content) => setShortDescription(content)}
-                    required
-                    setContentValidity={setIsContentValid}
                   />
                 </div>
 

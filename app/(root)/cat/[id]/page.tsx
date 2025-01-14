@@ -9,6 +9,8 @@ import { FC } from "react";
 import { Props } from "@/types/pageProps";
 
 import { fetchElement } from "@/app/shared/fetchElements";
+import ProductDiv from "@/components/ProductBox";
+import Image from "next/image";
 
 export async function generateMetadata(
   { params }: Props,
@@ -74,76 +76,45 @@ const IndexPage: FC<Props> = async ({ params }) => {
   const element = await fetchElement(category._id, "category");
 
   return (
-    <>
-      <div className="container mb-4">
-        <ol className="hidden lg:flex items-center mb-1.5 pt-1.5 pb-0 px-4 flex-wrap gap-4 gap-y-1 bg-white rounded-b-md text-sm shadow-sm">
-          <li>
-            <Link
-              href="/"
-              title={settings?.title}
-              className="hover:text-gray-600 bg-gray-200 px-3 py-1 rounded max-w-sm inline-block truncate"
-            >
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/cat"
-              title="All categories"
-              className="hover:text-gray-600 bg-gray-200 px-3 py-1 rounded max-w-sm inline-block truncate"
-            >
-              Categories
-            </Link>
-          </li>
-          <li>
-            <p className="hover:text-gray-600 py-1 rounded max-w-sm inline-block truncate">
-              {category?.categoryName}
-            </p>
-          </li>
-        </ol>
-      </div>
-      <ElementSection elementsData={element} />
-      {category?.shortDescription && (
-        <div className="container my-4">
-          <div className="bg-white p-4 border text-lg leading-7">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: category.shortDescription,
-              }}
-            />
+    <div className="max-w-6xl m-auto">
+      <div className="grid grid-cols-5">
+        <div className="col-span-1 bg-green-700">this is div</div>
+        <div className="col-span-4 w-full">
+          <div className="flex justify-between mb-2">
+            <div className="w-2/12">
+              <div className="flex justify-center h-44 items-center">
+                <Image
+                  src={category?.photo || "/default.jpg"}
+                  alt="Author Image"
+                  width={100}
+                  height={94}
+                  className="rounded-full "
+                />
+              </div>
+            </div>
+            <div className="w-10/12">
+              <span className="font-semibold text-2xl">
+                {category.categoryName}
+              </span>
+
+              <ReadMore height="h-24">
+                {category && (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: category.description,
+                    }}
+                  ></div>
+                )}
+              </ReadMore>
+            </div>
+          </div>
+
+          <div className="">
+            <ProductDiv products={products} />
           </div>
         </div>
-      )}
-      {/* <ElementSection id={category._id} page="category" /> */}
-
-      <div className="container">
-        <CategoryProducts
-          country={settings.country}
-          categoryName={category?.categoryName}
-          products={products}
-          writers={writers}
-        />
       </div>
-
-      {category?.description && (
-        <div className="container my-4">
-          <div className="bg-white p-4 border text-lg leading-7">
-            <h1 className="text-xl font-bold mb-2">
-              Buy {category?.categoryName} in {settings?.country}
-            </h1>
-            <ReadMore height="h-20">
-              {category && (
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: category.description,
-                  }}
-                ></div>
-              )}
-            </ReadMore>
-          </div>
-        </div>
-      )}
-    </>
+    </div>
   );
 };
 

@@ -55,13 +55,14 @@ const NewBanner: React.FC<BannerProps> = ({ elementItem }) => {
   useEffect(() => {
     const updateItemsToShow = () => {
       if (window.innerWidth < 640) setItemsToShow(mobileGrid); // Mobile
-      else if (window.innerWidth < 768) setItemsToShow(desktopGrid); // Small tablets
+      else if (window.innerWidth < 768)
+        setItemsToShow(desktopGrid); // Small tablets
       else setItemsToShow(desktopGrid); // Desktops
     };
 
     updateItemsToShow();
-    window.addEventListener('resize', updateItemsToShow);
-    return () => window.removeEventListener('resize', updateItemsToShow);
+    window.addEventListener("resize", updateItemsToShow);
+    return () => window.removeEventListener("resize", updateItemsToShow);
   }, [desktopGrid, mobileGrid]);
 
   // Handling swipe functionality
@@ -87,8 +88,11 @@ const NewBanner: React.FC<BannerProps> = ({ elementItem }) => {
     setIsSwiping(false);
   };
 
-  const displayedItems = items?.slice(startIndex, startIndex + itemsToShow)
-    .concat(items.slice(0, Math.max(0, startIndex + itemsToShow - items.length)));
+  const displayedItems = items
+    ?.slice(startIndex, startIndex + itemsToShow)
+    .concat(
+      items.slice(0, Math.max(0, startIndex + itemsToShow - items.length))
+    );
 
   const itemWidth = 100 / itemsToShow;
 
@@ -108,42 +112,42 @@ const NewBanner: React.FC<BannerProps> = ({ elementItem }) => {
 
   return (
     <>
-      {gridStyle === "1" ? (
-        <div className="relative group">
-          <div
-            ref={containerRef}
-            onMouseDown={handleMouseDown}
-            style={{ cursor: isSwiping ? "grabbing" : "grab" }}
-            className={`flex overflow-hidden w-full ${margin === 0
-            ? "gap-0"
-            : margin === 1
-            ? "gap-0.5"
-            : margin === 2
-            ? "gap-1"
-            : margin === 3
-            ? "gap-1.5"
-            : margin === 4
-            ? "gap-2"
-            : margin === 5
-            ? "gap-2.5"
-            : margin === 6
-            ? "gap-3"
-            : margin === 7
-            ? "gap-3.5"
-            : margin === 8
-            ? "gap-4"
-            : margin === 9
-            ? "gap-[18px]"
-            : margin === 10
-            ? "gap-5"
-            : null
+      <div className="relative group">
+        <div
+          ref={containerRef}
+          onMouseDown={handleMouseDown}
+          style={{ cursor: isSwiping ? "grabbing" : "grab" }}
+          className={`flex overflow-hidden w-full ${
+            margin === 0
+              ? "gap-0"
+              : margin === 1
+              ? "gap-0.5"
+              : margin === 2
+              ? "gap-1"
+              : margin === 3
+              ? "gap-1.5"
+              : margin === 4
+              ? "gap-2"
+              : margin === 5
+              ? "gap-2.5"
+              : margin === 6
+              ? "gap-3"
+              : margin === 7
+              ? "gap-3.5"
+              : margin === 8
+              ? "gap-4"
+              : margin === 9
+              ? "gap-[18px]"
+              : margin === 10
+              ? "gap-5"
+              : null
           }`}
         >
           {displayedItems.map((post: BannerItem, index: number) => (
             <div
               key={index}
               className="transition-opacity duration-500 w-full"
-              style={{ flex: `0 0 ${itemWidth}%`}}
+              style={{ flex: `0 0 ${itemWidth}%` }}
             >
               <Link
                 href={post.link}
@@ -184,39 +188,40 @@ const NewBanner: React.FC<BannerProps> = ({ elementItem }) => {
                     backgroundColor: boxBg || "#000000",
                   }}
                 />
-                {post.title &&
-                  <p className={`text-sm pt-0 ${
-                    titleAlignment === "left"
-                      ? "text-left"
-                      : titleAlignment === "right"
-                      ? "text-right"
-                      : titleAlignment === "center"
-                      ? "text-center"
-                      : ""
+                {post.title && (
+                  <p
+                    className={`text-sm pt-0 ${
+                      titleAlignment === "left"
+                        ? "text-left"
+                        : titleAlignment === "right"
+                        ? "text-right"
+                        : titleAlignment === "center"
+                        ? "text-center"
+                        : ""
                     } ${
                       padding === 0
-                      ? "p-0"
-                      : padding === 1
-                      ? "p-0.5"
-                      : padding === 2
-                      ? "p-1"
-                      : padding === 3
-                      ? "p-1.5"
-                      : padding === 4
-                      ? "p-2"
-                      : padding === 5
-                      ? "p-2.5"
-                      : padding === 6
-                      ? "p-3"
-                      : padding === 7
-                      ? "p-3.5"
-                      : padding === 8
-                      ? "p-4"
-                      : padding === 9
-                      ? "p-[18px]"
-                      : padding === 10
-                      ? "p-5"
-                      : ""
+                        ? "p-0"
+                        : padding === 1
+                        ? "p-0.5"
+                        : padding === 2
+                        ? "p-1"
+                        : padding === 3
+                        ? "p-1.5"
+                        : padding === 4
+                        ? "p-2"
+                        : padding === 5
+                        ? "p-2.5"
+                        : padding === 6
+                        ? "p-3"
+                        : padding === 7
+                        ? "p-3.5"
+                        : padding === 8
+                        ? "p-4"
+                        : padding === 9
+                        ? "p-[18px]"
+                        : padding === 10
+                        ? "p-5"
+                        : ""
                     }`}
                     style={{
                       color: boxText || "#ffffff",
@@ -225,7 +230,7 @@ const NewBanner: React.FC<BannerProps> = ({ elementItem }) => {
                   >
                     {post.title}
                   </p>
-                }
+                )}
               </Link>
             </div>
           ))}
@@ -267,473 +272,6 @@ const NewBanner: React.FC<BannerProps> = ({ elementItem }) => {
           </div>
         </div>
       </div>
-      ) : gridStyle === "2" ? (
-        <div
-          className={`grid grid-cols-${mobileGrid} md:grid-cols-${desktopGrid} ${margin === 0
-            ? "gap-0"
-            : margin === 1
-            ? "gap-0.5"
-            : margin === 2
-            ? "gap-1"
-            : margin === 3
-            ? "gap-1.5"
-            : margin === 4
-            ? "gap-2"
-            : margin === 5
-            ? "gap-2.5"
-            : margin === 6
-            ? "gap-3"
-            : margin === 7
-            ? "gap-3.5"
-            : margin === 8
-            ? "gap-4"
-            : margin === 9
-            ? "gap-[18px]"
-            : margin === 10
-            ? "gap-5"
-            : null
-          }`}
-        >
-          {bannerId?.banners.map((post: any, postIndex: any) => (
-            <Link
-              href={post.link}
-              className="flex-col flex relative rounded overflow-hidden hover:shadow-md"
-              key={postIndex}
-            >
-              <Image
-                src={post.img}
-                width={width}
-                height={height}
-                alt={post.title}
-                quality={100}
-                className={`hover:scale-[1.01] transition-all duration-500 w-full h-full ${
-                  padding === 0
-                    ? "p-0"
-                    : padding === 1
-                    ? "p-0.5"
-                    : padding === 2
-                    ? "p-1"
-                    : padding === 3
-                    ? "p-1.5"
-                    : padding === 4
-                    ? "p-2"
-                    : padding === 5
-                    ? "p-2.5"
-                    : padding === 6
-                    ? "p-3"
-                    : padding === 7
-                    ? "p-3.5"
-                    : padding === 8
-                    ? "p-4"
-                    : padding === 9
-                    ? "p-[18px]"
-                    : padding === 10
-                    ? "p-5"
-                    : ""
-                }`}
-                style={{
-                  backgroundColor: boxBg || "#000000",
-                }}
-              />
-              {post.title &&
-                <p className={`text-sm pt-0 ${
-                  titleAlignment === "left"
-                    ? "text-left"
-                    : titleAlignment === "right"
-                    ? "text-right"
-                    : titleAlignment === "center"
-                    ? "text-center"
-                    : ""
-                  } ${
-                    padding === 0
-                    ? "p-0"
-                    : padding === 1
-                    ? "p-0.5"
-                    : padding === 2
-                    ? "p-1"
-                    : padding === 3
-                    ? "p-1.5"
-                    : padding === 4
-                    ? "p-2"
-                    : padding === 5
-                    ? "p-2.5"
-                    : padding === 6
-                    ? "p-3"
-                    : padding === 7
-                    ? "p-3.5"
-                    : padding === 8
-                    ? "p-4"
-                    : padding === 9
-                    ? "p-[18px]"
-                    : padding === 10
-                    ? "p-5"
-                    : ""
-                  }`}
-                  style={{
-                    color: boxText || "#ffffff",
-                    backgroundColor: boxBg || "#000000",
-                  }}
-                >
-                  {post.title}
-                </p>
-              }
-            </Link>
-          ))}
-        </div>
-      ) : gridStyle === "3" ? (
-        <div className={`col-span-12 grid grid-cols-6 md:grid-cols-12 ${margin === 0
-          ? "gap-0"
-          : margin === 1
-          ? "gap-0.5"
-          : margin === 2
-          ? "gap-1"
-          : margin === 3
-          ? "gap-1.5"
-          : margin === 4
-          ? "gap-2"
-          : margin === 5
-          ? "gap-2.5"
-          : margin === 6
-          ? "gap-3"
-          : margin === 7
-          ? "gap-3.5"
-          : margin === 8
-          ? "gap-4"
-          : margin === 9
-          ? "gap-[18px]"
-          : margin === 10
-          ? "gap-5"
-          : null
-          }`}
-        >
-          <div className="col-span-12 md:col-span-3">
-            <div className={`grid grid-cols-2 md:grid-cols-1 ${margin === 0
-              ? "gap-0"
-              : margin === 1
-              ? "gap-0.5"
-              : margin === 2
-              ? "gap-1"
-              : margin === 3
-              ? "gap-1.5"
-              : margin === 4
-              ? "gap-2"
-              : margin === 5
-              ? "gap-2.5"
-              : margin === 6
-              ? "gap-3"
-              : margin === 7
-              ? "gap-3.5"
-              : margin === 8
-              ? "gap-4"
-              : margin === 9
-              ? "gap-[18px]"
-              : margin === 10
-              ? "gap-5"
-              : null
-              }`}
-            >
-              {bannerId.banners.slice(1, 3).map((post: any, postIndex: any) => (
-                <Link
-                  href={post.link}
-                  className="flex-col flex bg-white rounded overflow-hidden hover:shadow-md"
-                  key={postIndex}
-                >
-                  <Image
-                    src={post.img}
-                    width={width}
-                    height={height}
-                    alt={post.title}
-                    quality={100}
-                    className={`w-full h-full ${
-                      padding === 0
-                        ? "p-0"
-                        : padding === 1
-                        ? "p-0.5"
-                        : padding === 2
-                        ? "p-1"
-                        : padding === 3
-                        ? "p-1.5"
-                        : padding === 4
-                        ? "p-2"
-                        : padding === 5
-                        ? "p-2.5"
-                        : padding === 6
-                        ? "p-3"
-                        : padding === 7
-                        ? "p-3.5"
-                        : padding === 8
-                        ? "p-4"
-                        : padding === 9
-                        ? "p-[18px]"
-                        : padding === 10
-                        ? "p-5"
-                        : ""
-                    }`}
-                  />
-                  {post.title &&
-                    <p className={`text-sm pt-0 ${
-                      titleAlignment === "left"
-                        ? "text-left"
-                        : titleAlignment === "right"
-                        ? "text-right"
-                        : titleAlignment === "center"
-                        ? "text-center"
-                        : ""
-                      } ${
-                        padding === 0
-                        ? "p-0"
-                        : padding === 1
-                        ? "p-0.5"
-                        : padding === 2
-                        ? "p-1"
-                        : padding === 3
-                        ? "p-1.5"
-                        : padding === 4
-                        ? "p-2"
-                        : padding === 5
-                        ? "p-2.5"
-                        : padding === 6
-                        ? "p-3"
-                        : padding === 7
-                        ? "p-3.5"
-                        : padding === 8
-                        ? "p-4"
-                        : padding === 9
-                        ? "p-[18px]"
-                        : padding === 10
-                        ? "p-5"
-                        : ""
-                      }`}
-                    >
-                      {post.title}
-                    </p>
-                  }
-                </Link>
-              ))}
-            </div>
-          </div>
-          <div className={`col-span-12 md:col-span-6 ${imagePosition === "right"
-              ? "order-last"
-              : imagePosition === "left"
-              ? "order-first"
-              : ""
-              }`}>
-            <div className={`grid grid-cols-1 ${margin === 0
-              ? "gap-0"
-              : margin === 1
-              ? "gap-0.5"
-              : margin === 2
-              ? "gap-1"
-              : margin === 3
-              ? "gap-1.5"
-              : margin === 4
-              ? "gap-2"
-              : margin === 5
-              ? "gap-2.5"
-              : margin === 6
-              ? "gap-3"
-              : margin === 7
-              ? "gap-3.5"
-              : margin === 8
-              ? "gap-4"
-              : margin === 9
-              ? "gap-[18px]"
-              : margin === 10
-              ? "gap-5"
-              : ""
-              }`}
-            >
-              {bannerId.banners[0] && (
-                <Link
-                  href={bannerId.banners[0].link}
-                  className="flex-col flex bg-white rounded overflow-hidden hover:shadow-md"
-                >
-                  <Image
-                    src={bannerId.banners[0].img}
-                    width={width}
-                    height={height}
-                    alt={bannerId.banners[0].title}
-                    quality={100}
-                    className={`w-full h-full ${
-                      padding === 0
-                        ? "p-0"
-                        : padding === 1
-                        ? "p-0.5"
-                        : padding === 2
-                        ? "p-1"
-                        : padding === 3
-                        ? "p-1.5"
-                        : padding === 4
-                        ? "p-2"
-                        : padding === 5
-                        ? "p-2.5"
-                        : padding === 6
-                        ? "p-3"
-                        : padding === 7
-                        ? "p-3.5"
-                        : padding === 8
-                        ? "p-4"
-                        : padding === 9
-                        ? "p-[18px]"
-                        : padding === 10
-                        ? "p-5"
-                        : ""
-                    }`}
-                  />
-                  {bannerId.banners[0].title &&
-                    <p className={`text-sm pt-0 ${
-                      titleAlignment === "left"
-                        ? "text-left"
-                        : titleAlignment === "right"
-                        ? "text-right"
-                        : titleAlignment === "center"
-                        ? "text-center"
-                        : ""
-                      } ${
-                        padding === 0
-                        ? "p-0"
-                        : padding === 1
-                        ? "p-0.5"
-                        : padding === 2
-                        ? "p-1"
-                        : padding === 3
-                        ? "p-1.5"
-                        : padding === 4
-                        ? "p-2"
-                        : padding === 5
-                        ? "p-2.5"
-                        : padding === 6
-                        ? "p-3"
-                        : padding === 7
-                        ? "p-3.5"
-                        : padding === 8
-                        ? "p-4"
-                        : padding === 9
-                        ? "p-[18px]"
-                        : padding === 10
-                        ? "p-5"
-                        : ""
-                      }`}
-                    >
-                      {bannerId.banners[0].title}
-                    </p>
-                  }
-                </Link>
-              )}
-            </div>
-          </div>
-          <div className="col-span-12 md:col-span-3">
-            <div className={`grid grid-cols-2 md:grid-cols-1 ${margin === 0
-              ? "gap-0"
-              : margin === 1
-              ? "gap-0.5"
-              : margin === 2
-              ? "gap-1"
-              : margin === 3
-              ? "gap-1.5"
-              : margin === 4
-              ? "gap-2"
-              : margin === 5
-              ? "gap-2.5"
-              : margin === 6
-              ? "gap-3"
-              : margin === 7
-              ? "gap-3.5"
-              : margin === 8
-              ? "gap-4"
-              : margin === 9
-              ? "gap-[18px]"
-              : margin === 10
-              ? "gap-5"
-              : null
-              }`}
-            >
-              {bannerId.banners.slice(3).map((post: any, postIndex: any) => (
-                <Link
-                  href={post.link}
-                  className="flex-col flex bg-white rounded overflow-hidden hover:shadow-md"
-                  key={postIndex + 3}
-                >
-                  <Image
-                    src={post.img}
-                    width={width}
-                    height={height}
-                    alt={post.title}
-                    quality={100}
-                    className={`w-full h-full ${
-                      padding === 0
-                        ? "p-0"
-                        : padding === 1
-                        ? "p-0.5"
-                        : padding === 2
-                        ? "p-1"
-                        : padding === 3
-                        ? "p-1.5"
-                        : padding === 4
-                        ? "p-2"
-                        : padding === 5
-                        ? "p-2.5"
-                        : padding === 6
-                        ? "p-3"
-                        : padding === 7
-                        ? "p-3.5"
-                        : padding === 8
-                        ? "p-4"
-                        : padding === 9
-                        ? "p-[18px]"
-                        : padding === 10
-                        ? "p-5"
-                        : ""
-                    }`}
-                  />
-                  {post.title &&
-                    <p className={`text-sm pt-0 ${
-                      titleAlignment === "left"
-                        ? "text-left"
-                        : titleAlignment === "right"
-                        ? "text-right"
-                        : titleAlignment === "center"
-                        ? "text-center"
-                        : ""
-                      } ${
-                        padding === 0
-                        ? "p-0"
-                        : padding === 1
-                        ? "p-0.5"
-                        : padding === 2
-                        ? "p-1"
-                        : padding === 3
-                        ? "p-1.5"
-                        : padding === 4
-                        ? "p-2"
-                        : padding === 5
-                        ? "p-2.5"
-                        : padding === 6
-                        ? "p-3"
-                        : padding === 7
-                        ? "p-3.5"
-                        : padding === 8
-                        ? "p-4"
-                        : padding === 9
-                        ? "p-[18px]"
-                        : padding === 10
-                        ? "p-5"
-                        : ""
-                      }`}
-                    >
-                      {post.title}
-                    </p>
-                  }
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      ) : gridStyle === "4" ? (
-        <></>
-      ) : (
-        <></>
-      )}
     </>
   );
 };

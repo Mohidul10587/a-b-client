@@ -90,7 +90,7 @@ const ProductBox: React.FC<ProductBoxProps> = ({ items, elementItem }) => {
   }, [isSwiping]);
 
   return (
-    <>
+    <div className="md:min-w-6xl md:max-w-6xl">
       {gridStyle === "1" ? (
         <div className="relative group">
           <div
@@ -342,7 +342,7 @@ const ProductBox: React.FC<ProductBoxProps> = ({ items, elementItem }) => {
       ) : (
         <></>
       )}
-    </>
+    </div>
   );
 };
 

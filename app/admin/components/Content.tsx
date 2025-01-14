@@ -5,19 +5,14 @@ import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 
 interface ContentProps {
   onChange: (content: string) => void;
-  required?: boolean;
-  setContentValidity: (isValid: boolean) => void;
   initialContent?: string;
 }
-
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
 
 const Content: React.FC<ContentProps> = ({
   onChange,
-  required,
-  setContentValidity,
   initialContent = "", // Default value for initialContent
 }) => {
   const [content, setContent] = useState(initialContent);
@@ -25,16 +20,8 @@ const Content: React.FC<ContentProps> = ({
   const handleChange = (content: string) => {
     setContent(content);
     onChange(content);
-    if (required) {
-      setContentValidity(content.trim() !== "");
-    }
   };
 
-  useEffect(() => {
-    if (!required) {
-      setContentValidity(content.trim() !== "");
-    }
-  }, [content, required, setContentValidity]);
   useEffect(() => {
     setContent(initialContent); // Set initial content on mount
   }, [initialContent]);

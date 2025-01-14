@@ -7,8 +7,9 @@ import { Metadata, ResolvingMetadata } from "next";
 import ElementSection from "@/app/(root)/a-root-comp/ElementSection";
 import { FC } from "react";
 import { Props } from "@/types/pageProps";
-import WriterProducts from "./WriterPoducts";
 import { fetchElement } from "@/app/shared/fetchElements";
+import Image from "next/image";
+import ProductDiv from "@/components/ProductBox";
 
 // Utility function to fetch all necessary data
 async function getData(slug: string) {
@@ -25,7 +26,6 @@ async function getData(slug: string) {
       ),
       fetchSettings(),
     ]);
-
     return {
       products: productsRes || [],
       writer: writerRes?.writer || null,
@@ -95,72 +95,51 @@ const IndexPage: FC<Props> = async ({ params }) => {
 
   // Fetch all necessary data
   const { products, writer, categories, settings } = await getData(writerId);
-
+  console.log(writer, categories, settings);
   if (!writer || !settings) {
     return <div>Failed to load writer data or settings data.</div>;
   }
   const element = await fetchElement("home-main", "home-main");
   return (
-    <>
-      <div className="container mb-4">
-        <ol className="hidden lg:flex items-center mb-1.5 pt-1.5 pb-0 px-4 flex-wrap gap-4 gap-y-1 bg-white rounded-b-md text-sm shadow-sm">
-          <li>
-            <Link
-              href="/"
-              title="Price in Kenya"
-              className="hover:text-gray-600 bg-gray-200 px-3 py-1 rounded max-w-sm inline-block truncate"
-            >
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/writer"
-              title="All Writers"
-              className="hover:text-gray-600 bg-gray-200 px-3 py-1 rounded max-w-sm inline-block truncate"
-            >
-              Writers
-            </Link>
-          </li>
-          <li>
-            <Link
-              href={`/writer/${writer?.slug}`}
-              title="All writers"
-              className="hover:text-gray-600 bg-gray-200 px-3 py-1 rounded max-w-sm inline-block truncate"
-            >
-              {writer?.title}
-            </Link>
-          </li>
-        </ol>
-      </div>
+    <div className="max-w-6xl m-auto">
+      <div className="grid grid-cols-5">
+        <div className="col-span-1 bg-green-700">this is div</div>
 
-      <ElementSection elementsData={element} />
-      {/* <Banner items={banners} /> */}
-      <div className="container">
-        <WriterProducts
-          products={products}
-          categories={categories}
-          writerTitle={writer.title}
-        />
-      </div>
+        <div className="col-span-4">
+          <div className="flex justify-between mb-2 ">
+            <div className="w-2/12">
+              <div className="flex justify-center h-44 items-center">
+                <Image
+                  src={writer.photo}
+                  alt="Author Image"
+                  width={100}
+                  height={94}
+                  className="rounded-full "
+                />
+              </div>
+            </div>
+            <div className="w-10/12">
+              <span className="font-semibold text-2xl">{writer.title}</span>
 
-      <div className="container my-4">
-        <div className="bg-white p-4 border text-lg leading-7">
-          <h1 className="text-2xl font-bold mb-2">
-            Buy {writer?.title} in {settings.country}
-          </h1>
-          <ReadMore height="h-20">
-            {writer && (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: writer.description,
-                }}
-              ></div>
-            )}
-          </ReadMore>
+              <ReadMore height="h-24">
+                {writer && (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: writer.description,
+                    }}
+                  ></div>
+                )}
+              </ReadMore>
+            </div>
+          </div>
+
+          {/* Products after query */}
+          <div className="">
+            <ProductDiv products={products} />
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
