@@ -21,7 +21,7 @@ const IndexPage = async () => {
   const settings = await fetchSettings();
   const element = await fetchElement("home-main", "home-main");
   return (
-    <div className="max-w-6xl m-auto">
+    <div className="max-w-6xl mx-auto">
       <ElementSection elementsData={element} />
       {settings.description && (
         <div className="container my-4">

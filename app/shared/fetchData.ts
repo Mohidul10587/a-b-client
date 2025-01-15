@@ -37,3 +37,18 @@ export async function getWriters() {
 
   return writers;
 }
+
+export async function getPublishers() {
+  const response = await fetch(`${apiUrl}/publishers/allForProductUploadPage`, {
+    next: { revalidate: 30 },
+  });
+
+  if (!response.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    alert("Please check your internet connection");
+  }
+
+  const { publishers } = await response.json();
+
+  return publishers;
+}

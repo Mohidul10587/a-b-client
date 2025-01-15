@@ -76,10 +76,10 @@ const IndexPage: FC<Props> = async ({ params }) => {
   const element = await fetchElement(category._id, "category");
 
   return (
-    <div className="max-w-6xl m-auto">
+    <div className="max-w-6xl mx-auto">
       <div className="grid grid-cols-5">
         <div className="col-span-1 bg-green-700">this is div</div>
-        <div className="col-span-4 w-full">
+        <div className="col-span-4">
           <div className="flex justify-between mb-2">
             <div className="w-2/12">
               <div className="flex justify-center h-44 items-center">
@@ -109,9 +109,7 @@ const IndexPage: FC<Props> = async ({ params }) => {
             </div>
           </div>
 
-          <div className="">
-            <ProductDiv products={products} />
-          </div>
+          <ProductDiv products={products} />
         </div>
       </div>
     </div>

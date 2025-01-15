@@ -38,13 +38,13 @@ const Cart = () => {
   };
 
   return (
-    <div className="p-8">
+    <div className="max-w-6xl mx-auto">
       <div>
         <h1 className="text-2xl font-bold mb-6">Cart</h1>
         {cart.length === 0 ? (
           <p className="text-gray-600">Your cart is empty.</p>
         ) : (
-          <div className="container mx-auto p-4">
+          <div>
             {cart.map((item, index) => (
               <div key={index}>
                 <div className="flex border-b border-gray-300 p-4 items-center">

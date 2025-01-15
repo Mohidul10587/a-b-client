@@ -26,7 +26,7 @@
     "suneditor": "^2.46.2",
     "suneditor-react": "^3.6.1",
     "swiper": "^11.1.14",
-    "swr": "^2.2.5"
+    "swr": "^2.3.0"
   },
   "devDependencies": {
     "@types/node": "^20",

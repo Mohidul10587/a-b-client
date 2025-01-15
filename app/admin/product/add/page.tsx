@@ -13,7 +13,8 @@ import Meta from "@/app/admin/components/Meta";
 import { ISuggestion } from "@/types/suggestion";
 import { generateSlug } from "@/app/shared/gennerateSlug";
 const IndexPage: React.FC = () => {
-  const [publisher, setSupplier] = useState("");
+  const [publisher, setPublisher] = useState("");
+  const [publishers, setPublishers] = useState<any[]>([]);
   const [summary, setSummary] = useState("");
   const [numberOfPage, setNumberOfPage] = useState("");
   const [ISBN, setISBN] = useState("");
@@ -60,13 +61,28 @@ const IndexPage: React.FC = () => {
     setModalContent(content);
     setModalIsOpen(true);
   };
-  const [subCategory, setSubCategory] = useState("");
 
   const closeModal = () => {
     setModalIsOpen(false);
   };
 
   useEffect(() => {
+    const fetchPublishers = async () => {
+      try {
+        const response = await fetch(
+          `${apiUrl}/publishers/allForProductUploadPage`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+          setPublishers(data.publishers);
+        } else {
+          throw new Error("Failed to fetch brands");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
     const fetchSuggestion = async () => {
       try {
         const response = await fetch(`${apiUrl}/suggestion`);
@@ -81,6 +97,7 @@ const IndexPage: React.FC = () => {
         console.error(error);
       }
     };
+
     const fetchWriters = async () => {
       try {
         const response = await fetch(`${apiUrl}/writer/all`);
@@ -109,6 +126,7 @@ const IndexPage: React.FC = () => {
         console.log(error);
       }
     };
+    fetchPublishers();
     fetchSuggestion();
     fetchWriters();
     fetchCategories();
@@ -186,7 +204,6 @@ const IndexPage: React.FC = () => {
     formData.append("description", finalDescription);
     formData.append("shortDescription", finalShortDescription);
     formData.append("category", category);
-    formData.append("subCategory", subCategory);
     formData.append("price", String(price));
     formData.append("unprice", String(unprice));
     formData.append("stockStatus", stockStatus);
@@ -480,20 +497,20 @@ const IndexPage: React.FC = () => {
                     />
                   </div>
                   <div className="mb-4">
-                    <label
-                      htmlFor="publisher"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Publisher:
-                    </label>
-                    <input
-                      type="text"
-                      id="publisher"
-                      name="publisher"
-                      value={publisher}
-                      onChange={(e) => setSupplier(e.target.value)}
+                    <p>
+                      Publisher<sup className="text-red-700">*</sup>
+                    </p>
+                    <select
                       className="mt-1 p-2 w-full border rounded-md border-black"
-                    />
+                      value={publisher}
+                      onChange={(e) => setPublisher(e.target.value)}
+                    >
+                      {publishers.map((item) => (
+                        <option key={item._id} value={item._id}>
+                          {item.title}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
                 <div className="mb-4">
@@ -513,24 +530,6 @@ const IndexPage: React.FC = () => {
                   </select>
                 </div>
 
-                <div className="mb-4">
-                  <p>
-                    Subcategory<sup className="text-red-700">*</sup>
-                  </p>
-                  <select
-                    className="mt-1 p-2 w-full border rounded-md border-black"
-                    value={subCategory}
-                    onChange={(e) => setSubCategory(e.target.value)}
-                  >
-                    {categories
-                      .find((cat) => cat._id === category)
-                      ?.subCategories.map((subCat) => (
-                        <option key={subCat._id} value={subCat._id}>
-                          {subCat.title}
-                        </option>
-                      ))}
-                  </select>
-                </div>
                 <div className="mb-4">
                   <p>Description</p>
                   <Content onChange={(content) => setDescription(content)} />

@@ -7,8 +7,7 @@ const RootLayout: React.FC<{ children: React.ReactNode }> = async ({
   return (
     <div>
       <Header />
-      <main className="min-h-screen flex flex-col"> {children}</main>
-      {/* <Footer /> */}
+      <main> {children}</main>
     </div>
   );
 };

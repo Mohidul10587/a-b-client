@@ -83,53 +83,7 @@ export const ProductDetails = ({
     setActiveTab(tab);
   };
   return (
-    <div className="container">
-      <div className=" mb-4">
-        <ol className="hidden lg:flex items-center mb-1.5 pt-1.5 pb-0 px-4 flex-wrap gap-4 gap-y-1 bg-white rounded-b-md text-sm shadow-sm">
-          <li>
-            <Link
-              href="/"
-              title={settings?.title}
-              className="hover:text-gray-600 bg-gray-200 px-3 py-1 rounded max-w-sm inline-block truncate nuxt-link-active"
-            >
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              href={`/cat`}
-              title="All categories"
-              className="hover:text-gray-600 bg-gray-200 px-3 py-1 rounded max-w-sm inline-block truncate"
-            >
-              Categories
-            </Link>
-          </li>
-          <li>
-            <Link
-              href={`/cat/${categorySlug}`}
-              title="All Smartphones from Price in Kenya"
-              className="hover:text-gray-600 bg-gray-200 px-3 py-1 rounded max-w-sm inline-block truncate"
-            >
-              {product.category.categoryName}
-            </Link>
-          </li>
-          <li>
-            <Link
-              href={`/writer/${product.writer.slug}`}
-              title="Oppo products from Price in Kenya"
-              className="hover:text-gray-600 bg-gray-200 px-3 py-1 rounded max-w-sm inline-block truncate"
-            >
-              {product.writer.title}
-            </Link>
-          </li>
-          <li>
-            <p className="hover:text-gray-600 py-1 rounded max-w-sm inline-block truncate">
-              {product.title}
-            </p>
-          </li>
-        </ol>
-      </div>
-
+    <div className="max-w-6xl mx-auto">
       <div className="max-w-6xl mx-auto">
         <div className="  p-4 grid grid-cols-1 lg:grid-cols-5 gap-6">
           {/* Left Section: Product Image */}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Search from "../Search";
 import CategoriesItems from "../CategoriesItems";
 import { fetchCategories } from "@/app/shared/fetchData";
+import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
 
 // Assuming subcategories are part of ICategory
 const SecondPartOfHeader: React.FC = async () => {
@@ -14,7 +15,7 @@ const SecondPartOfHeader: React.FC = async () => {
   ]);
 
   return (
-    <div className="flex justify-between items-center py-1 max-w-6xl m-auto">
+    <div className="flex justify-between items-center py-1 max-w-6xl mx-auto">
       <Link href={"/"} className="outline-none">
         <Image
           src={settings?.logo}
@@ -26,26 +27,15 @@ const SecondPartOfHeader: React.FC = async () => {
         />
       </Link>
       <Search />
-      <div className="flex items-center justify-end relative">
-        {/* Static Links */}
-        <div className="flex items-center justify-end relative">
-          {/* Static Links */}
+      <div className="flex items-center justify-between  shadow w-56">
+        {/* Sign-in Section */}
+        <button className="flex items-center px-4 py-2 text-black hover:text-white rounded-md hover:bg-blue-600">
+          <FaUserCircle className="mr-2 text-lg" />
+          <span>Hello, Sign in</span>
+        </button>
 
-          <CategoriesItems items={categories} />
-          {/* Dropdown menu for categories and subcategories */}
-        </div>
-
-        <Link
-          href="/writer"
-          className="hidden md:block md:px-4 py-2 rounded-md  md:hover:text-orange-600  hover:bg-white md:hover:text-main transition-colors duration-200"
-        >
-          Writers
-        </Link>
-        <Link
-          href="/cart"
-          className="hidden md:block md:px-4 py-2 rounded-md  md:hover:text-orange-600 hover:bg-white md:hover:text-main transition-colors duration-200"
-        >
-          cart
+        <Link href="/cart" className="mr-4     ">
+          <FaShoppingCart className="text-2xl text-gray-700 hover:text-gray-900" />
         </Link>
       </div>
     </div>
