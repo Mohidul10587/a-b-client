@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@uploadthing/react": "^7.1.5",
     "@types/react": "^18.3.12",
     "axios": "^1.7.9",
     "cloudinary": "^2.2.0",
@@ -26,7 +27,8 @@
     "suneditor": "^2.46.2",
     "suneditor-react": "^3.6.1",
     "swiper": "^11.1.14",
-    "swr": "^2.3.0"
+    "swr": "^2.3.0",
+    "uploadthing": "^7.4.4"
   },
   "devDependencies": {
     "@types/node": "^20",

@@ -1,47 +1,16 @@
-import { apiUrl } from "@/app/shared/urls";
 import Link from "next/link";
 import ReadMore from "@/components/ReadMore";
-import { fetchSettings } from "@/app/shared/fetchSettingsData";
-import { Metadata, ResolvingMetadata } from "next";
+import { apiUrl, clientSideUrl } from "@/app/shared/urls";
 
-import ElementSection from "@/app/(root)/a-root-comp/ElementSection";
+import { Metadata, ResolvingMetadata } from "next";
+import { fetchSettings } from "@/app/shared/fetchSettingsData";
+import ElementSection from "../../a-root-comp/ElementSection";
 import { FC } from "react";
 import { Props } from "@/types/pageProps";
-import { fetchElement } from "@/app/shared/fetchElements";
-import Image from "next/image";
-import ProductDiv from "@/components/ProductBox";
 
-// Utility function to fetch all necessary data
-async function getData(slug: string) {
-  try {
-    const [productsRes, writerRes, categoryRes, settings] = await Promise.all([
-      fetch(`${apiUrl}/product/writer_products_by_slug/${slug}`, {
-        next: { revalidate: 30 },
-      }).then((res) => res.json()),
-      fetch(`${apiUrl}/writer/singleWriterBySlug/${slug}`, {
-        next: { revalidate: 30 },
-      }).then((res) => res.json()),
-      fetch(`${apiUrl}/category/all`, { next: { revalidate: 30 } }).then(
-        (res) => res.json()
-      ),
-      fetchSettings(),
-    ]);
-    return {
-      products: productsRes || [],
-      writer: writerRes?.writer || null,
-      categories: categoryRes?.categories || [],
-      settings,
-    };
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return {
-      products: [],
-      writer: null,
-      categories: [],
-      settings: null,
-    };
-  }
-}
+import { fetchElement } from "@/app/shared/fetchElements";
+import ProductDiv from "@/components/ProductBox";
+import Image from "next/image";
 
 export async function generateMetadata(
   { params }: Props,
@@ -50,22 +19,24 @@ export async function generateMetadata(
   const resolvedParams = await params;
   const slug = resolvedParams.id;
 
-  // Fetch the writer and settings data
-  const { writer, settings } = await getData(slug);
+  // Fetch the publisher data
+  const { settings, publisher } = await fetchData(slug);
 
   // Extracting relevant information for metadata
   const title =
-    writer.metaTitle || `Buy ${writer?.title} - Writers @${settings?.country}`;
+    publisher.metaTitle ||
+    `Buy ${publisher?.title} | Category | @${settings?.country}` ||
+    "Category Title";
   const description =
-    writer.metaDescription ||
-    writer?.description.replace(/<\/?[^>]+(>|$)/g, "") ||
-    `Explore a wide range of products from ${title}`;
-  const image = writer?.photo || "/default-image.png"; // Provide a default image if not available
+    publisher.metaDescription ||
+    publisher?.description?.replace(/<\/?[^>]+(>|$)/g, "") || // Remove HTML tags from description
+    `Explore a wide range of products in the ${title} publisher at ${settings.country}.`;
+  const image = publisher?.photoUrl || "/default-image.png"; // Provide a default image if not available
 
   return {
     title,
     description,
-    keywords: [...writer.tags],
+    keywords: [...publisher.keywords],
     openGraph: {
       title,
       description,
@@ -82,35 +53,38 @@ export async function generateMetadata(
       description,
       images: [image],
     },
-    icons: {
-      icon: image,
+    // icons: {
+    //   icon: image,
+    // },
+    alternates: {
+      canonical: `${clientSideUrl}/cat/${publisher.slug}`,
     },
   };
 }
 
 const IndexPage: FC<Props> = async ({ params }) => {
   const resolvedParams = await params;
+  const slug = resolvedParams.id;
 
-  const writerId = resolvedParams.id;
+  // Destructure the object returned by getData
+  const {
+    products = [],
+    writers = [],
+    publisher = null,
+    settings,
+  } = await fetchData(slug);
+  // const element = await fetchElement(publisher._id, "publisher");
 
-  // Fetch all necessary data
-  const { products, writer, categories, settings } = await getData(writerId);
-  console.log(writer, categories, settings);
-  if (!writer || !settings) {
-    return <div>Failed to load writer data or settings data.</div>;
-  }
-  const element = await fetchElement("home-main", "home-main");
   return (
     <div className="max-w-6xl mx-auto">
       <div className="grid grid-cols-5">
         <div className="col-span-1 bg-green-700">this is div</div>
-
         <div className="col-span-4">
-          <div className="flex justify-between mb-2 ">
+          <div className="flex justify-between mb-2">
             <div className="w-2/12">
               <div className="flex justify-center h-44 items-center">
                 <Image
-                  src={writer.photo}
+                  src={publisher?.photo || "/default.jpg"}
                   alt="Author Image"
                   width={100}
                   height={94}
@@ -119,21 +93,19 @@ const IndexPage: FC<Props> = async ({ params }) => {
               </div>
             </div>
             <div className="w-10/12">
-              <span className="font-semibold text-2xl">{writer.title}</span>
+              <span className="font-semibold text-2xl">{publisher.title}</span>
 
               <ReadMore height="h-24">
-                {writer && (
+                {publisher && (
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: writer.description,
+                      __html: publisher.description,
                     }}
                   ></div>
                 )}
               </ReadMore>
             </div>
           </div>
-
-          {/* Products after query */}
 
           <ProductDiv products={products} />
         </div>
@@ -143,3 +115,34 @@ const IndexPage: FC<Props> = async ({ params }) => {
 };
 
 export default IndexPage;
+
+async function fetchData(slug: string) {
+  try {
+    const [data, settings] = await Promise.all([
+      fetch(`${apiUrl}/product/products_by_punishers_slug/${slug}`, {
+        next: { revalidate: 30 },
+      }).then((res) => res.json()),
+      fetchSettings(),
+    ]);
+    console.log(data);
+    const products = data.products;
+    const writers = data.writers;
+    const publisher = data.publisher;
+
+    return {
+      products,
+      writers,
+      publisher,
+      settings,
+    };
+  } catch (error) {
+    console.error("Error fetching publisher data:", error);
+    return {
+      products: [],
+      writers: [],
+      publisher: null,
+      settings: null,
+      elementsData: null,
+    };
+  }
+}
