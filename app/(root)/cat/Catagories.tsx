@@ -23,7 +23,7 @@ async function fetchCategories(): Promise<ICategory[]> {
   }
 
   const data = await response.json();
-  return data.categories;
+  return data.respondedData;
 }
 
 const Catagories = async ({ width, height }: CatProps) => {
