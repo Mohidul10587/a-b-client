@@ -126,7 +126,7 @@ export const ProductDetails = ({
               </p>
               <p className="text-sm text-gray-500 ">
                 <span className="font-extrabold ">Category :</span>{" "}
-                {product.category.categoryName}
+                {product.category.title}
               </p>
             </div>
 

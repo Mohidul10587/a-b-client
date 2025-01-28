@@ -147,7 +147,7 @@ const ProductList: React.FC<{ productsS: IProduct[]; id: string }> = ({
             >
               <Link href={"/"} className="flex items-center space-x-2">
                 <Image
-                  src={item.photo}
+                  src={item.img}
                   alt={item.title}
                   width={50}
                   height={50}
@@ -194,7 +194,7 @@ const ProductList: React.FC<{ productsS: IProduct[]; id: string }> = ({
               >
                 <div className="flex items-center">
                   <Image
-                    src={product.photo}
+                    src={product.img}
                     alt={product.title}
                     width={50}
                     height={50}

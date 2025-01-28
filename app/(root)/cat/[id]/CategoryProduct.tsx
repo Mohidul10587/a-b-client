@@ -7,7 +7,7 @@ import Spinner from "@/components/Spinner";
 
 interface CategoryProductsProps {
   country: string;
-  categoryName: string;
+  title: string;
   products: IProduct[];
   writers: IWriter[];
   suggestions?: any[];
@@ -15,7 +15,7 @@ interface CategoryProductsProps {
 
 const CategoryProducts: React.FC<CategoryProductsProps> = ({
   country,
-  categoryName,
+  title,
   products,
   writers,
   suggestions,
@@ -82,7 +82,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({
     <>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between my-2">
         <div>
-          <h2 className="text-xl font-semibold">{categoryName}</h2>
+          <h2 className="text-xl font-semibold">{title}</h2>
           <p>Latest deals from {country}</p>
         </div>
         <div className="grid grid-cols-3 gap-2 w-full md:w-auto">

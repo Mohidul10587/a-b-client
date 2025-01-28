@@ -80,7 +80,7 @@ const ProductList: React.FC<{ products: IProduct[] }> = ({ products }) => {
               >
                 <div className="flex items-center">
                   <Image
-                    src={product.photo}
+                    src={product.img}
                     alt={product.title}
                     width={50}
                     height={50}

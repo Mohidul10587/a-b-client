@@ -11,7 +11,6 @@ interface PageProps {
 }
 
 const UpdatePageElement: React.FC<PageProps> = ({ data }) => {
-
   const [formData, setFormData] = useState({
     sectionTitle: "",
     page: "", // Page select feature
@@ -34,7 +33,7 @@ const UpdatePageElement: React.FC<PageProps> = ({ data }) => {
     category.subCategories.map((subCat) => ({
       _id: subCat._id,
       title: subCat.title,
-      parentCategoryName: category.categoryName,
+      parenttitle: category.title,
     }))
   );
 
@@ -119,7 +118,6 @@ const UpdatePageElement: React.FC<PageProps> = ({ data }) => {
       );
 
       if (response.ok) {
-   
       } else {
         console.error("Failed to update data");
       }
@@ -133,8 +131,6 @@ const UpdatePageElement: React.FC<PageProps> = ({ data }) => {
       onSubmit={handleSubmit}
       className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md mt-4"
     >
-   
-
       <div className="mb-4">
         <label className="block text-gray-700 font-medium mb-2">
           Section Title
@@ -259,7 +255,7 @@ const UpdatePageElement: React.FC<PageProps> = ({ data }) => {
             <option value="">Select a Category</option>
             {categories?.map((category) => (
               <option key={category._id} value={category._id}>
-                {category.categoryName}
+                {category.title}
               </option>
             ))}
           </select>
@@ -281,7 +277,7 @@ const UpdatePageElement: React.FC<PageProps> = ({ data }) => {
             <option value="">Select a SubCategory</option>
             {allSubCategories?.map((subCategory) => (
               <option key={subCategory._id} value={subCategory._id}>
-                {subCategory.title} ({subCategory.parentCategoryName})
+                {subCategory.title} ({subCategory.parenttitle})
               </option>
             ))}
           </select>

@@ -8,7 +8,7 @@ export interface IVariant {
 
 export interface IProduct {
   _id: string;
-  photo: string;
+  img: string;
   title: string;
   slug: string;
   description: string;

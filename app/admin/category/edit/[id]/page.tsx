@@ -1,35 +1,20 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Content from "@/components/Content";
 import Modal from "@/components/Modal";
 
 import Image from "next/image";
 import ImageGallery from "@/components/ImageGallery";
-import QnA from "@/components/QnA";
 
 import Keywords from "@/components/Keywords";
+
+import { useParams } from "next/navigation";
+import useSWR from "swr";
+import { ICategory } from "../../add/page";
+import { fetcher } from "@/app/shared/fetcher";
 import { processContent } from "@/app/shared/processContent";
 import { apiUrl } from "@/app/shared/urls";
-
-export interface IQnA {
-  title: string;
-  description: string;
-}
-
-export interface ICategory {
-  _id?: string;
-  metaTitle: string;
-  metaDescription: string;
-  keywords: string[];
-  title: string; // Category name
-  slug: string;
-  img: string;
-  metaImg: string;
-  position: number;
-  commissionForSeller: number;
-  display: boolean;
-  queAndAnsArray: IQnA[];
-}
+import QnA from "@/components/QnA";
 
 const IndexPage: React.FC = () => {
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
@@ -38,7 +23,7 @@ const IndexPage: React.FC = () => {
   const [modalContent, setModalContent] = useState("");
   const [description, setDescription] = useState("");
   const [shortDescription, setShortDescription] = useState("");
-
+  const id = useParams().id;
   const [data, setData] = useState<ICategory>({
     metaTitle: "",
     metaDescription: "",
@@ -52,6 +37,20 @@ const IndexPage: React.FC = () => {
     display: true,
     queAndAnsArray: [{ title: "", description: "" }],
   });
+  const {
+    data: response,
+    error,
+    mutate,
+    isLoading,
+  } = useSWR(`category/singleCategoryForCategoryEditPage/${id}`, fetcher);
+
+  useEffect(() => {
+    if (response?.respondedData) {
+      setData(response.respondedData);
+      setDescription(response.respondedData.description);
+      setShortDescription(response.respondedData.shortDescription);
+    }
+  }, [response]);
 
   const openModal = (content: string) => {
     setModalContent(content);
@@ -81,8 +80,8 @@ const IndexPage: React.FC = () => {
 
     try {
       openModal("Creating...");
-      const response = await fetch(`${apiUrl}/category/create`, {
-        method: "POST",
+      const response = await fetch(`${apiUrl}/category/update/${id}`, {
+        method: "PUT",
         credentials: "include",
         headers: {
           "Content-type": "Application/json",
@@ -91,6 +90,7 @@ const IndexPage: React.FC = () => {
       });
       const data = await response.json();
       if (response.ok) {
+        mutate();
         openModal(data.message);
         // Optionally reset the form fields if needed
       } else {
@@ -136,6 +136,7 @@ const IndexPage: React.FC = () => {
                 onChange={(content) => {
                   setDescription(content);
                 }}
+                initialContent={description}
               />
             </div>
             <div className="mb-4">
@@ -144,6 +145,7 @@ const IndexPage: React.FC = () => {
                 onChange={(content) => {
                   setShortDescription(content);
                 }}
+                initialContent={shortDescription}
               />
             </div>
             <div className="p-4 w-full space-y-4 bg-white mt-4">

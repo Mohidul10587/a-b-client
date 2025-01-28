@@ -52,6 +52,7 @@ const AdminHeader: React.FC = () => {
               <Link href="/admin/banner">Banner</Link>
               <Link href="/admin/writer">Writer</Link>
               <Link href="/admin/category">Category</Link>
+              <Link href="/admin/subcategory">Subcategory</Link>
               <Link href="/admin/publishers">Publishers</Link>
               <Link href="/admin/suggested">Suggested</Link>
               <Link href="/admin/setting">Setting</Link>

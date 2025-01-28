@@ -2,17 +2,12 @@ import { fetchSettings } from "@/app/shared/fetchSettingsData";
 import Image from "next/image";
 import Link from "next/link";
 import Search from "../Search";
-import CategoriesItems from "../CategoriesItems";
-import { fetchCategories } from "@/app/shared/fetchData";
 import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
 
 // Assuming subcategories are part of ICategory
 const SecondPartOfHeader: React.FC = async () => {
   // Fetch settings and categories concurrently
-  const [settings, categories] = await Promise.all([
-    fetchSettings(),
-    fetchCategories(),
-  ]);
+  const [settings] = await Promise.all([fetchSettings()]);
 
   return (
     <div className="flex justify-between items-center py-1 max-w-6xl mx-auto">

@@ -8,7 +8,7 @@ import React from "react";
 const Product: React.FC<IProduct> = ({
   _id,
   slug,
-  photo,
+  img,
   title,
   featured,
   sele,
@@ -29,7 +29,7 @@ const Product: React.FC<IProduct> = ({
       <Link href={`/${slug}`} className="w-full">
         <div className="w-full relative md:h-48 p-2 pb-0 h-40 flex items-center justify-center">
           <Image
-            src={photo || "/default.jpg"}
+            src={img || "/default.jpg"}
             width={600}
             height={600}
             alt={title}

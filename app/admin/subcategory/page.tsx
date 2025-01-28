@@ -7,7 +7,7 @@ import useSWR from "swr";
 
 const IndexPage: React.FC = () => {
   const { data, error, mutate, isLoading } = useSWR(
-    "category/allCategoriesForAdminCatIndexPage",
+    "subcategory/allSubcategoriesForAdminSubCatIndexPage",
     fetcher
   );
 
@@ -18,8 +18,8 @@ const IndexPage: React.FC = () => {
       ) : (
         <Table
           title="Category List"
-          link="/admin/category"
-          post={data?.respondedData}
+          link="/admin/subcategory"
+          post={data?.respondedData || []}
           mutate={mutate}
         />
       )}

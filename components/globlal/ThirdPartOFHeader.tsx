@@ -10,7 +10,7 @@ const ThirdPartOFHeader = async () => {
   const categories = await fetchCategories();
   const writers = await getWriters();
   const publishers = await getPublishers();
-
+  console.log(categories);
   return (
     <div className="flex items-center py-4 bg-white max-w-6xl m-auto">
       <div className="group relative">
@@ -67,7 +67,7 @@ const LinkDiv: FC<{ items: any; link: string }> = async ({ items, link }) => {
         <Link key={item._id} href={`/${link}/${item.slug}`}>
           {" "}
           <p className="text-gray-700 hover:text-blue-600">
-            {item.categoryName || item.title}
+            {item.title || item.title}
           </p>
         </Link>
       ))}

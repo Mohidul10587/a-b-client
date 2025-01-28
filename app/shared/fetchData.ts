@@ -7,7 +7,7 @@ interface ICategoryWithSubcategories extends ICategory {
 
 export async function fetchCategories(): Promise<ICategoryWithSubcategories[]> {
   try {
-    const response = await fetch(`${apiUrl}/category/all`);
+    const response = await fetch(`${apiUrl}/category/allCategoriesForNavBar`);
     if (!response.ok) {
       console.error(
         "Failed to fetch categories:",
@@ -17,7 +17,8 @@ export async function fetchCategories(): Promise<ICategoryWithSubcategories[]> {
       throw new Error("Failed to fetch categories");
     }
     const data = await response.json();
-    return data.categories;
+    console.log(data);
+    return data.respondedData;
   } catch (error) {
     console.error("Error in fetchCategories:", error);
     throw error;

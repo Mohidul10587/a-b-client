@@ -90,7 +90,7 @@ const Search = () => {
                       <div className="flex w-full gap-x-2 items-center">
                         <div className="w-16">
                           <Image
-                            src={product.photo}
+                            src={product.img}
                             alt={product.title}
                             width={50}
                             height={16}
@@ -134,7 +134,7 @@ const Search = () => {
                               />
                             </svg>
                             <p className="text-gray-500 flex items-center">
-                              <span> {product.category.categoryName}</span>
+                              <span> {product.category.title}</span>
                             </p>
                           </div>
                         </div>

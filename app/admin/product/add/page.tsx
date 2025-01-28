@@ -1,61 +1,62 @@
 "use client";
-
 import { apiUrl } from "@/app/shared/urls";
-import { fetchWithTokenRefresh } from "@/app/shared/fetchWithTokenRefresh";
 import Content from "@/app/admin/components/Content";
 import Modal from "@/app/admin/components/Modal";
-import Photo from "@/app/admin/components/Photo2";
 import { IWriter } from "@/types/writer";
-import { ICategory, InfoSection } from "@/types/category";
-import Image from "next/image";
+import { ICategory } from "@/types/category";
 import React, { useEffect, useState } from "react";
-import Meta from "@/app/admin/components/Meta";
 import { ISuggestion } from "@/types/suggestion";
-import { generateSlug } from "@/app/shared/gennerateSlug";
+import ImageGallery from "@/components/ImageGallery";
+import { processContent } from "@/app/shared/processContent";
+import Image from "next/image";
 const IndexPage: React.FC = () => {
-  const [publisher, setPublisher] = useState("");
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [imageType, setImageType] = useState("");
   const [publishers, setPublishers] = useState<any[]>([]);
-  const [summary, setSummary] = useState("");
-  const [numberOfPage, setNumberOfPage] = useState("");
-  const [ISBN, setISBN] = useState("");
-  const [edition, setEdition] = useState("");
-  const [binding, setBinding] = useState("");
-  const [productType, setProductType] = useState("");
-  const [translatorName, setTranslatorName] = useState("");
-  const [language, setLanguage] = useState("");
-  const [orderType, setOrderType] = useState("");
-  const [metaTitle, setMetaTitle] = useState("");
-  const [metaDescription, setMetaDescription] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
-  const [metaValue, setMetaValue] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
-  const [title, setTitle] = useState("");
-  const [titleEnglish, setTitleEnglish] = useState("");
-  const [subTitle, setSubTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [shortDescription, setShortDescription] = useState("");
-  const [category, setCategory] = useState("");
-  const [price, setPrice] = useState(0);
-  const [unprice, setunPrice] = useState(0);
-  const [stockStatus, setStockStatus] = useState("In Stock");
-  const [writerId, setWriterId] = useState("");
-  const [youtubeVideo, setYoutubeVideo] = useState("");
-  const [shippingInside, setShippingInside] = useState(50);
-  const [shippingOutside, setShippingOutside] = useState(100);
   const [writers, setWriters] = useState<IWriter[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const [photo, setPhoto] = useState<File | null>(null);
-  const [metaImageFile, setMetaImageFile] = useState<File | null>(null);
-  const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [filePreviews, setFilePreviews] = useState<(string | ArrayBuffer)[]>(
-    []
-  );
-  const [selectedImage, setSelectedImage] = useState<string | null>("");
   const [suggestions, setSuggestions] = useState<ISuggestion[]>([]);
-  const [suggestionId, setSuggestionId] = useState("");
-  // varity section end here
+  const [description, setDescription] = useState("");
+  const [shortDescription, setShortDescription] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<any | null>(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<any | null>(
+    null
+  );
+  const [data, setData] = useState({
+    publisher: "",
+    summary: "",
+    numberOfPage: 0,
+    ISBN: "",
+    edition: "",
+    binding: "",
+    productType: "",
+    translatorName: "",
+    language: "",
+    orderType: "",
+    metaTitle: "",
+    metaDescription: "",
+    tags: "",
+    metaValue: "",
+    title: "",
+    titleEnglish: "",
+    subTitle: "",
+    description: "",
+    shortDescription: "",
+    category: "",
+    price: 0,
+    unprice: 0,
+    stockStatus: "",
+    writer: "",
+    youtubeVideo: "",
+    shippingInside: 50,
+    shippingOutside: 50,
+    img: "",
+    suggestionId: "",
+    metaImg: "",
+    subcategory: "",
+  });
 
   const openModal = (content: string) => {
     setModalContent(content);
@@ -64,6 +65,7 @@ const IndexPage: React.FC = () => {
 
   const closeModal = () => {
     setModalIsOpen(false);
+    setIsImageModalOpen(false);
   };
 
   useEffect(() => {
@@ -114,11 +116,12 @@ const IndexPage: React.FC = () => {
 
     const fetchCategories = async () => {
       try {
-        const response = await fetch(`${apiUrl}/category/all`);
+        const response = await fetch(
+          `${apiUrl}/category/allCategoryForProductAddPage`
+        );
         if (response.ok) {
           const data = await response.json();
-          setCategories(data.categories);
-          setCategory(data.categories[0]._id);
+          setCategories(data.respondedData);
         } else {
           throw new Error("Failed to fetch categories");
         }
@@ -132,44 +135,41 @@ const IndexPage: React.FC = () => {
     fetchCategories();
   }, []);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = event.target.files;
-    if (selectedFiles) {
-      const newPreviews: (string | ArrayBuffer)[] = [];
-      const maxFiles = 8;
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const categoryId = e.target.value;
+    const category =
+      categories.find((cat: any) => cat._id === categoryId) || null;
+    setSelectedCategory(category);
+    setSelectedSubcategory(null);
 
-      if (selectedFiles.length + filePreviews.length > maxFiles) {
-        setError(`Maximum ${maxFiles} files allowed.`);
-        return;
-      } else {
-        setError(null);
-      }
-
-      const filesArray = Array.from(selectedFiles);
-      setAttachedFiles((prevFiles) => [...prevFiles, ...filesArray]);
-      filesArray.forEach((file) => {
-        const reader = new FileReader();
-
-        reader.onload = () => {
-          if (file.type.startsWith("image/")) {
-            newPreviews.push(reader.result as string);
-          } else {
-            newPreviews.push(file.name);
-          }
-
-          setFilePreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
-        };
-
-        reader.readAsDataURL(file);
-      });
-    }
+    setData({
+      ...data,
+      category: categoryId,
+      subcategory: "",
+    });
   };
 
-  const handleCancelClick = (index: number) => {
-    const newPreviews = [...filePreviews];
-    newPreviews.splice(index, 1);
-    setFilePreviews(newPreviews);
-    setAttachedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  const handleSubcategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const subcategoryId = e.target.value;
+    const subcategory =
+      selectedCategory?.subcategories.find(
+        (sub: any) => sub._id === subcategoryId
+      ) || null;
+    setSelectedSubcategory(subcategory);
+
+    setData({ ...data, subcategory: subcategoryId });
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setData((prev) => ({
+      ...prev,
+      [name]: name === "discount" || name === "price" ? Number(value) : value,
+    }));
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -177,10 +177,10 @@ const IndexPage: React.FC = () => {
     openModal("Product uploading... ");
 
     const requiredFields = [
-      { value: title, message: "Title is required" },
-      { value: photo, message: "Photo is required" },
-      { value: category, message: "Category is required" },
-      { value: writerId, message: "Writer is required" },
+      { value: data.title, message: "Title is required" },
+      { value: data.img, message: "Photo is required" },
+      { value: data.category, message: "Category is required" },
+      { value: data.writer, message: "Writer is required" },
     ];
     for (const field of requiredFields) {
       if (!field.value) {
@@ -189,66 +189,24 @@ const IndexPage: React.FC = () => {
       }
     }
 
-    const strippedDescription = description.replace(/(<([^>]+)>)/gi, "").trim();
-    const finalDescription = strippedDescription.length > 0 ? description : "";
+    const finalDescription = processContent(description);
+    const finalShortDescription = processContent(shortDescription);
 
-    const strippedShortDescription = shortDescription
-      .replace(/(<([^>]+)>)/gi, "")
-      .trim();
-    const finalShortDescription =
-      strippedShortDescription.length > 0 ? shortDescription : "";
+    const updatedData = {
+      ...data,
 
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("slug", generateSlug(title));
-    formData.append("description", finalDescription);
-    formData.append("shortDescription", finalShortDescription);
-    formData.append("category", category);
-    formData.append("price", String(price));
-    formData.append("unprice", String(unprice));
-    formData.append("stockStatus", stockStatus);
-    formData.append("writer", writerId);
-    formData.append("youtubeVideo", youtubeVideo.replace(/\s+/g, ""));
-    formData.append("shippingInside", String(shippingInside));
-    formData.append("shippingOutside", String(shippingOutside));
-    formData.append("metaTitle", metaTitle);
-    formData.append("metaDescription", metaDescription);
-    formData.append("tags", tags.join(","));
-    formData.append("publisher", publisher);
-    formData.append("summary", summary);
-    formData.append("numberOfPage", numberOfPage);
-    formData.append("ISBN", ISBN);
-    formData.append("edition", edition);
-    formData.append("binding", binding);
-    formData.append("productType", productType);
-    formData.append("translatorName", translatorName);
-    formData.append("language", language);
-    formData.append("orderType", orderType);
-    formData.append("titleEnglish", titleEnglish);
-    formData.append("subTitle", subTitle);
-    formData.append("suggestion", suggestionId);
-
-    if (photo) {
-      formData.append("photo", photo);
-    }
-    attachedFiles.forEach((file) => {
-      formData.append("attachedFiles", file);
-    });
-    if (metaImageFile) {
-      formData.append("metaImage", metaImageFile);
-    }
-
-    // Convert tags array to a comma-separated string
-
-    let token = localStorage.getItem("accessToken");
+      description: finalDescription,
+      shortDescription: finalShortDescription,
+    };
 
     try {
-      let response = await fetchWithTokenRefresh(`${apiUrl}/product/create`, {
+      let response = await fetch(`${apiUrl}/product/create`, {
         method: "POST",
+        credentials: "include",
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Content-type": "Application/json",
         },
-        body: formData,
+        body: JSON.stringify(updatedData),
       });
 
       if (response.ok) {
@@ -279,8 +237,8 @@ const IndexPage: React.FC = () => {
                     type="text"
                     placeholder="title"
                     name="title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    value={data.title}
+                    onChange={handleChange}
                     className="mt-1 p-2 w-full border rounded-md border-black"
                   />
                 </div>
@@ -291,9 +249,9 @@ const IndexPage: React.FC = () => {
                   <input
                     type="text"
                     placeholder="title"
-                    name="title"
-                    value={titleEnglish}
-                    onChange={(e) => setTitleEnglish(e.target.value)}
+                    name="titleEnglish"
+                    value={data.titleEnglish}
+                    onChange={handleChange}
                     className="mt-1 p-2 w-full border rounded-md border-black"
                   />
                 </div>
@@ -309,8 +267,8 @@ const IndexPage: React.FC = () => {
                   <select
                     id="productType"
                     name="productType"
-                    value={productType}
-                    onChange={(e) => setProductType(e.target.value)}
+                    value={data.productType}
+                    onChange={handleChange}
                     className="mt-1 p-2 w-full border rounded-md border-black"
                     required
                   >
@@ -332,8 +290,8 @@ const IndexPage: React.FC = () => {
                     type="text"
                     id="subTitle"
                     name="subTitle"
-                    value={subTitle}
-                    onChange={(e) => setSubTitle(e.target.value)}
+                    value={data.subTitle}
+                    onChange={handleChange}
                     className="mt-1 p-2 w-full border rounded-md border-black"
                     required
                   />
@@ -350,8 +308,8 @@ const IndexPage: React.FC = () => {
                     <select
                       id="orderType"
                       name="orderType"
-                      value={orderType}
-                      onChange={(e) => setOrderType(e.target.value)}
+                      value={data.orderType}
+                      onChange={handleChange}
                       className="mt-1 p-2 w-full border rounded-md border-black"
                       required
                     >
@@ -371,8 +329,8 @@ const IndexPage: React.FC = () => {
                     <select
                       id="language"
                       name="language"
-                      value={language}
-                      onChange={(e) => setLanguage(e.target.value)}
+                      value={data.language}
+                      onChange={handleChange}
                       className="mt-1 p-2 w-full border rounded-md border-black"
                       required
                     >
@@ -398,8 +356,8 @@ const IndexPage: React.FC = () => {
                       type="text"
                       id="translatorName"
                       name="translatorName"
-                      value={translatorName}
-                      onChange={(e) => setTranslatorName(e.target.value)}
+                      value={data.translatorName}
+                      onChange={handleChange}
                       className="mt-1 p-2 w-full border rounded-md border-black"
                       required
                     />
@@ -415,8 +373,8 @@ const IndexPage: React.FC = () => {
                     <select
                       id="binding"
                       name="binding"
-                      value={binding}
-                      onChange={(e) => setBinding(e.target.value)}
+                      value={data.binding}
+                      onChange={handleChange}
                       className="mt-1 p-2 w-full border rounded-md border-black"
                       required
                     >
@@ -434,8 +392,8 @@ const IndexPage: React.FC = () => {
                     <select
                       id="edition"
                       name="edition"
-                      value={edition}
-                      onChange={(e) => setEdition(e.target.value)}
+                      value={data.edition}
+                      onChange={handleChange}
                       className="mt-1 p-2 w-full border rounded-md border-black"
                       required
                     >
@@ -459,8 +417,8 @@ const IndexPage: React.FC = () => {
                       type="text"
                       id="ISBN"
                       name="ISBN"
-                      value={ISBN}
-                      onChange={(e) => setISBN(e.target.value)}
+                      value={data.ISBN}
+                      onChange={handleChange}
                       className="mt-1 p-2 w-full border rounded-md border-black"
                     />
                   </div>
@@ -475,8 +433,8 @@ const IndexPage: React.FC = () => {
                       type="number"
                       id="numberOfPage"
                       name="numberOfPage"
-                      value={numberOfPage}
-                      onChange={(e) => setNumberOfPage(e.target.value)}
+                      value={data.numberOfPage}
+                      onChange={handleChange}
                       className="mt-1 p-2 w-full border rounded-md border-black"
                     />
                   </div>
@@ -491,8 +449,8 @@ const IndexPage: React.FC = () => {
                       type="text"
                       id="summary"
                       name="summary"
-                      value={summary}
-                      onChange={(e) => setSummary(e.target.value)}
+                      value={data.summary}
+                      onChange={handleChange}
                       className="mt-1 p-2 w-full border rounded-md border-black"
                     />
                   </div>
@@ -502,8 +460,10 @@ const IndexPage: React.FC = () => {
                     </p>
                     <select
                       className="mt-1 p-2 w-full border rounded-md border-black"
-                      value={publisher}
-                      onChange={(e) => setPublisher(e.target.value)}
+                      value={data.publisher}
+                      name="publisher"
+                      onChange={handleChange}
+                      required
                     >
                       {publishers.map((item) => (
                         <option key={item._id} value={item._id}>
@@ -514,21 +474,54 @@ const IndexPage: React.FC = () => {
                   </div>
                 </div>
                 <div className="mb-4">
-                  <p>
-                    Category<sup className="text-red-700">*</sup>
-                  </p>
+                  <label htmlFor="category" className="block mb-2 font-medium">
+                    Select Category
+                  </label>
                   <select
-                    className="mt-1 p-2 w-full border rounded-md border-black"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
+                    id="category"
+                    className="w-full p-2 border rounded"
+                    onChange={handleCategoryChange}
+                    value={selectedCategory?._id || ""}
+                    required
                   >
-                    {categories.map((cat) => (
-                      <option key={cat._id} value={cat._id}>
-                        {cat.categoryName}
+                    <option value="">-- Select a Category --</option>
+                    {categories.map((category: any) => (
+                      <option key={category._id} value={category._id}>
+                        {category.title}
                       </option>
                     ))}
                   </select>
                 </div>
+
+                {selectedCategory &&
+                  selectedCategory.subcategories.length > 0 && (
+                    <div className="mb-4">
+                      <label
+                        htmlFor="subcategory"
+                        className="block mb-2 font-medium"
+                      >
+                        Select Subcategory
+                      </label>
+                      <select
+                        id="subcategory"
+                        className="w-full p-2 border rounded"
+                        onChange={handleSubcategoryChange}
+                        value={selectedSubcategory?._id || ""}
+                      >
+                        <option value="">-- Select a Subcategory --</option>
+                        {selectedCategory.subcategories.map(
+                          (subcategory: any) => (
+                            <option
+                              key={subcategory._id}
+                              value={subcategory._id}
+                            >
+                              {subcategory.title}
+                            </option>
+                          )
+                        )}
+                      </select>
+                    </div>
+                  )}
 
                 <div className="mb-4">
                   <p>Description</p>
@@ -541,96 +534,10 @@ const IndexPage: React.FC = () => {
                   />
                 </div>
 
-                <div className="w-full ">
-                  <Photo
-                    title="Photo (600px * 600px)"
-                    img=""
-                    onImageChange={setPhoto}
-                    requiredSing={true}
-                  />
-                </div>
+                <div className="w-full "></div>
                 <div className="w-full ">
                   <p>Photo gallery</p>
-                  <div className="flex flex-col items-start">
-                    <label
-                      htmlFor="fileInput"
-                      className="cursor-pointer flex items-center bg-white mt-2 px-3 py-2 space-x-2"
-                    >
-                      <span>Attach Files</span>
-                      <input
-                        id="fileInput"
-                        type="file"
-                        className="hidden"
-                        onChange={handleFileChange}
-                        multiple
-                      />
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="1em"
-                        height="1em"
-                        viewBox="0 0 15 15"
-                      >
-                        <path
-                          fill="currentColor"
-                          fillRule="evenodd"
-                          d="M7.318.975a3.328 3.328 0 1 1 4.707 4.707l-5.757 5.757A1.914 1.914 0 1 1 3.56 8.732l5.585-5.586l.708.708l-5.586 5.585a.914.914 0 1 0 1.293 1.293l5.757-5.757a2.328 2.328 0 1 0-3.293-3.293L2.096 7.611a3.743 3.743 0 0 0 5.293 5.293l5.757-5.758l.708.708l-5.758 5.757A4.743 4.743 0 0 1 1.39 6.904z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </label>
-
-                    {error && <div className="text-red-500">{error}</div>}
-
-                    {filePreviews.length > 0 && (
-                      <div className="text-sm text-gray-600 w-full mt-4 mb-8">
-                        <b>File Previews:</b>
-                        <div className="grid md:grid-cols-4 grid-cols-2 gap-4">
-                          {filePreviews.map((preview, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center relative justify-center bg-gray-100 p-1"
-                            >
-                              {typeof preview === "string" ? (
-                                preview.startsWith("data:image") ? (
-                                  <Image
-                                    src={preview as string}
-                                    width={50}
-                                    height={50}
-                                    alt="Preview"
-                                    className="h-24 w-full object-cover"
-                                  />
-                                ) : (
-                                  <span>{preview}</span>
-                                )
-                              ) : (
-                                <span>{String(preview)}</span>
-                              )}
-                              <p
-                                onClick={() => handleCancelClick(index)}
-                                className="absolute text-red-500 right-1 top-1 cursor-pointer"
-                              >
-                                X
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
                 </div>
-                <Meta
-                  metaTitle={metaTitle}
-                  setMetaTitle={setMetaTitle}
-                  metaDescription={metaDescription}
-                  setMetaDescription={setMetaDescription}
-                  selectedImage={selectedImage}
-                  setSelectedImage={setSelectedImage}
-                  tags={tags}
-                  setTags={setTags}
-                  metaValue={metaValue}
-                  setMetaValue={setMetaValue}
-                  setMetaImageFile={setMetaImageFile}
-                />
               </div>
               <div className="w-full">
                 <>
@@ -642,13 +549,37 @@ const IndexPage: React.FC = () => {
                       Publish
                     </button>
                   </div>
+
+                  <div className="w-full md:w-1/3">
+                    <p>Image</p>
+                    <div>
+                      <Image
+                        src={data.img || "/default.jpg"}
+                        width={200}
+                        height={150}
+                        alt="Image"
+                        className="border border-black "
+                      />
+
+                      <p
+                        className="font-bold mt-2 w-[200px] border border-black p-2 "
+                        onClick={() => {
+                          setIsImageModalOpen(true);
+                          setImageType("img");
+                        }}
+                      >
+                        {data.img ? "Change Image " : "Choose Image"}
+                      </p>
+                    </div>
+                  </div>
+
                   <div className="mb-4">
                     <p>Unpriced</p>
                     <input
                       type="number"
                       placeholder="100"
-                      value={unprice}
-                      onChange={(e) => setunPrice(Number(e.target.value))}
+                      value={data.unprice}
+                      onChange={handleChange}
                       className="mt-1 p-2 w-full border rounded-md border-black"
                     />
                   </div>
@@ -659,8 +590,8 @@ const IndexPage: React.FC = () => {
                     <input
                       type="number"
                       placeholder="100"
-                      value={price}
-                      onChange={(e) => setPrice(Number(e.target.value))}
+                      value={data.price}
+                      onChange={handleChange}
                       className="mt-1 p-2 w-full border rounded-md border-black"
                     />
                   </div>
@@ -668,8 +599,8 @@ const IndexPage: React.FC = () => {
                     <p>In Stock</p>
                     <select
                       className="mt-1 p-2 w-full border rounded-md border-black"
-                      value={stockStatus}
-                      onChange={(e) => setStockStatus(e.target.value)}
+                      value={data.stockStatus}
+                      onChange={handleChange}
                     >
                       <option value="In Stock">In Stock</option>
                       <option value="Out of Stock">Out of Stock</option>
@@ -680,8 +611,9 @@ const IndexPage: React.FC = () => {
                       Writer<sup className="text-red-700">*</sup>
                     </p>
                     <select
-                      value={writerId}
-                      onChange={(e) => setWriterId(e.target.value)}
+                      value={data.writer}
+                      onChange={handleChange}
+                      name="writer"
                       className="p-2 w-full outline-none rounded-md"
                     >
                       <option value="" disabled>
@@ -700,8 +632,8 @@ const IndexPage: React.FC = () => {
                     <input
                       type="text"
                       placeholder="example: 123,546,879"
-                      value={youtubeVideo}
-                      onChange={(e) => setYoutubeVideo(e.target.value)}
+                      value={data.youtubeVideo}
+                      onChange={handleChange}
                       className="mt-1 p-2 w-full border rounded-md border-black"
                     />
                   </div>
@@ -710,10 +642,8 @@ const IndexPage: React.FC = () => {
                     <input
                       type="number"
                       placeholder="title"
-                      value={shippingInside}
-                      onChange={(e) =>
-                        setShippingInside(Number(e.target.value))
-                      }
+                      value={data.shippingInside}
+                      onChange={handleChange}
                       className="mt-1 p-2 w-full border rounded-md border-black"
                     />
                   </div>
@@ -722,10 +652,8 @@ const IndexPage: React.FC = () => {
                     <input
                       type="number"
                       placeholder="title"
-                      value={shippingOutside}
-                      onChange={(e) =>
-                        setShippingOutside(Number(e.target.value))
-                      }
+                      value={data.shippingOutside}
+                      onChange={handleChange}
                       className="mt-1 p-2 w-full border rounded-md border-black"
                     />
                   </div>
@@ -733,8 +661,8 @@ const IndexPage: React.FC = () => {
                     <p>Suggestion</p>
                     <select
                       className="p-2 mt-2 w-full outline-none rounded-md"
-                      value={suggestionId}
-                      onChange={(e) => setSuggestionId(e.target.value)}
+                      value={data.suggestionId}
+                      onChange={handleChange}
                     >
                       {" "}
                       <option value="" disabled>
@@ -747,6 +675,28 @@ const IndexPage: React.FC = () => {
                       ))}
                     </select>
                   </div>
+                  <div className="w-full md:w-1/3">
+                    <p>Meta Image</p>
+                    <div>
+                      <Image
+                        src={data.metaImg || "/default.jpg"}
+                        width={200}
+                        height={150}
+                        alt="Image"
+                        className="border border-black "
+                      />
+
+                      <p
+                        className="font-bold mt-2 w-[200px] border border-black p-2 "
+                        onClick={() => {
+                          setIsImageModalOpen(true);
+                          setImageType("metaImg");
+                        }}
+                      >
+                        {data.metaImg ? "Change Image " : "Choose Image"}
+                      </p>
+                    </div>
+                  </div>
                 </>
               </div>
             </div>
@@ -756,14 +706,16 @@ const IndexPage: React.FC = () => {
             onClose={closeModal}
             content={modalContent}
           />
+          <ImageGallery
+            isOpen={isImageModalOpen}
+            onClose={closeModal}
+            img={imageType}
+            setData={setData}
+            data={data}
+          />
         </div>
       </div>
     </>
   );
 };
 export default IndexPage;
-interface section {
-  img: File | null;
-  title: string;
-  variantPrice: string;
-}

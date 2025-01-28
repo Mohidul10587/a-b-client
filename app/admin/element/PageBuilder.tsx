@@ -118,7 +118,7 @@ const PageBuilder: React.FC<PageProps> = ({
     category.subCategories.map((subcategory) => ({
       _id: subcategory._id,
       title: subcategory.title,
-      parentName: category.categoryName, // Add parent category name
+      parentName: category.title, // Add parent category name
     }))
   );
 
@@ -729,7 +729,7 @@ const PageBuilder: React.FC<PageProps> = ({
                         </option>
                         {categories.map((category) => (
                           <option key={category._id} value={category._id}>
-                            {category.categoryName}
+                            {category.title}
                           </option>
                         ))}
                       </select>

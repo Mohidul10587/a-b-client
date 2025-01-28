@@ -157,7 +157,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
     category.subCategories.map((subcategory) => ({
       _id: subcategory._id,
       title: subcategory.title,
-      parentName: category.categoryName, // Add parent category name
+      parentName: category.title, // Add parent category name
     }))
   );
   const matchingSubcategories = subcategories.find(
@@ -853,7 +853,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                           </option>
                           {categories.map((category) => (
                             <option key={category._id} value={category._id}>
-                              {category.categoryName}
+                              {category.title}
                             </option>
                           ))}
                         </select>

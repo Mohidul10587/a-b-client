@@ -270,7 +270,7 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
                 <div className="w-full md:w-1/3">
                   <Photo
                     title="Photo (600px * 600px)"
-                    img={product?.photo}
+                    img={product?.img}
                     onImageChange={setPhoto}
                   />
                 </div>
@@ -284,7 +284,7 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
                 >
                   {categories.map((cat) => (
                     <option key={cat._id} value={cat._id}>
-                      {cat.categoryName}
+                      {cat.title}
                     </option>
                   ))}
                 </select>

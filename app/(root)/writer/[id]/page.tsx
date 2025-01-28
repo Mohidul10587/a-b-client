@@ -1,15 +1,12 @@
 import { apiUrl } from "@/app/shared/urls";
-import Link from "next/link";
 import ReadMore from "@/components/ReadMore";
 import { fetchSettings } from "@/app/shared/fetchSettingsData";
 import { Metadata, ResolvingMetadata } from "next";
-
-import ElementSection from "@/app/(root)/a-root-comp/ElementSection";
 import { FC } from "react";
 import { Props } from "@/types/pageProps";
-import { fetchElement } from "@/app/shared/fetchElements";
 import Image from "next/image";
 import ProductDiv from "@/components/ProductBox";
+import ClientComponent from "./ClientComponent";
 
 // Utility function to fetch all necessary data
 async function getData(slug: string) {
@@ -21,15 +18,15 @@ async function getData(slug: string) {
       fetch(`${apiUrl}/writer/singleWriterBySlug/${slug}`, {
         next: { revalidate: 30 },
       }).then((res) => res.json()),
-      fetch(`${apiUrl}/category/all`, { next: { revalidate: 30 } }).then(
-        (res) => res.json()
-      ),
+      fetch(`${apiUrl}/category/allCategoryForFiltering`, {
+        next: { revalidate: 30 },
+      }).then((res) => res.json()),
       fetchSettings(),
     ]);
     return {
       products: productsRes || [],
       writer: writerRes?.writer || null,
-      categories: categoryRes?.categories || [],
+      categories: categoryRes?.respondedData || [],
       settings,
     };
   } catch (error) {
@@ -99,45 +96,14 @@ const IndexPage: FC<Props> = async ({ params }) => {
   if (!writer || !settings) {
     return <div>Failed to load writer data or settings data.</div>;
   }
-  const element = await fetchElement("home-main", "home-main");
+
   return (
     <div className="max-w-6xl mx-auto">
-      <div className="grid grid-cols-5">
-        <div className="col-span-1 bg-green-700">this is div</div>
-
-        <div className="col-span-4">
-          <div className="flex justify-between mb-2 ">
-            <div className="w-2/12">
-              <div className="flex justify-center h-44 items-center">
-                <Image
-                  src={writer.photo}
-                  alt="Author Image"
-                  width={100}
-                  height={94}
-                  className="rounded-full "
-                />
-              </div>
-            </div>
-            <div className="w-10/12">
-              <span className="font-semibold text-2xl">{writer.title}</span>
-
-              <ReadMore height="h-24">
-                {writer && (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: writer.description,
-                    }}
-                  ></div>
-                )}
-              </ReadMore>
-            </div>
-          </div>
-
-          {/* Products after query */}
-
-          <ProductDiv products={products} />
-        </div>
-      </div>
+      <ClientComponent
+        writer={writer}
+        products={products}
+        categories={categories}
+      />
     </div>
   );
 };

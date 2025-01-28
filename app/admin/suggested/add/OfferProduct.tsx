@@ -87,7 +87,7 @@ const OfferProduct: React.FC<OfferProductProps> = ({ items, onRemove }) => {
             >
               <Link href={"/"} className="flex items-center space-x-2">
                 <Image
-                  src={item.photo}
+                  src={item.img}
                   alt={item.title}
                   width={50}
                   height={50}

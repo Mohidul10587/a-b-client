@@ -25,7 +25,7 @@ export async function generateMetadata(
   // Extracting relevant information for metadata
   const title =
     category.metaTitle ||
-    `Buy ${category?.categoryName} | Category | @${settings?.country}` ||
+    `Buy ${category?.title} | Category | @${settings?.country}` ||
     "Category Title";
   const description =
     category.metaDescription ||
@@ -93,9 +93,7 @@ const IndexPage: FC<Props> = async ({ params }) => {
               </div>
             </div>
             <div className="w-10/12">
-              <span className="font-semibold text-2xl">
-                {category.categoryName}
-              </span>
+              <span className="font-semibold text-2xl">{category.title}</span>
 
               <ReadMore height="h-24">
                 {category && (

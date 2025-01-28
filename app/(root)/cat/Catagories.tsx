@@ -41,12 +41,10 @@ const Catagories = async ({ width, height }: CatProps) => {
             src={item.photoUrl || "/default.jpg"}
             width={width}
             height={height}
-            alt={item.categoryName}
+            alt={item.title}
           />
-          {item.categoryName && (
-            <h2 className="text-sm group-hover:text-main mt-1">
-              {item.categoryName}
-            </h2>
+          {item.title && (
+            <h2 className="text-sm group-hover:text-main mt-1">{item.title}</h2>
           )}
           <p className="font-normal text-sm">{item.categoryProducts}</p>
         </Link>

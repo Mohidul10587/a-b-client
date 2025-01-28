@@ -33,7 +33,7 @@ const UpdatePageElement: React.FC<PageProps> = ({ data }) => {
     category.subCategories.map((subCat) => ({
       _id: subCat._id,
       title: subCat.title,
-      parentCategoryName: category.categoryName,
+      parenttitle: category.title,
     }))
   );
 
@@ -255,7 +255,7 @@ const UpdatePageElement: React.FC<PageProps> = ({ data }) => {
             <option value="">Select a Category</option>
             {categories?.map((category) => (
               <option key={category._id} value={category._id}>
-                {category.categoryName}
+                {category.title}
               </option>
             ))}
           </select>
@@ -277,7 +277,7 @@ const UpdatePageElement: React.FC<PageProps> = ({ data }) => {
             <option value="">Select a SubCategory</option>
             {allSubCategories?.map((subCategory) => (
               <option key={subCategory._id} value={subCategory._id}>
-                {subCategory.title} ({subCategory.parentCategoryName})
+                {subCategory.title} ({subCategory.parenttitle})
               </option>
             ))}
           </select>

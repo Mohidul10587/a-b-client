@@ -1,7 +1,6 @@
 "use client";
+
 import { apiUrl } from "@/app/shared/urls";
-import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -13,6 +12,7 @@ const AdminLogin: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = (e: any) => {
+    console.log(email, password);
     e.preventDefault();
     setIsLoading(true);
     fetch(`${apiUrl}/admin/login`, {
@@ -30,12 +30,10 @@ const AdminLogin: React.FC = () => {
           setIsLoading(false);
           return;
         }
-
-        localStorage.setItem("accessToken", data.token);
+        console.log(response);
         router.push("/admin");
       })
       .catch((error) => {
-        console.log(error);
         console.error(error);
         setError("Something went wrong");
         setIsLoading(false);

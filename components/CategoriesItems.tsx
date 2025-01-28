@@ -25,7 +25,7 @@ const Categories: React.FC<CategoriesProps> = ({ items }) => {
               href={`/cat/${category.slug}`}
               className="flex items-center font-bold text-gray-700 hover:text-gray-500"
             >
-              {category.categoryName}
+              {category.title}
             </Link>
             {category.subCategories?.length > 0 && (
               <div className="pl-2">

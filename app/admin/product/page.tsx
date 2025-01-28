@@ -40,13 +40,10 @@ const IndexPage = () => {
   };
 
   const handleDelete = async (id: string) => {
-    const token = localStorage.getItem("accessToken");
     try {
-      const response = await fetchWithTokenRefresh(`${apiUrl}/product/${id}`, {
+      const response = await fetch(`${apiUrl}/product/${id}`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        credentials: "include",
       });
       if (response.ok) {
         setProducts(products.filter((product) => product._id !== id));
@@ -101,7 +98,7 @@ const IndexPage = () => {
               <tr key={product._id}>
                 <td className="px-6 py-4 w-2/12">
                   <Image
-                    src={product.photo}
+                    src={product.img}
                     width={50}
                     height={50}
                     alt={product.title}

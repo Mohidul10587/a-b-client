@@ -25,7 +25,7 @@ export interface ISubcategory {
 export interface ICategory {
   _id: ObjectId;
   slug: string;
-  categoryName: string;
+  title: string;
   description: string;
   infoSections: InfoSection[];
   photoUrl: string;
