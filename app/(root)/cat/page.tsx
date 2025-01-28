@@ -15,14 +15,14 @@ export async function generateMetadata(): Promise<Metadata> {
 const IndexPage: React.FC = async () => {
   const element = await fetchElement("category-main", "category-main");
   return (
-    <>
+    <div className="max-w-6xl mx-auto">
       <ElementSection elementsData={element} />
       <div className="container my-4">
         <h2 className="text-xl font-semibold">Featured</h2>
         <p>Latest deals from Price in Kenya</p>
         <Catagories width={60} height={60} />
       </div>
-    </>
+    </div>
   );
 };
 export default IndexPage;

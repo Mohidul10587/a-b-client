@@ -9,6 +9,7 @@ import { ISuggestion } from "@/types/suggestion";
 import ImageGallery from "@/components/ImageGallery";
 import { processContent } from "@/app/shared/processContent";
 import Image from "next/image";
+import { languages } from "@/app/shared/language";
 const IndexPage: React.FC = () => {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [imageType, setImageType] = useState("");
@@ -33,7 +34,7 @@ const IndexPage: React.FC = () => {
     binding: "",
     productType: "",
     translatorName: "",
-    language: "",
+    language: "bn",
     orderType: "",
     metaTitle: "",
     metaDescription: "",
@@ -221,7 +222,7 @@ const IndexPage: React.FC = () => {
   };
 
   // Update slug whenever the title changes
-
+  console.log(data.language);
   return (
     <>
       <div className="container my-4 flex justify-center">
@@ -321,28 +322,26 @@ const IndexPage: React.FC = () => {
                   </div>
                   <div className="mb-4">
                     <label
-                      htmlFor="language"
-                      className="block text-sm font-medium text-gray-700"
+                      htmlFor="language-selector"
+                      className="block mb-2 font-medium"
                     >
-                      Language:
+                      Select Language:
                     </label>
                     <select
-                      id="language"
-                      name="language"
+                      id="language-selector"
                       value={data.language}
+                      name="language"
                       onChange={handleChange}
-                      className="mt-1 p-2 w-full border rounded-md border-black"
-                      required
+                      className="border rounded-lg p-2 w-full"
                     >
-                      <option value="english">English</option>
-                      <option value="spanish">Spanish</option>
-                      <option value="french">French</option>
-                      <option value="german">German</option>
-                      <option value="italian">Italian</option>
-                      <option value="chinese">Chinese</option>
-                      <option value="japanese">Japanese</option>
-                      <option value="korean">Korean</option>
-                      {/* Add more options as needed */}
+                      <option value="" disabled>
+                        Choose a language
+                      </option>
+                      {languages.map((lang) => (
+                        <option key={lang.code} value={lang.code}>
+                          {lang.name} ({lang.nativeName})
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div className="mb-4">

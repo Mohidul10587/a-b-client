@@ -11,22 +11,27 @@ import ClientComponent from "./ClientComponent";
 // Utility function to fetch all necessary data
 async function getData(slug: string) {
   try {
-    const [productsRes, writerRes, categoryRes, settings] = await Promise.all([
-      fetch(`${apiUrl}/product/writer_products_by_slug/${slug}`, {
-        next: { revalidate: 30 },
-      }).then((res) => res.json()),
-      fetch(`${apiUrl}/writer/singleWriterBySlug/${slug}`, {
-        next: { revalidate: 30 },
-      }).then((res) => res.json()),
-      fetch(`${apiUrl}/category/allCategoryForFiltering`, {
-        next: { revalidate: 30 },
-      }).then((res) => res.json()),
-      fetchSettings(),
-    ]);
+    const [productsRes, writerRes, categoryRes, publishersRes, settings] =
+      await Promise.all([
+        fetch(`${apiUrl}/product/writer_products_by_slug/${slug}`, {
+          next: { revalidate: 30 },
+        }).then((res) => res.json()),
+        fetch(`${apiUrl}/writer/singleWriterBySlug/${slug}`, {
+          next: { revalidate: 30 },
+        }).then((res) => res.json()),
+        fetch(`${apiUrl}/category/allCategoryForFiltering`, {
+          next: { revalidate: 30 },
+        }).then((res) => res.json()),
+        fetch(`${apiUrl}/publishers/allPublisherForFiltering`, {
+          next: { revalidate: 30 },
+        }).then((res) => res.json()),
+        fetchSettings(),
+      ]);
     return {
       products: productsRes || [],
       writer: writerRes?.writer || null,
       categories: categoryRes?.respondedData || [],
+      publishers: publishersRes?.respondedData || [],
       settings,
     };
   } catch (error) {
@@ -35,6 +40,7 @@ async function getData(slug: string) {
       products: [],
       writer: null,
       categories: [],
+      publishers: [],
       settings: null,
     };
   }
@@ -91,7 +97,9 @@ const IndexPage: FC<Props> = async ({ params }) => {
   const writerId = resolvedParams.id;
 
   // Fetch all necessary data
-  const { products, writer, categories, settings } = await getData(writerId);
+  const { products, writer, categories, publishers, settings } = await getData(
+    writerId
+  );
   console.log(writer, categories, settings);
   if (!writer || !settings) {
     return <div>Failed to load writer data or settings data.</div>;
@@ -103,6 +111,7 @@ const IndexPage: FC<Props> = async ({ params }) => {
         writer={writer}
         products={products}
         categories={categories}
+        publishers={publishers}
       />
     </div>
   );
