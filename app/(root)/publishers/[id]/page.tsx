@@ -1,18 +1,9 @@
-import Link from "next/link";
-import ReadMore from "@/components/ReadMore";
 import { apiUrl, clientSideUrl } from "@/app/shared/urls";
-
 import { Metadata, ResolvingMetadata } from "next";
 import { fetchSettings } from "@/app/shared/fetchSettingsData";
-import ElementSection from "../../a-root-comp/ElementSection";
 import { FC } from "react";
 import { Props } from "@/types/pageProps";
-
-import { fetchElement } from "@/app/shared/fetchElements";
-import ProductDiv from "@/components/ProductBox";
-import Image from "next/image";
 import ClientComponent from "./ClientComponent";
-
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
@@ -83,6 +74,7 @@ const IndexPage: FC<Props> = async ({ params }) => {
         publisher={publisher}
         products={products}
         categories={categories}
+        writers={writers}
       />
     </div>
   );
@@ -92,19 +84,17 @@ export default IndexPage;
 
 async function fetchData(slug: string) {
   try {
-    const [data, categoryRes, settings] = await Promise.all([
+    const [data, settings] = await Promise.all([
       fetch(`${apiUrl}/product/products_by_punishers_slug/${slug}`, {
         next: { revalidate: 30 },
       }).then((res) => res.json()),
-      fetch(`${apiUrl}/category/allCategoryForFiltering`, {
-        next: { revalidate: 30 },
-      }).then((res) => res.json()),
+
       fetchSettings(),
     ]);
 
     const products = data.products;
     const writers = data.writers;
-    const categories = categoryRes.respondedData;
+    const categories = data.categories;
     const publisher = data.publisher;
 
     return {

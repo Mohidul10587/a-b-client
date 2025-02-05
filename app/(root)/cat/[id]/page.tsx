@@ -1,16 +1,13 @@
-import Link from "next/link";
-import ReadMore from "@/components/ReadMore";
 import { apiUrl, clientSideUrl } from "@/app/shared/urls";
-import CategoryProducts from "./CategoryProduct";
+
 import { Metadata, ResolvingMetadata } from "next";
 import { fetchSettings } from "@/app/shared/fetchSettingsData";
-import ElementSection from "../../a-root-comp/ElementSection";
+
 import { FC } from "react";
 import { Props } from "@/types/pageProps";
 
 import { fetchElement } from "@/app/shared/fetchElements";
-import ProductDiv from "@/components/ProductBox";
-import Image from "next/image";
+
 import ClientComponent from "./ClientComponent";
 
 export async function generateMetadata(

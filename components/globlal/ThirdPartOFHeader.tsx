@@ -10,7 +10,7 @@ const ThirdPartOFHeader = async () => {
   const categories = await fetchCategories();
   const writers = await getWriters();
   const publishers = await getPublishers();
-  console.log(categories);
+
   return (
     <div className="flex items-center py-4 bg-white max-w-6xl m-auto">
       <div className="group relative">
