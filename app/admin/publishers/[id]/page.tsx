@@ -95,7 +95,7 @@ const IndexPage: React.FC = () => {
         return; // Stop submission if a required field is missing
       }
     }
-    console.log(generateSlug(formData.title));
+
     openModal("Uploading... ");
     const formDataAppend = new FormData();
     formDataAppend.append("_id", formData._id);

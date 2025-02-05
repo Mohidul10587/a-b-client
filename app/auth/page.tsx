@@ -12,7 +12,6 @@ const AdminLogin: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = (e: any) => {
-    console.log(email, password);
     e.preventDefault();
     setIsLoading(true);
     fetch(`${apiUrl}/admin/login`, {
@@ -30,7 +29,7 @@ const AdminLogin: React.FC = () => {
           setIsLoading(false);
           return;
         }
-        console.log(response);
+
         router.push("/admin");
       })
       .catch((error) => {

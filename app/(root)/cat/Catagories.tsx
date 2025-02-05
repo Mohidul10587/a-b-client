@@ -28,7 +28,7 @@ async function fetchCategories(): Promise<ICategory[]> {
 
 const Catagories = async ({ width, height }: CatProps) => {
   const categories = await fetchCategories();
-  console.log("This is categories", categories);
+
   return (
     <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-2">
       {categories.map((item, index) => (
@@ -38,7 +38,7 @@ const Catagories = async ({ width, height }: CatProps) => {
           className="group flex items-center justify-center flex-col p-2 border font-bold bg-white"
         >
           <Image
-            src={item.photoUrl || "/default.jpg"}
+            src={item.img || "/default.jpg"}
             width={width}
             height={height}
             alt={item.title}

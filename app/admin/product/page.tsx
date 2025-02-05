@@ -5,7 +5,6 @@ import { IProduct } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import EditVariantModal from "./EditVariantModal";
 
 const IndexPage = () => {
   const [products, setProducts] = useState<IProduct[]>([]);

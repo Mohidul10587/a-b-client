@@ -18,7 +18,7 @@ const IndexPage: React.FC = () => {
       try {
         const res = await fetch(`${apiUrl}/suggestion`);
         const data = await res.json();
-        console.log(data);
+
         setSuggestions(data.suggestions);
       } catch (error) {
         console.error("Failed to fetch suggestions:", error);

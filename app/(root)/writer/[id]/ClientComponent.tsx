@@ -134,7 +134,7 @@ const ClientComponent: FC<{
           <div className="w-2/12">
             <div className="flex justify-center h-44 items-center">
               <Image
-                src={writer.photo}
+                src={writer.img}
                 alt="Author Image"
                 width={100}
                 height={94}

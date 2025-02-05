@@ -107,7 +107,7 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
         const response = await fetch(`${apiUrl}/product/${productId}`);
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
+
           setProduct(data);
           setSelectedImage(data.metaImage);
           setMetaTitle(data.metaTitle);

@@ -29,7 +29,7 @@ const Checkout = () => {
     postalCode: "",
     phone: "",
   });
-  console.log(deliveryInfo);
+
   const [paymentMethod, setPaymentMethod] = useState("AamarPay");
   const [isSubmitting, setIsSubmitting] = useState(false);
 

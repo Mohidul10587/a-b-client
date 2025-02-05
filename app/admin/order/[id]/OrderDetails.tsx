@@ -49,7 +49,7 @@ const OrderDetails: React.FC<{ id: string }> = ({ id }) => {
     paymentStatus,
     paymentTnxId,
   } = order;
-  console.log(order);
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen flex justify-center items-center">
       <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6">

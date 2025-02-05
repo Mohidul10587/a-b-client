@@ -1,11 +1,8 @@
 import { apiUrl } from "@/app/shared/urls";
-import ReadMore from "@/components/ReadMore";
 import { fetchSettings } from "@/app/shared/fetchSettingsData";
 import { Metadata, ResolvingMetadata } from "next";
 import { FC } from "react";
 import { Props } from "@/types/pageProps";
-import Image from "next/image";
-import ProductDiv from "@/components/ProductBox";
 import ClientComponent from "./ClientComponent";
 
 // Utility function to fetch all necessary data
@@ -100,7 +97,7 @@ const IndexPage: FC<Props> = async ({ params }) => {
   const { products, writer, categories, publishers, settings } = await getData(
     writerId
   );
-  console.log(writer, categories, settings);
+
   if (!writer || !settings) {
     return <div>Failed to load writer data or settings data.</div>;
   }

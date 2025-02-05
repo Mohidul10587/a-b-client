@@ -77,7 +77,7 @@ const IndexPage: React.FC = () => {
         );
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
+
           setPublishers(data.publishers);
         } else {
           throw new Error("Failed to fetch brands");
@@ -222,7 +222,7 @@ const IndexPage: React.FC = () => {
   };
 
   // Update slug whenever the title changes
-  console.log(data.language);
+
   return (
     <>
       <div className="container my-4 flex justify-center">
@@ -464,6 +464,7 @@ const IndexPage: React.FC = () => {
                       onChange={handleChange}
                       required
                     >
+                      <option value="">-- Select a Publisher --</option>
                       {publishers.map((item) => (
                         <option key={item._id} value={item._id}>
                           {item.title}

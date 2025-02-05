@@ -37,14 +37,11 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
           redirectUrl,
         }
       );
-      console.log(response);
+
       if (response.data.paymentUrl) {
         window.location.href = response.data.paymentUrl;
       }
-    } catch (error) {
-      console.log(error);
-      //   console.error("Payment initialization failed", error);
-    }
+    } catch (error) {}
   };
 
   return (

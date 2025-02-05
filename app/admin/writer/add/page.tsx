@@ -1,168 +1,231 @@
 "use client";
 import React, { useState } from "react";
-import Content from "@/app/admin/components/Content";
-import Photo from "@/app/admin/components/Photo2";
+import Content from "@/components/Content";
+import Modal from "@/components/Modal";
+import ImageGallery from "@/components/ImageGallery";
+import Keywords from "@/components/Keywords";
+import { processContent } from "@/app/shared/processContent";
 import { apiUrl } from "@/app/shared/urls";
-import Modal from "@/app/admin/components/Modal"; // Adjust the import path as needed
-import { fetchWithTokenRefresh } from "@/app/shared/fetchWithTokenRefresh";
-import Meta from "@/app/admin/components/Meta";
+import Image from "next/image";
+
+export interface IQnA {
+  title: string;
+  description: string;
+}
+
+export interface IWriter {
+  metaTitle: string;
+  metaDescription: string;
+  keywords: string[];
+  title: string;
+  slug: string;
+  description: string;
+  img: string;
+  metaImg: string;
+}
 
 const IndexPage: React.FC = () => {
-  const [metaTitle, setMetaTitle] = useState("");
-  const [metaDescription, setMetaDescription] = useState("");
-  const [selectedImage, setSelectedImage] = useState<string | null>(""); // Start with an empty string
-  const [tags, setTags] = useState<string[]>([]);
-  const [metaValue, setMetaValue] = useState("");
-  const [metaImageFile, setMetaImageFile] = useState<File | null>(null);
-  const [title, setTitle] = useState("");
-  const [slug, setSlug] = useState("");
-  const [description, setDescription] = useState("");
-  const [photo, setPhoto] = useState<File | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
-  const [isContentValid, setIsContentValid] = useState(false);
+  const [description, setDescription] = useState("");
+  const [shortDescription, setShortDescription] = useState("");
+  const [imageType, setImageType] = useState("");
+  const [data, setData] = useState<IWriter>({
+    metaTitle: "",
+    metaDescription: "",
+    keywords: [] as string[],
+    title: "",
+    slug: "",
+    description: "",
+    img: "",
+    metaImg: "",
+  });
 
   const openModal = (content: string) => {
     setModalContent(content);
-    setModalIsOpen(true);
+    setIsSubmitModalOpen(true);
   };
 
   const closeModal = () => {
-    setModalIsOpen(false);
+    setIsSubmitModalOpen(false);
+    setIsImageModalOpen(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate if content and photo are present
+    if (!data.title) return openModal("Title is required.");
+    if (!data.img) return openModal("Photo is required.");
 
-    if (!title) {
-      openModal("Title is required.");
-      return;
-    }
+    const finalDescription = processContent(description);
+    const finalShortDescription = processContent(shortDescription);
 
-    if (!photo) {
-      openModal("Image is required.");
-      return;
-    }
-
-    setIsSubmitting(true);
-    openModal("Processing...");
-
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("slug", slug);
-    formData.append("description", description);
-    if (photo) {
-      formData.append("photo", photo);
-    }
-
-    // Add new state values to FormData
-    formData.append("metaTitle", metaTitle);
-    formData.append("metaDescription", metaDescription);
-
-    // If selectedImage is not null, append it
-    if (metaImageFile) {
-      formData.append("metaImage", metaImageFile);
-    }
-
-    // Convert tags array to a comma-separated string
-    formData.append("tags", tags.join(","));
-
-    const token = localStorage.getItem("accessToken");
+    const updatedData = {
+      ...data,
+      description: finalDescription,
+      shortDescription: finalShortDescription,
+    };
 
     try {
-      const response = await fetchWithTokenRefresh(`${apiUrl}/writer/create`, {
+      openModal("Creating...");
+      const response = await fetch(`${apiUrl}/writer/create`, {
         method: "POST",
+        credentials: "include",
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Content-type": "Application/json",
         },
-        body: formData,
+        body: JSON.stringify(updatedData),
       });
-
-      if (response.ok) {
-        openModal("Writer added successfully!");
-        // Reset form fields
-        setTitle("");
-        setDescription("");
-        setPhoto(null);
-        setIsContentValid(false); // Reset content validity
-      } else {
-        openModal("Failed to add writer.");
-      }
+      const responseData = await response.json();
+      openModal(responseData.message);
     } catch (error) {
-      openModal("An error occurred while submitting the form");
-    } finally {
-      setIsSubmitting(false);
+      openModal("An unexpected error occurred. Please try again later.");
     }
   };
 
   return (
     <>
       <div className="container my-4">
-        <form onSubmit={handleSubmit}>
-          <div className="flex flex-col md:flex-row gap-8">
-            <div className="w-full md:w-2/3">
-              <div className="mb-4">
-                <p>Title</p>
-                <input
-                  type="text"
-                  placeholder="title"
-                  className="p-2 mt-2 w-full outline-none rounded-md"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </div>
-              <div className="mb-4">
-                <p>Slug</p>
-                <input
-                  type="text"
-                  placeholder="Slug"
-                  name="slug"
-                  value={slug}
-                  onChange={(e) => setSlug(e.target.value)}
-                  className="p-2 mt-2 w-full outline-none rounded-md"
-                />
-              </div>
-              <div className="mb-4">
-                <p>Description</p>
-                <Content onChange={(content) => setDescription(content)} />
-              </div>
-
-              <Meta
-                metaTitle={metaTitle}
-                setMetaTitle={setMetaTitle}
-                metaDescription={metaDescription}
-                setMetaDescription={setMetaDescription}
-                selectedImage={selectedImage}
-                setSelectedImage={setSelectedImage}
-                tags={tags}
-                setTags={setTags}
-                metaValue={metaValue}
-                setMetaValue={setMetaValue}
-                setMetaImageFile={setMetaImageFile}
+        <div className="flex flex-col md:flex-row gap-8">
+          <div className="w-full md:w-2/3">
+            <div className="mb-4">
+              <p> Title</p>
+              <input
+                type="text"
+                value={data.title}
+                onChange={(e) => setData({ ...data, title: e.target.value })}
+                placeholder="Writer Name"
+                className="p-2 mt-2 w-full outline-none rounded-md"
               />
             </div>
-            <div className="w-full md:w-1/3">
-              <div className="border-2 border-main border-dashed rounded-md p-2 my-8">
-                <button
-                  type="submit"
-                  className="bg-main flex items-center justify-center w-full text-white px-4 py-2 rounded-md"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Publishing..." : "Publish"}
-                </button>
+
+            <div className="mb-4">
+              <p>Slug</p>
+              <input
+                type="text"
+                value={data.slug}
+                onChange={(e) => setData({ ...data, slug: e.target.value })}
+                placeholder="Slug"
+                className="p-2 mt-2 w-full outline-none rounded-md"
+              />
+            </div>
+
+            <div className="mb-4">
+              <p>Description</p>
+              <Content onChange={(content) => setDescription(content)} />
+            </div>
+            <div className="mb-4">
+              <p>Short Description</p>
+              <Content onChange={(content) => setShortDescription(content)} />
+            </div>
+            <div className="p-4 w-full space-y-4 bg-white mt-4">
+              <div>
+                <label htmlFor="titleInput" className="text-gray-700">
+                  Meta Title
+                </label>
+                <input
+                  id="titleInput"
+                  type="text"
+                  value={data.metaTitle}
+                  onChange={(e) =>
+                    setData({ ...data, metaTitle: e.target.value })
+                  }
+                  placeholder="Enter title"
+                  className="mt-1 p-2 w-full border outline-0 rounded-md"
+                />
               </div>
-              <div className="border-2 border-main border-dashed rounded-md p-2 my-8">
-                <Photo title="Photo" img="" onImageChange={setPhoto} />
+
+              <div>
+                <label htmlFor="descriptionInput" className="text-gray-700">
+                  Meta Description
+                </label>
+                <textarea
+                  id="descriptionInput"
+                  value={data.metaDescription}
+                  onChange={(e) =>
+                    setData({ ...data, metaDescription: e.target.value })
+                  }
+                  placeholder="Enter description"
+                  className="mt-1 p-2 w-full border outline-0 rounded-md resize-none"
+                  rows={2}
+                />
+              </div>
+              <div className="w-full md:w-1/3">
+                <p>Meta Image</p>
+                <div>
+                  <Image
+                    src={data.metaImg || "/default.jpg"}
+                    width={200}
+                    height={150}
+                    alt="Image"
+                    className="border border-black "
+                  />
+
+                  <p
+                    className="font-bold mt-2 w-[200px] border border-black p-2 "
+                    onClick={() => {
+                      setIsImageModalOpen(true);
+                      setImageType("metaImg");
+                    }}
+                  >
+                    {data.metaImg ? "Change Image " : "Choose Image"}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <Keywords data={data} setData={setData} />
+          </div>
+
+          <div className="w-1/2">
+            <div className="border-2 border-main border-dashed rounded-md p-2 my-8">
+              <button
+                onClick={handleSubmit}
+                className="bg-main flex items-center justify-center w-full text-white px-4 py-2 rounded-md"
+              >
+                Publish
+              </button>
+            </div>
+
+            {/* Category image start here */}
+            <div className="w-full md:w-1/3">
+              <p>Image</p>
+              <div>
+                <Image
+                  src={data.img || "/default.jpg"}
+                  width={200}
+                  height={150}
+                  alt="Image"
+                  className="border border-black "
+                />
+
+                <p
+                  className="font-bold mt-2 w-[200px] border border-black p-2 "
+                  onClick={() => {
+                    setIsImageModalOpen(true);
+                    setImageType("img");
+                  }}
+                >
+                  {data.img ? "Change Image " : "Choose Image"}
+                </p>
               </div>
             </div>
           </div>
-        </form>
+        </div>
       </div>
 
-      <Modal isOpen={modalIsOpen} onClose={closeModal} content={modalContent} />
+      <Modal
+        isOpen={isSubmitModalOpen}
+        onClose={closeModal}
+        content={modalContent}
+      />
+      <ImageGallery
+        isOpen={isImageModalOpen}
+        onClose={closeModal}
+        img={imageType}
+        setData={setData}
+        data={data}
+      />
     </>
   );
 };

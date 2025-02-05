@@ -38,7 +38,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ products }) => {
   const handleNext = () => {
     if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
   };
-  console.log(currentProducts);
+
   return (
     <div>
       <h2 className="text-lg font-semibold border-b pb-2">Related Products</h2>

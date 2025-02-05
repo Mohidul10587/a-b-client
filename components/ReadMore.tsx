@@ -23,7 +23,7 @@ const ReadMore = ({ height, children }: ReadMoreProps) => {
   const toggleReadMore = () => {
     setIsExpanded(!isExpanded);
   };
-  console.log(height);
+
   return (
     <div className="relative description">
       <div

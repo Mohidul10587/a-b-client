@@ -32,7 +32,7 @@ export async function generateMetadata(
     publisher.metaDescription ||
     publisher?.description?.replace(/<\/?[^>]+(>|$)/g, "") || // Remove HTML tags from description
     `Explore a wide range of products in the ${title} publisher at ${settings.country}.`;
-  const image = publisher?.photoUrl || "/default-image.png"; // Provide a default image if not available
+  const image = publisher?.img || "/default-image.png"; // Provide a default image if not available
 
   return {
     title,
@@ -101,7 +101,7 @@ async function fetchData(slug: string) {
       }).then((res) => res.json()),
       fetchSettings(),
     ]);
-    console.log(data);
+
     const products = data.products;
     const writers = data.writers;
     const categories = categoryRes.respondedData;

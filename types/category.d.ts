@@ -28,7 +28,7 @@ export interface ICategory {
   title: string;
   description: string;
   infoSections: InfoSection[];
-  photoUrl: string;
+  img: string;
   display: boolean;
   displayPositionOfHomePage: number;
   subCategories: ISubcategory[];

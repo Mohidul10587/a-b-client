@@ -11,6 +11,7 @@ import { Props } from "@/types/pageProps";
 import { fetchElement } from "@/app/shared/fetchElements";
 import ProductDiv from "@/components/ProductBox";
 import Image from "next/image";
+import ClientComponent from "./ClientComponent";
 
 export async function generateMetadata(
   { params }: Props,
@@ -31,7 +32,7 @@ export async function generateMetadata(
     category.metaDescription ||
     category?.description?.replace(/<\/?[^>]+(>|$)/g, "") || // Remove HTML tags from description
     `Explore a wide range of products in the ${title} category at ${settings.country}.`;
-  const image = category?.photoUrl || "/default-image.png"; // Provide a default image if not available
+  const image = category?.img || "/default-image.png"; // Provide a default image if not available
 
   return {
     title,
@@ -71,46 +72,18 @@ const IndexPage: FC<Props> = async ({ params }) => {
     products = [],
     writers = [],
     category = null,
+    publishers = [],
     settings,
   } = await fetchData(slug);
   const element = await fetchElement(category._id, "category");
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="grid grid-cols-5">
-        <div className="col-span-1 bg-green-700">this is div</div>
-        <div className="col-span-4">
-          <div className="flex justify-between mb-2">
-            <div className="w-2/12">
-              <div className="flex justify-center h-44 items-center">
-                <Image
-                  src={category?.photo || "/default.jpg"}
-                  alt="Author Image"
-                  width={100}
-                  height={94}
-                  className="rounded-full "
-                />
-              </div>
-            </div>
-            <div className="w-10/12">
-              <span className="font-semibold text-2xl">{category.title}</span>
-
-              <ReadMore height="h-24">
-                {category && (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: category.description,
-                    }}
-                  ></div>
-                )}
-              </ReadMore>
-            </div>
-          </div>
-
-          <ProductDiv products={products} />
-        </div>
-      </div>
-    </div>
+    <ClientComponent
+      products={products}
+      category={category}
+      publishers={publishers}
+      writers={writers}
+    />
   );
 };
 
@@ -118,8 +91,11 @@ export default IndexPage;
 
 async function fetchData(slug: string) {
   try {
-    const [data, settings] = await Promise.all([
+    const [data, publishersRes, settings] = await Promise.all([
       fetch(`${apiUrl}/product/products_by_category_slug/${slug}`, {
+        next: { revalidate: 30 },
+      }).then((res) => res.json()),
+      fetch(`${apiUrl}/publishers/allPublisherForFiltering`, {
         next: { revalidate: 30 },
       }).then((res) => res.json()),
       fetchSettings(),
@@ -128,11 +104,13 @@ async function fetchData(slug: string) {
     const products = data.products;
     const writers = data.writers;
     const category = data.category;
+    const publishers = publishersRes?.respondedData || [];
 
     return {
       products,
       writers,
       category,
+      publishers,
       settings,
     };
   } catch (error) {
@@ -141,6 +119,7 @@ async function fetchData(slug: string) {
       products: [],
       writers: [],
       category: null,
+      publishers: [],
       settings: null,
       elementsData: null,
     };

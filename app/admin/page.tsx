@@ -30,7 +30,6 @@ const IndexPage: React.FC = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.orders);
         setOrders(data.orders);
       })
       .catch((error) => {
@@ -96,7 +95,7 @@ const IndexPage: React.FC = () => {
       })
       .catch((error) => console.error("Error updating order status:", error));
   };
-  console.log(orders);
+
   return (
     <>
       <div className="container my-4">

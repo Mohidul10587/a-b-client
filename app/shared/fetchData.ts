@@ -17,7 +17,7 @@ export async function fetchCategories(): Promise<ICategoryWithSubcategories[]> {
       throw new Error("Failed to fetch categories");
     }
     const data = await response.json();
-    console.log(data);
+
     return data.respondedData;
   } catch (error) {
     console.error("Error in fetchCategories:", error);
