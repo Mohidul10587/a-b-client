@@ -3,15 +3,13 @@
 import React, { useState } from "react";
 
 import ReadMore from "@/components/ReadMore";
-import Slider from "@/components/Slider";
-import Link from "next/link";
+
 import Image from "next/image";
 import Youtube from "@/components/Youtube";
 
 import Product from "@/components/Product.home";
-import { FC, Key } from "react";
+import { Key } from "react";
 
-import SocialShare from "@/components/SocialShare";
 import {
   FaShareAlt,
   FaShoppingCart,
@@ -37,23 +35,8 @@ interface ProductDetailsProps {
 export const ProductDetails = ({
   product,
   settings,
-  slideImages,
-  fullUrl,
-  categorySlug,
-  whatsappUrl,
   allProducts,
-  productId,
 }: ProductDetailsProps) => {
-  const [discount, setDiscount] = useState(0); // Discount as a state
-
-  const { price, unprice } = product;
-
-  // Format price and unprice with default of empty strings if NaN
-
-  const formattedUnprice = isNaN(unprice)
-    ? ""
-    : new Intl.NumberFormat().format(unprice);
-
   // Conditional check to hide the section if both price and unprice are invalid
 
   const addToCart = (product: any, quantity: number) => {
@@ -66,7 +49,7 @@ export const ProductDetails = ({
     } else {
       const sortedProduct = {
         _id: product._id,
-        photo: product.photo,
+        img: product.img,
         price: product.price,
         title: product.title,
       };
@@ -90,7 +73,7 @@ export const ProductDetails = ({
           <div className="col-span-2">
             <div className="relative">
               <Image
-                src={product.photo} // Replace with actual image path
+                src={product.img} // Replace with actual image path
                 alt="Product Image"
                 width={400}
                 height={600}

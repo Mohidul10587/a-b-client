@@ -5,7 +5,7 @@ import Link from "next/link";
 interface Product {
   originalPrice: React.JSX.Element;
   rating: number;
-  photo?: string;
+  img?: string;
   title?: string;
   slug: string;
   price?: number;
@@ -50,7 +50,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ products }) => {
                 <Link href={`/${product.slug}`}>
                   <div className="flex items-center space-x-4">
                     <Image
-                      src={product.photo || "/related-product-1.jpg"} // Use actual image path or fallback
+                      src={product.img || "/related-product-1.jpg"} // Use actual image path or fallback
                       alt={product.title || "Related Product"}
                       width={50}
                       height={70}
