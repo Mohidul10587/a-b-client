@@ -120,7 +120,7 @@ const Auth = () => {
           {/* Email Login Form */}
           {activeForm === "login" && (
             <div className="w-full">
-              {/* <form className="space-y-6" onSubmit={handleLogin}>
+              <form className="space-y-6" onSubmit={handleLogin}>
                 <div className="rounded-md shadow-sm">
                   <div className="mb-2">
                     <label htmlFor="email">Email</label>
@@ -204,7 +204,7 @@ const Auth = () => {
                     Log in
                   </button>
                 </div>
-              </form> */}
+              </form>
               <GoogleAndFacebookDiv
                 handleSingInWithGoogle={handleSingInWithGoogle}
                 handleSingInWithFacebook={handleSingInWithFacebook}
@@ -216,7 +216,7 @@ const Auth = () => {
 
           {activeForm === "signup" && (
             <div className="w-full">
-              {/* <form
+              <form
                 className="mt-8 space-y-6"
                 onSubmit={signUpWithEmailPassword}
               >
@@ -313,7 +313,7 @@ const Auth = () => {
                     Sign Up
                   </button>
                 </div>
-              </form> */}
+              </form>
 
               <GoogleAndFacebookDiv
                 handleSingInWithGoogle={handleSingInWithGoogle}
@@ -346,19 +346,19 @@ const GoogleAndFacebookDiv = ({
   return (
     <div className="mt-4">
       <div className="my-4 cursor-pointer text-center text-gray-500 hover:text-main">
-        {/* {activeForm == "login" && (
+        {activeForm == "login" && (
           <p onClick={() => handleFormSwitch("signup")}>
             No account ? Create a new account
           </p>
-        )} */}
+        )}
 
-        {/* {activeForm == "signup" && (
+        {activeForm == "signup" && (
           <p onClick={() => handleFormSwitch("login")}>
             Already have an account? Log In
           </p>
-        )} */}
+        )}
       </div>
-      {/* <p className="text-center font-bold my-4">---------- OR ---------</p> */}
+      <p className="text-center font-bold my-4">---------- OR ---------</p>
       <button
         onClick={handleSingInWithGoogle}
         className="bg-[#4285F4] text-white text-sm font-semibold p-2 rounded w-full flex items-center justify-center hover:bg-[#357ae8] transition-all mb-3"
