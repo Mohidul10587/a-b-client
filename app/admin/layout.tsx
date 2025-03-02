@@ -21,10 +21,10 @@ const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         if (data.success === true) {
           setLoading(false);
         } else {
-          router.push("/auth");
+          router.push("/aAuth");
         }
       } catch (error) {
-        router.push("/auth");
+        router.push("/aAuth");
       }
     };
 

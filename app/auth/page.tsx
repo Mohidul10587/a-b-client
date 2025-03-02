@@ -1,94 +1,57 @@
 "use client";
-
-import { apiUrl } from "@/app/shared/urls";
+import { Suspense, useEffect } from "react";
+import Auth from "@/app/auth/Auth";
+import Image from "next/image";
+import Link from "next/link";
+import { useData } from "../DataContext";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useSettings } from "@/app/context/AppContext";
 
-const AdminLogin: React.FC = () => {
+const IndexPage: React.FC = () => {
+  const settings = useSettings();
+  const { sessionStatus } = useData();
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e: any) => {
-    e.preventDefault();
-    setIsLoading(true);
-    fetch(`${apiUrl}/admin/login`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    })
-      .then((response) => response.json().then((data) => ({ data, response })))
-      .then(({ data, response }) => {
-        if (!response.ok) {
-          setError(data.message);
-          setIsLoading(false);
-          return;
-        }
+  useEffect(() => {
+    if (sessionStatus === "authenticated") {
+      router.push("/"); // Redirect to the home page
+    }
+  }, [sessionStatus, router]);
 
-        router.push("/admin");
-      })
-      .catch((error) => {
-        console.error(error);
-        setError("Something went wrong");
-        setIsLoading(false);
-      });
-  };
+  if (sessionStatus === "loading") {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading...
+      </div>
+    );
+  }
 
-  return (
-    <>
-      <div className="bg-gray-50 font-[sans-serif] text-[#333]">
-        <div className="flex flex-col items-center justify-center py-6 px-4">
-          <div className="max-w-md w-full border py-8 px-6 rounded border-gray-300 bg-white">
-            <h1 className="text- font-bold">Admin login</h1>
-            {error ? (
-              <div className="mt-4 text-red-500 text-center">{error}</div>
-            ) : null}
-            <form className="mt-4 space-y-4" onSubmit={handleLogin}>
-              <div>
-                <input
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className="w-full text-sm px-4 py-3 rounded outline-none border-2 focus:border-main"
-                  placeholder="Email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div>
-                <input
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  className="w-full text-sm px-4 py-3 rounded outline-none border-2 focus:border-main"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-
-              <div className="!mt-10">
-                <button
-                  type="submit"
-                  className="w-full py-2.5 px-4 text-sm rounded text-white bg-main hover:bg-main focus:outline-none"
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Logging in..." : "Log in"}
-                </button>
-              </div>
-            </form>
-          </div>
+  if (sessionStatus === "unauthenticated") {
+    return (
+      <div className="fixed top-0 left-0 right-0 bottom-0 bg-main bg-bg bg-no-repeat bg-cover flex justify-center items-center">
+        <div className="flex flex-col items-center w-full max-w-lg m-4">
+          <Link href="/" className="outline-none mb-6">
+            <Image
+              src={settings?.logo}
+              unoptimized
+              width={200}
+              height={50}
+              quality={100}
+              className="h-9 w-min"
+              alt="Logo"
+            />
+          </Link>
+          <>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Auth />
+            </Suspense>
+          </>
         </div>
       </div>
-    </>
-  );
+    );
+  }
+  // Avoid rendering anything if the user is being redirected
+  return null;
 };
 
-export default AdminLogin;
+export default IndexPage;

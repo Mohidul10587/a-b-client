@@ -2,6 +2,9 @@ import { Metadata } from "next";
 import { SettingsProvider } from "./context/AppContext";
 import "./globals.css";
 import { fetchSettings } from "./shared/fetchSettingsData";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/authOptions";
+import { DataProvider } from "./DataContext";
 
 // Generate metadata dynamically
 export async function generateMetadata(): Promise<Metadata> {
@@ -20,6 +23,7 @@ interface RootLayoutProps {
 async function RootLayout({ children }: RootLayoutProps) {
   // Fetch settings to use across the application
   const settings = await fetchSettings();
+  const session = await getServerSession(authOptions);
 
   return (
     <html lang="en">
@@ -39,7 +43,9 @@ async function RootLayout({ children }: RootLayoutProps) {
       </head>
       <body className="bg-gray-300" cz-shortcut-listen="true">
         {/* Provide settings globally */}
-        <SettingsProvider value={settings}>{children}</SettingsProvider>
+        <DataProvider session={session}>
+          <SettingsProvider value={settings}>{children}</SettingsProvider>
+        </DataProvider>
       </body>
     </html>
   );
