@@ -4,6 +4,7 @@ import { apiUrl } from "../shared/urls";
 let socket: Socket | null = null;
 
 // Initialize Socket.IO client
+
 export const getSocket = (): Socket => {
   if (!socket) {
     socket = io("https://add-to-cart-server-0ktr.onrender.com", {
