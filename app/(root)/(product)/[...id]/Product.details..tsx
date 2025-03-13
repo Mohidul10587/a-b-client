@@ -1,7 +1,9 @@
 "use client";
-import { useSettings } from "@/app/context/AppContext";
+
+import { useData } from "@/app/DataContext";
 import Image from "next/image";
 import Link from "next/link";
+import React from "react";
 
 interface ProductProps {
   _id: string;
@@ -28,7 +30,7 @@ const Product: React.FC<ProductProps> = ({
   withCompareProductId_leftSide,
   categoryId,
 }) => {
-  const settings = useSettings();
+  const { settings } = useData();
   return (
     <div className="group relative border bg-white block rounded">
       <Link href={`/${slug}`} className="w-full">

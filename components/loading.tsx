@@ -2,7 +2,7 @@ import React from "react";
 
 const LoadingComponent = () => {
   return (
-    <div className="container my-4">
+    <div className="container my-4 max-w-6xl">
       <div className="grid md:grid-cols-4 grid-cols-1">
         <div className="border border-white shadow rounded-md p-4 w-full">
           <div className="animate-pulse flex flex-col space-y-4">

@@ -1,21 +1,28 @@
 "use client";
-import { useSettings } from "@/app/context/AppContext";
+
+import { useData } from "@/app/DataContext";
 import { IProduct } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import AddToCart from "./AddToCart";
 
 const Product: React.FC<IProduct> = ({
   _id,
   slug,
   img,
   title,
+  existingQnt,
   featured,
   sele,
   price,
   unprice,
+  category,
   stockStatus,
+  shippingInside,
+  shippingOutside,
 }) => {
+  console.log("first", existingQnt);
   const formattedPrice = new Intl.NumberFormat().format(price);
   const formattedUnprice = new Intl.NumberFormat().format(unprice);
   // Calculate discount percentage
@@ -23,7 +30,7 @@ const Product: React.FC<IProduct> = ({
     unprice > price ? Math.round(((unprice - price) / unprice) * 100) : 0;
   // Conditional rendering logic for unprice
   const showUnprice = unprice > price;
-  const settings = useSettings();
+  const { settings } = useData();
   return (
     <div className="group relative border bg-white block rounded h-full">
       <Link href={`/${slug}`} className="w-full">
@@ -81,6 +88,21 @@ const Product: React.FC<IProduct> = ({
           )}
         </div>
       </Link>
+      <AddToCart
+        product={{
+          _id: _id,
+          type: "main",
+          img: img,
+          price: price,
+          unprice: unprice,
+          title: title,
+          existingQnt: existingQnt,
+          shippingInside: shippingInside,
+          shippingOutside: shippingOutside,
+          variantId: _id,
+          commissionForSeller: category?.commissionForSeller,
+        }}
+      />
     </div>
   );
 };

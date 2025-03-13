@@ -2,10 +2,11 @@
 import { apiUrl } from "@/app/shared/urls";
 import Image from "next/image";
 import React from "react";
-import { useSettings } from "@/app/context/AppContext";
+
 import { IOrder } from "@/types/oder";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
+import { useData } from "@/app/DataContext";
 
 const fetcher = async (url: string) => {
   const response = await fetch(url, {
@@ -19,7 +20,7 @@ const fetcher = async (url: string) => {
 };
 
 const OrderDetails = () => {
-  const settings = useSettings();
+  const { settings } = useData();
   const router = useParams();
   const id = router.id;
 

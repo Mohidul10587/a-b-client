@@ -4,10 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { useRouter } from "next/navigation";
-import { useSettings } from "@/app/context/AppContext";
+import { useData } from "@/app/DataContext";
 
 const AdminHeader: React.FC = () => {
-  const settings = useSettings();
+  const { settings } = useData();
   const [menuOpen, setMenuOpen] = useState(false); // State to manage menu open/close
   const router = useRouter();
   return (

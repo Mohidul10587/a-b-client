@@ -5,7 +5,7 @@ import { apiUrl } from "@/app/shared/urls";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSettings } from "@/app/context/AppContext";
+import { useData } from "@/app/DataContext";
 
 const fetcher = (url: string) =>
   fetch(url).then((res) => {
@@ -16,7 +16,7 @@ const fetcher = (url: string) =>
   });
 
 const Search = () => {
-  const settings = useSettings();
+  const { settings } = useData();
   const [query, setQuery] = useState(""); // Default search query
   const [isDisplay, setIsDisplay] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -91,7 +91,8 @@ const Search = () => {
                               {item.title}
                             </h3>
                             <p className="text-sm text-gray-500">
-                              {settings?.currencySymbol} {new Intl.NumberFormat().format(item.price)}
+                              {settings?.currencySymbol}{" "}
+                              {new Intl.NumberFormat().format(item.price)}
                             </p>
                           </div>
                         </div>
@@ -111,7 +112,9 @@ const Search = () => {
                             className="h-12 w-12 rounded"
                           />
                           <div className="flex items-center justify-between w-full">
-                            <h3 className="font-bold text-sm">{item.companyName}</h3>
+                            <h3 className="font-bold text-sm">
+                              {item.companyName}
+                            </h3>
                             <p className="text-xs">Sellers</p>
                           </div>
                         </div>
@@ -128,7 +131,9 @@ const Search = () => {
                             className="h-12 w-12 rounded"
                           />
                           <div className="flex items-center justify-between w-full">
-                            <h3 className="font-bold text-sm">{item.categoryName}</h3>
+                            <h3 className="font-bold text-sm">
+                              {item.categoryName}
+                            </h3>
                             <p className="text-xs">Categories</p>
                           </div>
                         </div>

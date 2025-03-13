@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useSettings } from "@/app/context/AppContext";
+
 import Image from "next/image";
 import Link from "next/link";
 import Search from "./Search";
@@ -16,7 +16,7 @@ const Header: React.FC<{
     image?: string;
     email?: string;
   } | null>(null);
-  const settings = useSettings();
+  const { settings } = useData();
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {

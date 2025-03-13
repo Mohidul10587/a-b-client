@@ -1,11 +1,12 @@
 "use client";
-import { useSettings } from "@/app/context/AppContext";
+
 import { apiUrl } from "@/app/shared/urls";
 import { IProduct } from "@/types/product";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Spinner from "./Spinner";
+import { useData } from "@/app/DataContext";
 
 const Search = () => {
   const [searchText, setSearchText] = useState("");
@@ -61,7 +62,7 @@ const Search = () => {
     setSearchText("");
   };
 
-  const settings = useSettings();
+  const { settings } = useData();
 
   return (
     <div className="w-full max-w-xl">

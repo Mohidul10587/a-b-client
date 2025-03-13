@@ -5,11 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useData } from "../DataContext";
 import { useRouter } from "next/navigation";
-import { useSettings } from "@/app/context/AppContext";
 
 const IndexPage: React.FC = () => {
-  const settings = useSettings();
-  const { sessionStatus } = useData();
+  const { sessionStatus, settings } = useData();
   const router = useRouter();
 
   useEffect(() => {
@@ -32,7 +30,7 @@ const IndexPage: React.FC = () => {
         <div className="flex flex-col items-center w-full max-w-lg m-4">
           <Link href="/" className="outline-none mb-6">
             <Image
-              src={settings?.logo}
+              src={settings?.logo || "/default.jpg"}
               unoptimized
               width={200}
               height={50}

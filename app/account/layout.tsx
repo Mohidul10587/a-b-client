@@ -2,7 +2,7 @@
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import LayoutTop from "./LayoutTop";
-import { ChatProvider } from "./chat/ChatContext";
+
 import { useData } from "../DataContext";
 import Header from "@/components/header/Header";
 import FooterPage from "@/components/Footer";
@@ -32,12 +32,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   if (sessionStatus === "authenticated") {
     return (
       <main>
-        <ChatProvider>
-          <Header />
-          <LayoutTop user={user} />
-          {children}
-          <FooterPage />
-        </ChatProvider>
+        <Header />
+        <LayoutTop user={user} />
+        {children}
+        <FooterPage />
       </main>
     );
   }

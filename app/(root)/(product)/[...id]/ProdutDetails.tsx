@@ -7,7 +7,7 @@ import ReadMore from "@/components/ReadMore";
 import Image from "next/image";
 import Youtube from "@/components/Youtube";
 
-import Product from "@/components/Product.home";
+import Product from "@/components/Product";
 import { Key } from "react";
 
 import {

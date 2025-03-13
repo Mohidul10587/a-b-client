@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useSettings } from "@/app/context/AppContext";
+import { useData } from "@/app/DataContext";
 
 // Interface for category and subcategory data
 interface ISubCategory {
@@ -24,7 +24,7 @@ const CategoriesItems: React.FC<{
   categories?: ICategory[];
   menuWithCategories?: any[] | undefined;
 }> = ({ categories, menuWithCategories }) => {
-  const settings = useSettings();
+  const { settings } = useData();
 
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null); // State to track expanded category

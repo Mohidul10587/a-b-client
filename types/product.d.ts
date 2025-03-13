@@ -14,6 +14,7 @@ export interface IProduct {
   description: string;
   shortDescription: string;
   featured: string;
+  existingQnt: number;
   sele: string;
   price: number;
   unprice: number;

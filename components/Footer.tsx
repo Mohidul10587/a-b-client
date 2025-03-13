@@ -2,11 +2,11 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useSettings } from "@/app/context/AppContext";
+import { useData } from "@/app/DataContext";
 
 // Server component
 const FooterPage: React.FC = () => {
-  const settings = useSettings();
+  const { settings } = useData();
   return (
     <>
       <div className="fixed md:bottom-8 bottom-16 right-4 flex flex-col">

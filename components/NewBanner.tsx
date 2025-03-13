@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ClientPageRoot } from "next/dist/client/components/client-page";
 
 interface BannerItem {
   img: string;

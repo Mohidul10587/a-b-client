@@ -1,12 +1,11 @@
 "use client";
+import { useData } from "@/app/DataContext";
 import Image from "next/image";
 import Link from "next/link";
 
-import { useSettings } from "@/app/context/AppContext";
-
 // Server component
 const FooterPage = () => {
-  const settings = useSettings();
+  const { settings } = useData();
   return (
     <>
       <div className="fixed md:bottom-8 bottom-16 right-4 flex flex-col">

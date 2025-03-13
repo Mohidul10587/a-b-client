@@ -3,14 +3,14 @@ import Link from "next/link";
 import Image from "next/image";
 import useSWR from "swr";
 import { apiUrl } from "@/app/shared/urls";
-import { useSettings } from "@/app/context/AppContext";
+import { useData } from "@/app/DataContext";
 
 // Fetcher function for SWR
 const fetcher = (url: string) =>
   fetch(url, { credentials: "include" }).then((res) => res.json());
 
 const Wishlist = () => {
-  const settings = useSettings();
+  const { settings } = useData();
   // Retrieve the user ID from local storage
   const id =
     typeof window !== "undefined" ? localStorage.getItem("myId") : null;
@@ -112,10 +112,12 @@ const Wishlist = () => {
                     </h3>
                     <div className="flex items-center space-x-1">
                       <p className="text-gray-500 font-bold">
-                        {settings?.currencySymbol} {new Intl.NumberFormat().format(item.productId.price)}
+                        {settings?.currencySymbol}{" "}
+                        {new Intl.NumberFormat().format(item.productId.price)}
                       </p>
                       <del className="text-gray-500">
-                        {settings?.currencySymbol} {new Intl.NumberFormat().format(item.productId.unprice)}
+                        {settings?.currencySymbol}{" "}
+                        {new Intl.NumberFormat().format(item.productId.unprice)}
                       </del>
                     </div>
                   </div>

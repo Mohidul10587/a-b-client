@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { IProduct } from "@/types/product";
-import Product from "@/components/Product.home";
-
+import Product from "@/components/Product";
+import { useData } from "@/app/DataContext";
 interface ProductBoxProps {
   items: IProduct[];
   elementItem?: any;

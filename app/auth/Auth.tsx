@@ -1,14 +1,11 @@
 "use client";
-import Image from "next/image";
-import { signIn, useSession } from "next-auth/react";
+
+import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { useData } from "../DataContext";
-import { apiUrl } from "../shared/urls";
-import { useSettings } from "@/app/context/AppContext";
 
 const Auth = () => {
-  const settings = useSettings();
   const [activeForm, setActiveForm] = useState<
     "signup" | "login" | "forgotPassword"
   >("login");
@@ -18,7 +15,7 @@ const Auth = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const { user, session, sessionStatus } = useData();
+  const { settings } = useData();
 
   const router = useRouter();
   const handleFormSwitch = (form: "signup" | "login" | "forgotPassword") => {
@@ -68,19 +65,22 @@ const Auth = () => {
     // Replace with your backend URL
     e.preventDefault();
     try {
-      const response = await fetch(`${apiUrl}/user/signUpWithEmailPassword`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json", // Optional: Ensure the response format
-        },
-        body: JSON.stringify({
-          name: username,
-          slug: "my-slug",
-          email,
-          password,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/createUserByEmailAndPassword`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: username,
+            slug: "my-slug",
+            email,
+            password,
+          }),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -88,7 +88,7 @@ const Auth = () => {
       }
 
       const data = await response.json();
-
+      console.log("this is data", data);
       const res = await signIn("credentials", {
         email: data.user.email,
         password,
@@ -364,6 +364,13 @@ const GoogleAndFacebookDiv = ({
         className="bg-[#4285F4] text-white text-sm font-semibold p-2 rounded w-full flex items-center justify-center hover:bg-[#357ae8] transition-all mb-3"
       >
         <p>Continue with Google</p>
+      </button>
+
+      <button
+        onClick={handleSingInWithFacebook}
+        className="bg-[#3b5999] mb-3 text-white text-sm font-semibold p-2 rounded w-full flex items-center justify-center space-x-1"
+      >
+        <p>Continue with Facebook</p>
       </button>
     </div>
   );

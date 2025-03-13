@@ -3,14 +3,7 @@ import { FC } from "react";
 import MenusUser from "./MenusUser";
 
 const LayoutTop: FC<{
-  user: {
-    _id: string;
-    image: string;
-    isSeller: boolean;
-    name: string;
-    createdAt: string;
-    sellerId: any;
-  };
+  user: User;
 }> = ({ user }) => {
   const date = new Date(user.createdAt).toLocaleDateString("en-US", {
     year: "numeric",
@@ -26,9 +19,7 @@ const LayoutTop: FC<{
             <div className="flex items-center">
               <div className="rounded border h-24 w-24 mr-2 p-2 flex items-center justify-center">
                 <Image
-                  src={`${
-                    user.sellerId?.photo || user.image || "/default.jpg"
-                  }`}
+                  src={`${user.image || "/default.jpg"}`}
                   width={130}
                   height={130}
                   alt="user"
@@ -37,10 +28,10 @@ const LayoutTop: FC<{
               </div>
               <div>
                 <h1 className=" font-bold text-secondary text-md">
-                  {user.sellerId?.companyName || user.name}
+                  {user.name}
                 </h1>
                 <ul className="text-sm">
-                  <li> {user.sellerId?.companyName || user.name}</li>
+                  <li> {user.name}</li>
                   <li>Joined {date}</li>
                 </ul>
               </div>

@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { IProduct } from "@/types/product";
-import { useSettings } from "@/app/context/AppContext";
+
 import { apiUrl } from "@/app/shared/urls";
 import Modal from "@/components/admin/Modal";
 import Link from "next/link";
+import { useData } from "@/app/DataContext";
 
 const ProductList: React.FC<{ productsS: IProduct[]; id: string }> = ({
   productsS,
@@ -18,7 +19,7 @@ const ProductList: React.FC<{ productsS: IProduct[]; id: string }> = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
-  const settings = useSettings();
+  const { settings } = useData();
 
   useEffect(() => {
     const fetchSuggestion = async () => {

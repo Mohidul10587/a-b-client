@@ -1,147 +1,123 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Session } from "next-auth";
-import { apiUrl } from "./shared/urls";
+import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import { fetcher } from "./shared/fetcher";
 
-interface User {
-  oneClickPayStartedAt: any;
-  _id: string;
-  slug: string;
-  name: string;
-  email: string;
-  image: string;
-  isSeller: boolean;
-  isUser: boolean;
-  createdAt: string;
-  sellerId: any;
-  coins: number;
-  coinsTakingDate: string;
-  isOneClickPayOffer: boolean;
-}
-
-interface DataContextProps {
-  user: User;
-  session: Session | null;
-  sessionStatus: "authenticated" | "unauthenticated" | "loading";
-
-  numberOfCartProduct: number;
-  setNumberOfCartProducts: React.Dispatch<React.SetStateAction<number>>;
-  thisProductQuantity: number;
-  setThisProductQuantity: React.Dispatch<React.SetStateAction<number>>;
-}
-
 const DataContext = createContext<DataContextProps | undefined>(undefined);
-
-export const DataProvider = ({
-  children,
-  session,
-}: {
-  children: React.ReactNode;
-  session: Session | null;
-}) => {
+export const DataProvider = ({ children }: { children: React.ReactNode }) => {
+  const { data: response } = useSWR(`settings`, fetcher);
+  const settings = response?.respondedData;
+  const { data: session, status: sessionStatus } = useSession();
   const [numberOfCartProduct, setNumberOfCartProducts] = useState<number>(0);
   const [thisProductQuantity, setThisProductQuantity] = useState<number>(0);
   const [user, setUser] = useState<User>({
     _id: "",
+    name: "",
     slug: "",
     email: "",
-    name: "",
     image: "",
+    phone: "",
+    password: "",
     isSeller: false,
-    isUser: true,
-    createdAt: "",
-    sellerId: {},
+    isUser: false,
+    oneClickPayStartedAt: "",
     coins: 0,
     coinsTakingDate: "",
-    isOneClickPayOffer: false,
-    oneClickPayStartedAt: "",
+    toDaysCoins: 0,
+    companyName: "",
+    companyEmail: "",
+    country: "",
+    city: "",
+    postalCode: "",
+    companyPhone: "",
+    street: "",
+    address: "",
+    facebook: "",
+    twitter: "",
+    gmail: "",
+    whatsapp: "",
+    skype: "",
+    linkedin: "",
+    monday_openingHours: "",
+    tuesday_openingHours: "",
+    wednesday_openingHours: "",
+    thursday_openingHours: "",
+    friday_openingHours: "",
+    saturday_openingHours: "",
+    sunday_openingHours: "",
+    photo: "",
+    coverPhoto: "",
+    contactInfo: "",
+    createdAt: "",
   });
-  const [sessionStatus, setSessionStatus] = useState<
-    "authenticated" | "unauthenticated" | "loading"
-  >("loading");
+
+  const {
+    data: responseUser,
+    error: errorUser,
+    mutate: muteUser,
+    isLoading: isLoadingUser,
+  } = useSWR(
+    session ? `user/getAuthenticatedUser?id=${session.user?.id}` : null,
+    fetcher
+  );
+
   useEffect(() => {
-    if (session) {
-      setSessionStatus("authenticated");
-      const storeUserDataInDatabase = async (userData: {
-        name: string;
-        email: string;
-        image?: string;
-      }) => {
+    if (responseUser) {
+      const user = responseUser.respondedData;
+      setUser(user);
+      localStorage.setItem("myId", user?._id);
+      const storeUserDataInDatabase = async () => {
         try {
-          const response = await fetch(`${apiUrl}/user/create`, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData),
-          });
-          const data = await response.json();
-          console.log("This is data", data);
-          if (!response.ok) {
-            throw new Error("Failed to store user data in the database.");
+          const cartData = localStorage.getItem("cartData");
+          if (!cartData) {
+            setNumberOfCartProducts(responseUser.respondedCartData);
+            return;
           }
-          if (response.ok) {
-            localStorage.setItem("myId", data.user._id);
-            setUser(data.user);
-            if (localStorage.getItem("isCartSaved") !== "cart saved") {
-              const cartData = localStorage.getItem("cartData");
-
-              if (!cartData) return;
-
-              try {
-                const response = await fetch(`${apiUrl}/cart/create`, {
-                  method: "POST",
-                  credentials: "include",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    userId: data.user._id,
-                    cartItems: JSON.parse(cartData),
-                  }),
-                });
-
-                if (response.ok) {
-                  const result = await response.json();
-                  localStorage.setItem("isCartSaved", "cart saved");
-                  localStorage.removeItem("cartData");
-                  const total = result.cart.cartItems.reduce(
-                    (total: number, item: any) => total + item.quantity,
-                    0
-                  );
-                  setNumberOfCartProducts(total);
-                }
-              } catch (error) {
-                console.error("Error saving cart:", error);
+          try {
+            const cartResponse = await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}/cart/create`,
+              {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  userId: user._id,
+                  cartItems: JSON.parse(cartData),
+                }),
               }
+            );
+
+            if (cartResponse.ok) {
+              const result = await cartResponse.json();
+              localStorage.removeItem("cartData");
+              const total = result.cart.cartItems.reduce(
+                (total: number, item: any) => total + item.quantity,
+                0
+              );
+              setNumberOfCartProducts(total);
             }
+          } catch (error) {
+            console.error("Error saving cart:", error);
           }
         } catch (error) {
           console.error("Error storing user data:", error);
         }
       };
-      const userData = {
-        name: session?.user?.name || "Unknown User",
-        email: session?.user?.email || "",
-        image: session?.user?.image || "",
-      };
-
-      storeUserDataInDatabase(userData);
-    } else {
-      setSessionStatus("unauthenticated");
+      storeUserDataInDatabase();
     }
-  }, [session]);
+  }, [responseUser]);
 
   return (
     <DataContext.Provider
       value={{
         user,
+        muteUser,
         session,
         sessionStatus,
-
+        settings,
         numberOfCartProduct,
         setNumberOfCartProducts,
         thisProductQuantity,
@@ -156,8 +132,7 @@ export const DataProvider = ({
 export const useData = () => {
   const context = useContext(DataContext);
   if (!context) {
-    throw new Error("useData must be used within a DataProvider");
+    throw new Error("Use data must be used within a data provider");
   }
   return context;
 };
-// change

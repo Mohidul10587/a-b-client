@@ -3,14 +3,14 @@ import React, { useEffect, useState } from "react";
 import OfferProduct from "./OfferProduct";
 import Image from "next/image";
 import { IProduct } from "@/types/product";
-import { useSettings } from "@/app/context/AppContext";
+import { useData } from "@/app/DataContext";
 
 const ProductList: React.FC<{ products: IProduct[] }> = ({ products }) => {
   const [items, setItems] = useState<IProduct[]>([]);
   const [visibleCount, setVisibleCount] = useState(10);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const settings = useSettings();
+  const { settings } = useData();
 
   // Filtered products based on search term, excluding products already in items
   const filteredProducts = products.filter(

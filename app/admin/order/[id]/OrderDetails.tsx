@@ -2,14 +2,15 @@
 import { apiUrl } from "@/app/shared/urls";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import { useSettings } from "@/app/context/AppContext";
+
 import { formatDate } from "@/app/shared/formateTime";
 import { IOrder } from "@/types/oder";
 import { fetchWithTokenRefresh } from "@/app/shared/fetchWithTokenRefresh";
+import { useData } from "@/app/DataContext";
 
 const OrderDetails: React.FC<{ id: string }> = ({ id }) => {
   const [order, setOrder] = useState<any>(null);
-  const settings = useSettings();
+  const { settings } = useData();
   useEffect(() => {
     if (id) {
       const fetchOrder = async () => {

@@ -1,6 +1,6 @@
 "use client";
 import { IProduct } from "@/types/product";
-import Product from "./Product.home";
+import Product from "./Product";
 
 interface ProductDivProps {
   products: IProduct[];

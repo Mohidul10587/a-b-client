@@ -1,54 +1,27 @@
-import { Metadata } from "next";
-import { SettingsProvider } from "./context/AppContext";
+import type { Metadata } from "next";
 import "./globals.css";
+
+import ClientLayout from "./clientLayout";
 import { fetchSettings } from "./shared/fetchSettingsData";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/authOptions";
-import { DataProvider } from "./DataContext";
 
-// Generate metadata dynamically
-export async function generateMetadata(): Promise<Metadata> {
-  const settings = await fetchSettings();
+export const metadata: Metadata = {
+  title:
+    "Zuricart | Online Shopping Site Kenya - Shop For Phones, Televisions, Electronics and More",
+  description: "Online shopping site Kenya",
+};
 
-  return {
-    title: settings?.websiteTitle || "Default Title",
-    description: settings?.metaDescription || "Default Description",
-  };
-}
-
-interface RootLayoutProps {
+export default async function RootLayout({
+  children,
+}: Readonly<{
   children: React.ReactNode;
-}
-
-async function RootLayout({ children }: RootLayoutProps) {
-  // Fetch settings to use across the application
+}>) {
   const settings = await fetchSettings();
-  const session = await getServerSession(authOptions);
 
   return (
     <html lang="en">
-      <head>
-        <style>{`
-  history {display:none !important} 
-  .bg-main {background-color: ${
-    settings?.bgColor || "#235432"
-  } !important} /* Fallback color for backgrounds */
-  .text-main {color: ${
-    settings?.bgColor || "#235432"
-  } !important} /* Fallback color for text */
-  .border-main {border-color: ${
-    settings?.bgColor || "#235432"
-  } !important} /* Fallback color for borders */
-`}</style>
-      </head>
       <body className="bg-gray-300" cz-shortcut-listen="true">
-        {/* Provide settings globally */}
-        <DataProvider session={session}>
-          <SettingsProvider value={settings}>{children}</SettingsProvider>
-        </DataProvider>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
 }
-
-export default RootLayout;
