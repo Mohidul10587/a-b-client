@@ -127,7 +127,7 @@ const IndexPage: React.FC = () => {
           throw new Error("Failed to fetch categories");
         }
       } catch (error) {
-        console.log(error);
+        
       }
     };
     fetchPublishers();

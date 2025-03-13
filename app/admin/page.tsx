@@ -33,7 +33,7 @@ const IndexPage: React.FC = () => {
         setOrders(data.orders);
       })
       .catch((error) => {
-        console.log(error);
+        
         console.error("Error fetching orders:", error);
       });
   }, []); // Empty dependency array to run only once on mount

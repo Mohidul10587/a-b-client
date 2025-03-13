@@ -13,7 +13,7 @@ const SecondPartOfHeader: React.FC = () => {
   // Fetch settings and categories concurrently
 
   const { user, sessionStatus, settings, numberOfCartProduct } = useData();
-  console.log(numberOfCartProduct);
+  
   return (
     <div className="flex justify-between items-center py-1 max-w-6xl mx-auto">
       <Link href={"/"} className="outline-none">

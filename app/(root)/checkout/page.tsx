@@ -79,7 +79,7 @@ const Checkout = () => {
         window.open(response.data.paymentUrl, "_blank");
       }
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -101,7 +101,7 @@ const Checkout = () => {
         router.push("/success/123");
       }
     } catch (error) {
-      console.log(error);
+      
     }
   };
 

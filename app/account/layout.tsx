@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { sessionStatus, user } = useData();
   const router = useRouter();
   const pathname = usePathname();
-  console.log(user);
+  
   useEffect(() => {
     if (sessionStatus === "unauthenticated") {
       router.replace(`/auth?redirect=${encodeURIComponent(pathname)}`);

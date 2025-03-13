@@ -24,7 +24,7 @@ async function fetchColor() {
 
     // Save the updated config file
     fs.writeFileSync(configPath, config, "utf8");
-    console.log(`Updated main color to: ${color}`);
+    
   } catch (error) {
     console.error("Failed to fetch the color:", error);
   }
