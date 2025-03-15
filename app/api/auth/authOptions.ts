@@ -56,13 +56,13 @@ export const authOptions: NextAuthOptions = {
           // Set the refresh token cookie
           (await cookies()).set("refreshToken", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-            path: "/",
+            secure: true,
+            sameSite: "none",
+            maxAge: 10 * 24 * 60 * 60 * 1000,
           });
 
           return {
-            id: currentUser._id, // Include _id as id in the session
+            id: currentUser._id,
             name: currentUser.name,
             email: currentUser.email,
           };
@@ -118,18 +118,13 @@ export const authOptions: NextAuthOptions = {
           // Set the refresh token cookie
           (await cookies()).set("refreshToken", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-            path: "/",
+            secure: true,
+            sameSite: "none",
+            maxAge: 10 * 24 * 60 * 60 * 1000,
           });
 
           // Store user id in token for session
           user.id = currentUser._id;
-
-          // Set a cookie flag for Google login
-          (await cookies()).set("googleLogin", "true", {
-            path: "/",
-          });
         } catch (error) {
           console.error("Google Login Error:", error);
           return false;

@@ -30,8 +30,8 @@ const DropdownMenu: FC<{ user: User }> = ({ user }) => {
         method: "POST",
       });
       if (res.ok) {
+        console.log("Response okey");
         localStorage.removeItem("user");
-        localStorage.removeItem("isCartSaved");
       }
     } catch (error) {
       console.error("Failed to log out:", error);
