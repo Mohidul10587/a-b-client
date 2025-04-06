@@ -168,6 +168,7 @@ const Cart = () => {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          SameSite: "None",
         },
         body: JSON.stringify({
           userId: user._id,

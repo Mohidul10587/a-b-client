@@ -88,7 +88,7 @@ const Auth = () => {
       }
 
       const data = await response.json();
-      
+
       const res = await signIn("credentials", {
         email: data.user.email,
         password,
