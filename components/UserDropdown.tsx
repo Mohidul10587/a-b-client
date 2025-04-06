@@ -12,7 +12,7 @@ import {
   FaUser,
 } from "react-icons/fa";
 
-const DropdownMenu: FC<{ user: User }> = ({ user }) => {
+const DropdownMenu: FC<{ user: any }> = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -30,7 +30,6 @@ const DropdownMenu: FC<{ user: User }> = ({ user }) => {
         method: "POST",
       });
       if (res.ok) {
-        console.log("Response okey");
         localStorage.removeItem("user");
       }
     } catch (error) {

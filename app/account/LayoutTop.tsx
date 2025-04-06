@@ -3,7 +3,7 @@ import { FC } from "react";
 import MenusUser from "./MenusUser";
 
 const LayoutTop: FC<{
-  user: User;
+  user: any;
 }> = ({ user }) => {
   const date = new Date(user.createdAt).toLocaleDateString("en-US", {
     year: "numeric",

@@ -501,7 +501,6 @@ const Auth: FC<{ setIsModalOpen: any }> = ({ setIsModalOpen }) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const { user, session, sessionStatus } = useData();
 
   const router = useRouter();
   const handleFormSwitch = (form: "signup" | "login" | "forgotPassword") => {

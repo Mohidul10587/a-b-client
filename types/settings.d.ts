@@ -17,7 +17,11 @@ export interface ISettings {
   deliveryTime1: string;
   deliveryMethod2: string;
   deliveryTime2: string;
+  phone: string;
   payment: string;
+  popUpImgStatus: boolean;
+  popUpImgLink: string;
+  popUpImg: string;
   paymentText1: string;
   paymentText2: string;
   officeAddress: string;
