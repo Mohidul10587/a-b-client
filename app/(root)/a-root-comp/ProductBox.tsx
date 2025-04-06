@@ -11,7 +11,7 @@ interface ProductBoxProps {
 const ProductBox: React.FC<ProductBoxProps> = ({ items, elementItem }) => {
   const { desktopGrid, mobileGrid, gridStyle, margin, imagePosition } =
     elementItem;
-  console.log("From element", items);
+  
   const [startIndex, setStartIndex] = useState(0);
   const [itemsToShow, setItemsToShow] = useState(desktopGrid);
   const containerRef = useRef<HTMLDivElement>(null);

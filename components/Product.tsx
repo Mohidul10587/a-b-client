@@ -22,7 +22,7 @@ const Product: React.FC<IProduct> = ({
   shippingInside,
   shippingOutside,
 }) => {
-  console.log("from product ", shippingInside, shippingOutside);
+  
   const formattedPrice = new Intl.NumberFormat().format(price);
   const formattedUnprice = new Intl.NumberFormat().format(unprice);
   // Calculate discount percentage

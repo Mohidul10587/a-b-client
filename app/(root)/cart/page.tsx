@@ -81,7 +81,7 @@ const Cart = () => {
       setCart(cartData ? JSON.parse(cartData) : []);
     }
   }, [cartResponse?.respondedData, sessionStatus, totalShippingInside]);
-  console.log(cart);
+
   const increaseQuantity = async (
     type: string,
     id: string,
@@ -384,15 +384,6 @@ const Cart = () => {
                     </div>
                   </div>
                 ))}
-              </div>
-              <div>
-                <Link
-                  href={`/checkout`}
-                  className="bg-blue-600 my-4 font-bold text-center text-white px-4 py-2 w-full rounded-md block"
-                >
-                  Proceed to checkout
-                </Link>
-                <button></button>
               </div>
             </>
           )}

@@ -8,7 +8,7 @@ interface ElementSectionProps {
 }
 
 const ElementSection = async ({ elementsData }: ElementSectionProps) => {
-  console.log("olement", elementsData);
+  
   return (
     <div className="container my-4">
       {elementsData?.map((item: any, index: number) => (
