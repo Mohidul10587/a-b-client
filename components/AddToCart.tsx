@@ -17,7 +17,7 @@ export const getTotalCartCount = (): number => {
 };
 
 const AddToCart: FC<{ product: any }> = ({ product }) => {
-  
+  console.log("This is from product", product);
   const router = useRouter();
   const { user, setNumberOfCartProducts, sessionStatus } = useData();
   const [thisProductQuantity, setThisProductQuantity] = useState<number>(0);
@@ -333,7 +333,7 @@ const addToDataBase = async (
     existingQnt: storedProduct.existingQnt,
     isChecked: true,
   };
-  
+
   try {
     const response = await fetch(`${apiUrl}/cart/addSingleItemToCart`, {
       method: "POST",

@@ -78,9 +78,7 @@ const Checkout = () => {
       if (response.data.paymentUrl) {
         window.open(response.data.paymentUrl, "_blank");
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const handleCacheOnDelivery = async () => {
@@ -100,9 +98,7 @@ const Checkout = () => {
 
         router.push("/success/123");
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const calculateTotal = () => {
@@ -112,8 +108,8 @@ const Checkout = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-6  gap-6 flex justify-center  ">
-      <div className=" border p-6 rounded-lg shadow-md bg-white w-2/3">
+    <div className="container mx-auto  py-6  gap-6 flex justify-center max-w-6xl ">
+      <div className=" border p-6 rounded-lg shadow-md bg-white w-full">
         <h1 className="text-3xl font-bold mb-6 flex items-center gap-2">
           <FaShoppingCart className="text-blue-500" />
           Checkout
@@ -158,7 +154,7 @@ const Checkout = () => {
             <FaInfoCircle className="text-purple-500" />
             Delivery Information
           </h2>
-          <form className="space-y-4">
+          <form className=" grid grid-cols-2 gap-2">
             {Object.keys(deliveryInfo).map((key) => (
               <div key={key} className="relative">
                 <span className="absolute inset-y-0 left-0 pl-3 flex items-center">

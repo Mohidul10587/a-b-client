@@ -11,7 +11,7 @@ interface ProductBoxProps {
 const ProductBox: React.FC<ProductBoxProps> = ({ items, elementItem }) => {
   const { desktopGrid, mobileGrid, gridStyle, margin, imagePosition } =
     elementItem;
-
+  console.log("From element", items);
   const [startIndex, setStartIndex] = useState(0);
   const [itemsToShow, setItemsToShow] = useState(desktopGrid);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -28,7 +28,7 @@ const ProductBox: React.FC<ProductBoxProps> = ({ items, elementItem }) => {
 
   // Autoplay functionality
   useEffect(() => {
-    const interval = setInterval(handleNext, 10000); // Change every 10 seconds
+    const interval = setInterval(handleNext, 30000); // Change every 10 seconds
     return () => clearInterval(interval); // Cleanup on unmount
   }, []);
 
