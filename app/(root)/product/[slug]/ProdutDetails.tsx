@@ -23,7 +23,6 @@ import RelatedProducts from "./RelatedProducts";
 interface ProductDetailsProps {
   product: any;
   settings: any;
-  schema: any;
   categoryId: string;
   slideImages: any;
   fullUrl: string;

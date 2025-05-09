@@ -22,7 +22,6 @@ const Product: React.FC<IProduct> = ({
   shippingInside,
   shippingOutside,
 }) => {
-  
   const formattedPrice = new Intl.NumberFormat().format(price);
   const formattedUnprice = new Intl.NumberFormat().format(unprice);
   // Calculate discount percentage
@@ -33,7 +32,7 @@ const Product: React.FC<IProduct> = ({
   const { settings } = useData();
   return (
     <div className="group relative border bg-white block rounded h-full">
-      <Link href={`/${slug}`} className="w-full">
+      <Link href={`/product/${slug}`} className="w-full">
         <div className="w-full relative md:h-48 p-2 pb-0 h-40 flex items-center justify-center">
           <Image
             src={img || "/default.jpg"}

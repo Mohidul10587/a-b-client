@@ -53,3 +53,24 @@ export async function getPublishers() {
 
   return publishers;
 }
+
+export async function fetchData<T>(
+  urlEndPoint: string,
+  revalidateTime: number = 40
+): Promise<FetchDataResponse<T>> {
+  try {
+    const res = await fetch(`${apiUrl}/${urlEndPoint}`, {
+      next: { revalidate: revalidateTime },
+    });
+    const json = await res.json();
+
+    return json;
+  } catch (error) {
+    console.error(`Error fetching data from ${urlEndPoint}:`, error);
+    return {
+      success: false,
+      message: "Error fetching data",
+      resData: null,
+    };
+  }
+}

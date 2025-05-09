@@ -43,7 +43,7 @@ const Auth = () => {
       const res = await signIn("credentials", {
         email: trimmedEmail,
         password,
-        callbackUrl: redirectUrl,
+        redirect: false, // Important
       });
 
       // Handle sign-in response
@@ -51,7 +51,7 @@ const Auth = () => {
         setError("Invalid email or password. Please try again."); // Custom error message
         setSubmittingState(false);
       } else {
-        router.push(redirectUrl); // Redirect to the desired page
+        window.location.href = redirectUrl;
       }
     } catch (error) {
       console.error("Login Error:", error);
