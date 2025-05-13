@@ -17,12 +17,12 @@ export const getTotalCartCount = (): number => {
 };
 
 const AddToCart: FC<{ product: any }> = ({ product }) => {
-  
   const router = useRouter();
   const { user, setNumberOfCartProducts, sessionStatus } = useData();
   const [thisProductQuantity, setThisProductQuantity] = useState<number>(0);
   const [existingQuantity, setExistingQuantity] = useState(0);
   const [productsInCart, setProductsInCart] = useState<any[]>([]);
+  const [isProductExisted, setIsProductExisted] = useState<boolean>(false);
 
   useEffect(() => {
     // Access localStorage only after component mounts (client-side)
@@ -80,13 +80,6 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
     return 0;
   };
 
-  const [isProductExisted, setIsProductExisted] = useState<boolean>(
-    !!productsInCart?.find(
-      (item: any) =>
-        item._id === product._id && item.variantId === product.variantId
-    )
-  );
-
   const [isProductExistedInDatabase, setIsProductExistedInDatabase] =
     useState<boolean>(
       !!cartResponse?.respondedData?.find(
@@ -94,25 +87,6 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
           item._id === product._id && item.variantId === product.variantId
       )
     );
-
-  useEffect(() => {
-    setThisProductQuantity(
-      getThisProductQuantity(product._id, product.variantId)
-    );
-    setIsProductExisted(
-      !!productsInCart?.find(
-        (item: any) =>
-          item._id === product._id && item.variantId === product.variantId
-      )
-    );
-    setIsProductExistedInDatabase(
-      !!cartResponse?.respondedData?.find(
-        (item: any) =>
-          item._id === product._id && item.variantId === product.variantId
-      )
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cartResponse?.respondedData, product, productsInCart]);
 
   const addToCart = (
     product: any,
@@ -217,14 +191,26 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
       setThisProductQuantity(getThisProductQuantity(id, variantId));
     }
   };
-
-  const buyNow = () => {
-    localStorage.setItem(
-      "buyNow",
-      JSON.stringify([{ ...product, quantity: 1, seller: product.seller._id }])
+  useEffect(() => {
+    const productsInCartInLocalStorage = localStorage.getItem("cartData");
+    const productsInCart = JSON.parse(productsInCartInLocalStorage as string);
+    setThisProductQuantity(
+      getThisProductQuantity(product._id, product.variantId)
     );
-    router.push("/buyNow");
-  };
+    setIsProductExisted(
+      !!productsInCart?.find(
+        (item: any) =>
+          item._id === product._id && item.variantId === product.variantId
+      )
+    );
+    setIsProductExistedInDatabase(
+      !!cartResponse?.respondedData?.find(
+        (item: any) =>
+          item._id === product._id && item.variantId === product.variantId
+      )
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cartResponse?.respondedData, product, productsInCart]);
   return (
     <div>
       <div className="flex items-center w-full gap-2 p-2 pt-0 ">

@@ -15,10 +15,15 @@ import { useEffect, useState } from "react";
 
 import { FaShoppingCart, FaInfoCircle, FaCreditCard } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { useData } from "@/app/DataContext";
+import React from "react";
+import useSWR from "swr";
+import { fetcher } from "@/app/shared/fetcher";
 
 const Checkout = () => {
   const router = useRouter();
   const [cart, setCart] = useState<any[]>([]);
+  const { setNumberOfCartProducts, user, sessionStatus, settings } = useData();
   const [deliveryInfo, setDeliveryInfo] = useState<{
     [key: string]: string;
   }>({
@@ -29,14 +34,22 @@ const Checkout = () => {
     postalCode: "",
     phone: "",
   });
-
+  const {
+    data: cartResponse,
+    error: cartError,
+    mutate,
+  } = useSWR(user?._id ? `cart/getUserCart/${user._id}` : null, fetcher);
   const [paymentMethod, setPaymentMethod] = useState("AamarPay");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const cartData = localStorage.getItem("cartData");
-    setCart(cartData ? JSON.parse(cartData) : []);
-  }, []);
+    if (sessionStatus === "authenticated") {
+      setCart(cartResponse?.respondedData || []);
+    } else {
+      const cartData = localStorage.getItem("cartData");
+      setCart(cartData ? JSON.parse(cartData) : []);
+    }
+  }, [cartResponse?.respondedData, sessionStatus]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -80,25 +93,42 @@ const Checkout = () => {
       }
     } catch (error) {}
   };
-
   const handleCacheOnDelivery = async () => {
+    const hasEmptyField = Object.values(deliveryInfo).some(
+      (val) => !val.trim()
+    );
+    if (hasEmptyField) {
+      alert("Please fill out all delivery fields.");
+      return;
+    }
     try {
-      const response = await axios.post(`${apiUrl}/order/create`, {
-        cart: result,
-        deliveryInfo,
-        paidAmount: calculateTotal(),
-        paymentStatus: false,
-        paymentTnxId: "No id",
-        paymentMethod,
-        status: "Pending",
+      const response = await fetch(`${apiUrl}/order/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // 👈 This sends cookies with the request
+        body: JSON.stringify({
+          cart: result,
+          deliveryInfo,
+          paidAmount: calculateTotal(),
+          paymentStatus: false,
+          paymentTnxId: "No id",
+          paymentMethod,
+          status: "Pending",
+        }),
       });
 
       if (response.status === 201) {
-        alert(response.data.message);
-
+        const data = await response.json();
+        alert(data.message);
         router.push("/success/123");
+      } else {
+        console.error("Order creation failed");
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const calculateTotal = () => {
@@ -110,11 +140,6 @@ const Checkout = () => {
   return (
     <div className="container mx-auto  py-6  gap-6 flex justify-center max-w-6xl ">
       <div className=" border p-6 rounded-lg shadow-md bg-white w-full">
-        <h1 className="text-3xl font-bold mb-6 flex items-center gap-2">
-          <FaShoppingCart className="text-blue-500" />
-          Checkout
-        </h1>
-
         {/* Cart Summary */}
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
@@ -130,11 +155,22 @@ const Checkout = () => {
                   key={item._id}
                   className="flex justify-between items-center border-b pb-3"
                 >
-                  <div>
-                    <p className="font-medium text-lg">{item.name}</p>
-                    <p className="text-gray-600 text-sm">
-                      Quantity: {item.quantity}
-                    </p>
+                  <div className="flex items-center space-x-4">
+                    <div className="relative w-16 h-16">
+                      <Image
+                        src={item.img}
+                        alt={item.title}
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded"
+                      />
+                    </div>
+                    <div>
+                      <p className="font-medium text-lg">{item.name}</p>
+                      <p className="text-gray-600 text-sm">
+                        Quantity: {item.quantity}
+                      </p>
+                    </div>
                   </div>
                   <p className="font-medium text-lg text-blue-500">
                     ${(item.price * item.quantity).toFixed(2)}
@@ -168,6 +204,7 @@ const Checkout = () => {
                   className="border border-blue-300 p-3 pl-10 w-full rounded focus:outline-blue-500 "
                   value={deliveryInfo[key]}
                   onChange={handleInputChange}
+                  required
                 />
               </div>
             ))}
