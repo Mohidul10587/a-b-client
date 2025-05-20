@@ -33,20 +33,19 @@ const IndexPage: React.FC = () => {
         setOrders(data.orders);
       })
       .catch((error) => {
-        
         console.error("Error fetching orders:", error);
       });
   }, []); // Empty dependency array to run only once on mount
 
   useEffect(() => {
-    fetch(`${apiUrl}/admin/getOrdersCount`, {
+    fetch(`${apiUrl}/user/getOrdersCount`, {
       headers: {
         Authorization: `Bearer ${token}`, // Include the token in the Authorization header
       },
     })
       .then((response) => response.json())
       .then((data) => {
-        setCounts(data);
+        setCounts(data.resData);
       })
       .catch((error) => {
         console.error("Error fetching counts:", error);
@@ -95,7 +94,7 @@ const IndexPage: React.FC = () => {
       })
       .catch((error) => console.error("Error updating order status:", error));
   };
-
+  
   return (
     <>
       <div className="container my-4">
@@ -150,7 +149,7 @@ const IndexPage: React.FC = () => {
                   <tr key={order._id}>
                     <td className="p-2">
                       <Image
-                        src={order.firstProduct?.photo}
+                        src={order.firstProduct?.img}
                         width={50}
                         height={50}
                         alt="Photo"

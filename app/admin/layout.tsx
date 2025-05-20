@@ -12,12 +12,12 @@ const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   useEffect(() => {
     const checkAdminStatus = async () => {
       try {
-        let response = await fetch(`${apiUrl}/admin/check-admin`, {
+        let response = await fetch(`${apiUrl}/user/checkStuff`, {
           method: "GET",
           credentials: "include",
         });
         const data = await response.json();
-
+        
         if (data.success === true) {
           setLoading(false);
         } else {

@@ -77,7 +77,7 @@ const Checkout = () => {
           email: deliveryInfo.email,
           phone: deliveryInfo.phone,
           orderInfoForStore: {
-            cart: result,
+            cart,
             deliveryInfo,
             paidAmount: calculateTotal(),
             paymentStatus: false,

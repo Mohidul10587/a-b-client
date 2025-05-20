@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { useRouter } from "next/navigation";
 import { useData } from "@/app/DataContext";
+import { handleLogOut } from "@/app/shared/handleLogOut";
 
 const AdminHeader: React.FC = () => {
   const { settings } = useData();
@@ -61,8 +62,7 @@ const AdminHeader: React.FC = () => {
 
               <button
                 onClick={() => {
-                  localStorage.removeItem("accessToken");
-                  router.push("/adminLogin");
+                  handleLogOut("/aAuth");
                 }}
               >
                 Logout

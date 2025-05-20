@@ -2,8 +2,11 @@ import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
 import CredentialsProvider from "next-auth/providers/credentials";
-import { apiUrl } from "@/app/shared/urls";
+
 import Facebook from "next-auth/providers/facebook";
+import { apiUrl } from "@/app/shared/urls";
+
+Facebook;
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -33,7 +36,7 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials: any) {
         try {
           // Make a request to your backend API
-          const res = await fetch(`${apiUrl}/user/logInWithEmailPassword`, {
+          const res = await fetch(`${apiUrl}/user/logInUserWithEmailPassword`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
