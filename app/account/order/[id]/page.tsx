@@ -1,149 +1,140 @@
 "use client";
-import { apiUrl } from "@/app/shared/urls";
 import Image from "next/image";
-import React from "react";
-
-import { IOrder } from "@/types/oder";
-import { useParams } from "next/navigation";
+import React, { FC } from "react";
 import useSWR from "swr";
-import { useData } from "@/app/DataContext";
+import { fetcher } from "@/app/shared/fetcher";
+import { useParams } from "next/navigation";
 
-const fetcher = async (url: string) => {
-  const response = await fetch(url, {
-    method: "GET",
-    credentials: "include",
-  });
-  if (!response.ok) {
-    throw new Error("Failed to fetch");
-  }
-  return response.json();
-};
-
-const OrderDetails = () => {
-  const { settings } = useData();
-  const router = useParams();
-  const id = router.id;
-
+const Index = () => {
+  const id = useParams().id;
   const {
     data: order,
     error,
     isLoading,
-  } = useSWR<any>(
-    id ? `${apiUrl}/sellerOrder/getSingleOrder/${id}` : null,
-    fetcher
-  );
+  } = useSWR(id ? `order/getSingleOrder/${id}` : null, fetcher);
 
   if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error fetching order details: {error.message}</p>;
-
+  if (error) return <p>Failed to load order details.</p>;
+  if (!order) return <p>No order found.</p>;
+  const {
+    deliveryInfo,
+    _id,
+    cart,
+    paymentMethod,
+    status,
+    createdAt,
+    paymentStatus,
+    paymentTnxId,
+  } = order;
+  
   return (
-    <div>
-      {order ? (
-        <div className="container mx-auto p-6 space-y-8">
-          {/* Delivery Info Section */}
-          <section className="bg-white shadow-md rounded-lg p-6">
-            <h2 className="text-2xl font-semibold mb-4">
-              Delivery Information
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <p className="text-gray-700">
-                  <strong>Name:</strong> {order.name}
-                </p>
-                <p className="text-gray-700">
-                  <strong>Address:</strong> {order.address}
-                </p>
-                <p className="text-gray-700">
-                  <strong>Phone Number:</strong> {order.phone}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-700">
-                  <strong>Selected Shipping:</strong> {order.shippingMethod}
-                </p>
-
-                <p className="text-gray-700">
-                  <strong>Payment Method:</strong>{" "}
-                  {order.paymentMethod === "mobilePay" && "Mobile Pay"}
-                  {order.paymentMethod === "stripe" && "Stripe"}
-                  {order.paymentMethod === "onCache" && "On Cache"}
-                </p>
-                <p className="text-gray-700">
-                  <strong>Transaction Id:</strong> {order.transactionId}
-                </p>
-              </div>
-            </div>
-            <div className="mt-4">
-              <p className="text-gray-700">
-                <strong>Status:</strong>{" "}
-                <span
-                  className={`${
-                    order.status === "Delivered"
-                      ? "text-green-500"
-                      : "text-red-500"
-                  }`}
-                >
-                  {order.status}
-                </span>
-              </p>
-            </div>
-          </section>
-
-          {/* Products Section */}
-          <section className="bg-white shadow-md rounded-lg p-6">
-            <h2 className="text-2xl font-semibold mb-4">Products</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {order.products.map((product: any, index: number) => (
-                <div
-                  key={index}
-                  className="p-4 border rounded-lg shadow-sm bg-gray-50 flex flex-col items-center"
-                >
-                  <div className="relative w-32 h-32 mb-4">
-                    <Image
-                      src={product.photo}
-                      alt={product.title}
-                      fill
-                      className="object-cover rounded-md"
-                    />
-                  </div>
-                  <h3 className="text-lg font-semibold text-center mb-2">
-                    {product.title}
-                  </h3>
-                  <p className="text-gray-600">
-                    Price:{" "}
-                    <span className="text-gray-800 font-medium">
-                      ${product.price}
-                    </span>
-                  </p>
-                  <p
-                    className={`text-sm ${
-                      product.stockStatus === "In Stock"
-                        ? "text-green-500"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {product.stockStatus}
-                  </p>
-                  <p className="text-gray-600">
-                    Seller ID:{" "}
-                    <span className="text-gray-800">{product.seller}</span>
-                  </p>
-                  <p className="text-gray-600">
-                    Commission for Seller:{" "}
-                    <span className="text-gray-800">
-                      {product.commissionForSeller}%
-                    </span>
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
+    <div className="p-6 bg-gray-100 min-h-screen flex justify-center items-center">
+      <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold flex items-center">
+            Order Details
+          </h1>
+          <span
+            className={`${
+              order.status === "Pending"
+                ? "bg-yellow-100 text-yellow-700"
+                : order.status === "Shipped"
+                ? "bg-blue-100 text-blue-700"
+                : order.status === "Delivered"
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
+            } px-3 py-1 rounded-full font-medium text-sm`}
+          >
+            {order.status}
+          </span>
         </div>
-      ) : (
-        <p>No order found.</p>
-      )}
+
+        {/* Delivery Info */}
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold text-gray-700 mb-2">
+            Delivery Info
+          </h2>
+          <div className="text-gray-600">
+            <p>
+              <span className="font-medium">Name:</span> {deliveryInfo.name}
+            </p>
+            <p>
+              <span className="font-medium">Email:</span> {deliveryInfo.email}
+            </p>
+            <p>
+              <span className="font-medium">Address:</span>{" "}
+              {deliveryInfo.address}, {deliveryInfo.city},{" "}
+              {deliveryInfo.postalCode}
+            </p>
+            <p>
+              <span className="font-medium">Phone:</span> {deliveryInfo.phone}
+            </p>
+          </div>
+        </div>
+
+        {/* Cart Items */}
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold text-gray-700 mb-2">
+            Cart Items
+          </h2>
+          <div className="space-y-4">
+            {cart.map((item: any) => (
+              <div
+                key={item._id}
+                className="flex items-center gap-4 p-4 border rounded-md bg-gray-50"
+              >
+                <Image
+                  src={item.img}
+                  alt={item.title}
+                  height={64}
+                  width={64}
+                  className="w-16 h-16 object-cover rounded-md border"
+                />
+                <div className="flex-1">
+                  <p className="text-gray-800 font-medium">{item.title}</p>
+                </div>
+                <div className="text-gray-600 font-medium">
+                  Quantity: {item.quantity}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Payment and Status */}
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold text-gray-700 mb-2">
+            Order Summary
+          </h2>
+          <div className="text-gray-600">
+            <p>
+              <span className="font-medium">Payment Method:</span>{" "}
+              {paymentMethod}
+            </p>
+            <p>
+              <span className="font-medium">Status:</span> {status}
+            </p>
+            <p>
+              <span className="font-medium">Order ID:</span> {_id}
+            </p>
+            <p>
+              <span className="font-medium">Order payment Status:</span>{" "}
+              {paymentStatus ? "Paid" : "Unpaid"}
+            </p>
+            <p>
+              <span className="font-medium">Order payment TnxId:</span>{" "}
+              {paymentTnxId}
+            </p>
+            ,
+            <p>
+              <span className="font-medium">Created At:</span>{" "}
+              {new Date(createdAt).toLocaleString()}
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default OrderDetails;
+export default Index;

@@ -14,6 +14,7 @@ import { getTotalCartCount } from "@/components/AddToCart";
 import { FaHeart, FaTrashAlt } from "react-icons/fa";
 
 const Cart = () => {
+  const router = useRouter();
   const [isUpdating, setIsUpdating] = useState(false);
   const [message, setMessage] = useState("");
   const [availableQuantity, setAvailableQuantity] = useState(0);
@@ -189,8 +190,6 @@ const Cart = () => {
     }
   };
 
-  const checkedProducts = cart.filter((item) => item.isChecked === true);
-
   const updateProductCheckedStatus = async (
     variantId: string,
     isChecked: boolean
@@ -237,8 +236,8 @@ const Cart = () => {
 
   return (
     <div className="">
-      <div className="container my-4 max-w-6xl px-2 bg-white flex">
-        <div className="w-8/12">
+      <div className="container my-4 max-w-6xl px-2 bg-white">
+        <div className="">
           <div className="flex items-center space-x-1 text-xs mb-2">
             <Link href="/" className="">
               Home
@@ -295,8 +294,8 @@ const Cart = () => {
               </Link>
             </div>
           ) : (
-            <>
-              <div className="block border divide-y">
+            <div className="flex justify-between">
+              <div className="w-8/12">
                 {cart.map((item, index) => (
                   <div key={index}>
                     <div className="flex border-b border-gray-300 p-4 items-center">
@@ -385,71 +384,66 @@ const Cart = () => {
                   </div>
                 ))}
               </div>
-            </>
+              <div className=" border  w-4/12 max-w-sm p-4 bg-white rounded-xl shadow-md  border-gray-300 sticky top-5">
+                <h2 className="text-lg font-semibold mb-4">Checkout Summary</h2>
+                <div className="space-y-2 text-sm text-gray-700">
+                  <div className="flex justify-between">
+                    <span>Subtotal</span>
+                    <span>
+                      {settings?.currencySymbol} {"  "}
+                      {totalPrice.toLocaleString("en-BD")}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Online Fee</span>
+                    <span>
+                      {" "}
+                      {settings?.currencySymbol} {"  "}
+                      {totalShippingInside.toLocaleString("en-BD")}
+                    </span>
+                  </div>
+                  <div className="flex justify-between font-medium">
+                    <span>Total</span>
+                    <span>
+                      {" "}
+                      {settings?.currencySymbol} {"  "}
+                      {(totalPrice + totalShippingInside).toLocaleString(
+                        "en-BD"
+                      )}
+                    </span>
+                  </div>
+                  <div className="flex justify-between font-bold text-gray-900 border-t pt-2">
+                    <span>Payable Total</span>
+                    <span>
+                      {" "}
+                      {settings?.currencySymbol} {"  "}
+                      {(totalPrice + totalShippingInside).toLocaleString(
+                        "en-BD"
+                      )}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-5 space-y-3">
+                  <button
+                    onClick={() => {
+                      if (sessionStatus === "unauthenticated") {
+                        setIsModalOpen(true);
+                      } else {
+                        router.push("/checkout");
+                      }
+                    }}
+                    className="w-full bg-blue-600 text-white font-medium py-2 rounded-md hover:bg-blue-700 transition flex items-center justify-center gap-2"
+                  >
+                    Proceed to Checkout
+                    <span>→</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
         </div>
-        <div className="w-4/12 max-w-sm p-4 bg-white rounded-xl shadow-md border border-gray-200 sticky top-5">
-          <h2 className="text-lg font-semibold mb-4">Checkout Summary</h2>
-          <div className="space-y-2 text-sm text-gray-700">
-            <div className="flex justify-between">
-              <span>Subtotal</span>
-              <span>
-                {settings?.currencySymbol} {"  "}
-                {totalPrice.toLocaleString("en-BD")}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span>Online Fee</span>
-              <span>
-                {" "}
-                {settings?.currencySymbol} {"  "}
-                {totalShippingInside.toLocaleString("en-BD")}
-              </span>
-            </div>
-            <div className="flex justify-between font-medium">
-              <span>Total</span>
-              <span>
-                {" "}
-                {settings?.currencySymbol} {"  "}
-                {(totalPrice + totalShippingInside).toLocaleString("en-BD")}
-              </span>
-            </div>
-            <div className="flex justify-between font-bold text-gray-900 border-t pt-2">
-              <span>Payable Total</span>
-              <span>
-                {" "}
-                {settings?.currencySymbol} {"  "}
-                {(totalPrice + totalShippingInside).toLocaleString("en-BD")}
-              </span>
-            </div>
-          </div>
 
-          <div className="mt-4 flex items-center justify-between p-3 bg-yellow-100 border border-yellow-300 rounded-md text-sm text-yellow-800">
-            <span>
-              You will earn <span className="font-semibold">203</span> points
-            </span>
-            <span>💰</span>
-          </div>
-
-          <div className="mt-5 space-y-3">
-            <button className="w-full border border-purple-500 text-purple-600 font-medium py-2 rounded-md hover:bg-purple-50 transition">
-              Order as a Gift
-            </button>
-            <Link
-              href={`/checkout`}
-              className="w-full bg-blue-600 text-white font-medium py-2 rounded-md hover:bg-blue-700 transition flex items-center justify-center gap-2"
-            >
-              Proceed to Checkout
-              <span>→</span>
-            </Link>
-            <p className="text-xs text-gray-500 text-center mt-2">
-              Apply{" "}
-              <span className="font-medium text-gray-700">Promo Code</span> or{" "}
-              <span className="font-medium text-gray-700">Voucher Code</span> on
-              the Shipping Page
-            </p>
-          </div>
-        </div>
         {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div className="bg-white p-6 rounded shadow-lg w-11/12">

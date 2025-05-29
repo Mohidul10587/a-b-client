@@ -7,17 +7,11 @@ import Image from "next/image";
 import { getStatusColor } from "../utils/statusColor";
 import { useData } from "../DataContext";
 import useSWR from "swr";
-
-const fetcher = (url: string) =>
-  fetch(url, { credentials: "include" }).then((res) => res.json());
+import { fetcher } from "../shared/fetcher";
 
 const IndexPage: React.FC = () => {
   const { sessionStatus } = useData();
-
-  const { data, error, isLoading } = useSWR(
-    sessionStatus === "authenticated" ? `${apiUrl}/user/allOrdersOfUser` : null,
-    fetcher
-  );
+  const { data, error, isLoading } = useSWR(`user/allOrdersOfUser`, fetcher);
 
   const orders = data?.orders || [];
 
@@ -26,9 +20,10 @@ const IndexPage: React.FC = () => {
   }
 
   if (error) {
+    
     return <p>Error fetching orders. Please try again later.</p>;
   }
-  
+
   return (
     <>
       {orders?.length > 0 && (
@@ -53,16 +48,16 @@ const IndexPage: React.FC = () => {
                   <tr key={order._id}>
                     <td className="p-2">
                       <Image
-                        src={order.cart[0]?.photo || "/default.jpg"}
+                        src={order.cart[0]?.img || "/default.jpg"}
                         width={50}
                         height={50}
                         alt="Photo"
                         unoptimized
                       />
                     </td>
-                    <td className="p-2">{order.name}</td>
-                    <td className="p-2">{order.address}</td>
-                    <td className="p-2">{order.phone}</td>
+                    <td className="p-2">{order.deliveryInfo.name}</td>
+                    <td className="p-2">{order.deliveryInfo.address}</td>
+                    <td className="p-2">{order.deliveryInfo.phone}</td>
                     <td className={`p-1 text-${getStatusColor(order.status)}`}>
                       <span className={`p-1 ${getStatusColor(order.status)}`}>
                         {order.status}
@@ -71,7 +66,7 @@ const IndexPage: React.FC = () => {
 
                     <td className="p-2 ">
                       <Link
-                        href={`/account/userOrder/${order._id}`}
+                        href={`/account/order/${order._id}`}
                         className="p-2 bg-main font-bold rounded-md text-white text-center w-full"
                       >
                         Details

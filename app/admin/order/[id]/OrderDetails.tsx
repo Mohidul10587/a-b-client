@@ -1,45 +1,19 @@
 "use client";
-import { apiUrl } from "@/app/shared/urls";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
-
-import { formatDate } from "@/app/shared/formateTime";
-import { IOrder } from "@/types/oder";
-import { fetchWithTokenRefresh } from "@/app/shared/fetchWithTokenRefresh";
-import { useData } from "@/app/DataContext";
+import React from "react";
+import useSWR from "swr";
+import { fetcher } from "@/app/shared/fetcher";
 
 const OrderDetails: React.FC<{ id: string }> = ({ id }) => {
-  const [order, setOrder] = useState<any>(null);
-  const { settings } = useData();
-  useEffect(() => {
-    if (id) {
-      const fetchOrder = async () => {
-        const token = localStorage.getItem("accessToken");
-        try {
-          const response = await fetchWithTokenRefresh(
-            `${apiUrl}/order/getSingleOrder/${id}`,
-            {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          const data = await response.json();
-          setOrder(data);
-        } catch (error) {
-          console.error("Error fetching order details:", error);
-        }
-      };
+  const {
+    data: order,
+    error,
+    isLoading,
+  } = useSWR(id ? `order/getSingleOrder/${id}` : null, fetcher);
 
-      fetchOrder();
-    }
-  }, [id]);
-
-  if (!order) {
-    return <p>Loading...</p>;
-  }
-
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Failed to load order details.</p>;
+  if (!order) return <p>No order found.</p>;
   const {
     deliveryInfo,
     _id,
@@ -50,7 +24,7 @@ const OrderDetails: React.FC<{ id: string }> = ({ id }) => {
     paymentStatus,
     paymentTnxId,
   } = order;
-
+  
   return (
     <div className="p-6 bg-gray-100 min-h-screen flex justify-center items-center">
       <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6">
@@ -107,13 +81,15 @@ const OrderDetails: React.FC<{ id: string }> = ({ id }) => {
                 key={item._id}
                 className="flex items-center gap-4 p-4 border rounded-md bg-gray-50"
               >
-                <img
-                  src={item.id.photo}
-                  alt={item.id.title}
+                <Image
+                  src={item.img}
+                  alt={item.title}
+                  height={64}
+                  width={64}
                   className="w-16 h-16 object-cover rounded-md border"
                 />
                 <div className="flex-1">
-                  <p className="text-gray-800 font-medium">{item.id.title}</p>
+                  <p className="text-gray-800 font-medium">{item.title}</p>
                 </div>
                 <div className="text-gray-600 font-medium">
                   Quantity: {item.quantity}

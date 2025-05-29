@@ -3,8 +3,6 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { apiUrl } from "../shared/urls";
 import Image from "next/image";
-
-import { IOrder } from "@/types/oder";
 import { getStatusColor } from "../utils/statusColor";
 import { fetchWithTokenRefresh } from "../shared/fetchWithTokenRefresh";
 
@@ -55,9 +53,7 @@ const IndexPage: React.FC = () => {
   const handleDelete = (orderId: string) => {
     fetchWithTokenRefresh(`${apiUrl}/order/delete/${orderId}`, {
       method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`, // Include the token in the Authorization header
-      },
+      credentials: "include",
     })
       .then((response) => {
         if (response.ok) {
@@ -94,7 +90,7 @@ const IndexPage: React.FC = () => {
       })
       .catch((error) => console.error("Error updating order status:", error));
   };
-  
+
   return (
     <>
       <div className="container my-4">
@@ -149,10 +145,11 @@ const IndexPage: React.FC = () => {
                   <tr key={order._id}>
                     <td className="p-2">
                       <Image
-                        src={order.firstProduct?.img}
+                        src={order.firstProduct.img || "/default.jpg"}
                         width={50}
                         height={50}
                         alt="Photo"
+                        unoptimized
                       />
                     </td>
                     <td className="p-2">{order.customersName}</td>
