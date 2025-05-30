@@ -79,7 +79,7 @@ const ClientComponent: FC<{
           <div>
             <p className="font-semibold mb-2">Filter by subcategory</p>
             <div className="space-y-2 max-h-[178px] overflow-y-auto">
-              {category.subcategories.map((item: any) => (
+              {category.subcategories?.map((item: any) => (
                 <div key={item._id} className="flex items-center">
                   <input
                     type="checkbox"

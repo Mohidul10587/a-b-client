@@ -138,7 +138,7 @@ const ClientComponent: FC<{
             </div>
           </div>
           <div className="w-10/12">
-            <span className="font-semibold text-2xl">{publisher.title}</span>
+            <span className="font-semibold text-2xl">{publisher?.title}</span>
 
             <ReadMore height="h-24">
               {publisher && (

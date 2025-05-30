@@ -34,7 +34,7 @@ export async function generateMetadata(
   return {
     title,
     description,
-    keywords: [...category.tags],
+    keywords: [...(category?.tags || [])],
     openGraph: {
       title,
       description,
@@ -72,7 +72,7 @@ const IndexPage: FC<Props> = async ({ params }) => {
     publishers = [],
     settings,
   } = await fetchData(slug);
-  const element = await fetchElement(category._id, "category");
+  // const element = await fetchElement(category._id, "category");
 
   return (
     <ClientComponent
