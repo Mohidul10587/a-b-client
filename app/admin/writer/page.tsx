@@ -3,6 +3,7 @@ import { apiUrl } from "@/app/shared/urls";
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import LoadingComponent from "@/components/loading";
 
 // Define the Writer interface
 interface Writer {
@@ -70,9 +71,7 @@ const IndexPage: React.FC = () => {
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center py-10">
-          <div className="animate-spin rounded-full h-10 w-10 border-4 border-main border-t-transparent"></div>
-        </div>
+        <LoadingComponent />
       ) : (
         <>
           {/* Desktop Table */}
