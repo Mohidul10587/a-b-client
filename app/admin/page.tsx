@@ -1,11 +1,12 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import { apiUrl } from "../shared/urls";
 import Image from "next/image";
 import { getStatusColor } from "../utils/statusColor";
 import { fetcher } from "../shared/fetcher";
 import useSWR from "swr";
+import LoadingComponent from "@/components/loading";
 
 interface ICounts {
   ordersCount: number;
@@ -22,11 +23,11 @@ const IndexPage: React.FC = () => {
     fetcher
   );
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingComponent />;
   if (error) return <div>Error fetching orders</div>;
 
   const orders = data?.orders || [];
-  const counts = data?.counts || null;
+  const counts: ICounts = data?.counts || null;
 
   const handleDelete = (orderId: string) => {
     fetch(`${apiUrl}/order/delete/${orderId}`, {

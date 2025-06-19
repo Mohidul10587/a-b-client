@@ -14,6 +14,10 @@ const IndexPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 10;
+
   useEffect(() => {
     const fetchSuggestions = async () => {
       try {
@@ -51,12 +55,45 @@ const IndexPage: React.FC = () => {
     }
   };
 
+  const filteredSuggestions = suggestions.filter((s) =>
+    s.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const indexOfLast = currentPage * postsPerPage;
+  const indexOfFirst = indexOfLast - postsPerPage;
+  const currentSuggestions = filteredSuggestions.slice(
+    indexOfFirst,
+    indexOfLast
+  );
+
+  const nextPage = () => {
+    if (indexOfLast < filteredSuggestions.length) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
   return (
     <div className="container my-6 px-2 sm:px-4">
       {/* Top Header */}
       <div className="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
         <h1 className="text-xl font-bold">Suggestions</h1>
-        <div>
+        <div className="flex gap-2 w-full md:w-auto">
+          <input
+            type="text"
+            placeholder="Search"
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1); // reset page on search
+            }}
+            className="border px-2 py-1 rounded w-full md:w-64"
+          />
           <Link
             href="/admin/suggested/add"
             className="bg-main py-2 px-4 rounded-md text-white"
@@ -69,7 +106,7 @@ const IndexPage: React.FC = () => {
       {/* Loading */}
       {loading ? (
         <LoadingComponent />
-      ) : suggestions.length === 0 ? (
+      ) : filteredSuggestions.length === 0 ? (
         <p className="text-gray-500">No suggestions found.</p>
       ) : (
         <>
@@ -84,7 +121,7 @@ const IndexPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {suggestions.map((s) => (
+                {currentSuggestions.map((s) => (
                   <tr key={s._id} className="border-t">
                     <td className="px-4 py-2">
                       <Image
@@ -118,7 +155,7 @@ const IndexPage: React.FC = () => {
 
           {/* Mobile Cards */}
           <div className="md:hidden flex flex-col gap-4">
-            {suggestions.map((s) => (
+            {currentSuggestions.map((s) => (
               <div
                 key={s._id}
                 className="bg-white rounded shadow p-4 flex flex-col sm:flex-row gap-4"
@@ -151,6 +188,24 @@ const IndexPage: React.FC = () => {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Pagination */}
+          <div className="flex justify-between mt-4">
+            <button
+              onClick={prevPage}
+              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <button
+              onClick={nextPage}
+              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+              disabled={indexOfLast >= filteredSuggestions.length}
+            >
+              Next
+            </button>
           </div>
         </>
       )}

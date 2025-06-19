@@ -1,11 +1,11 @@
 "use client";
+
 import { apiUrl } from "@/app/shared/urls";
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import LoadingComponent from "@/components/loading";
 
-// Define the Writer interface
 interface Writer {
   _id: string;
   title: string;
@@ -15,8 +15,11 @@ interface Writer {
 }
 
 const IndexPage: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState("");
   const [writers, setWriters] = useState<Writer[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const postsPerPage = 10;
 
   // Fetch all writers
   useEffect(() => {
@@ -39,17 +42,38 @@ const IndexPage: React.FC = () => {
     fetchWriters();
   }, []);
 
-  // Delete a single writer
+  // Filtered + paginated writers
+  const filteredWriters = writers.filter((writer) =>
+    writer.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const indexOfLast = currentPage * postsPerPage;
+  const indexOfFirst = indexOfLast - postsPerPage;
+  const currentWriters = filteredWriters.slice(indexOfFirst, indexOfLast);
+
+  const nextPage = () => {
+    if (indexOfLast < filteredWriters.length) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
   const deleteWriter = async (id: string) => {
+    const confirmed = confirm("Are you sure you want to delete this writer?");
+    if (!confirmed) return;
+
     try {
       const response = await fetch(`${apiUrl}/writer/deleteWriter/${id}`, {
         method: "DELETE",
         credentials: "include",
       });
       if (response.ok) {
-        setWriters((prevWriters) =>
-          prevWriters.filter((writer) => writer._id !== id)
-        );
+        setWriters((prev) => prev.filter((w) => w._id !== id));
       } else {
         throw new Error("Failed to delete writer");
       }
@@ -62,12 +86,24 @@ const IndexPage: React.FC = () => {
     <div className="container my-6 px-2 sm:px-4">
       <div className="flex items-center justify-between mb-6 flex-wrap gap-2">
         <h1 className="text-xl font-bold">Writers</h1>
-        <Link
-          href="/admin/writer/add"
-          className="bg-main py-2 px-4 rounded-md text-white text-sm"
-        >
-          Add
-        </Link>
+        <div className="flex gap-2 w-full md:w-auto">
+          <input
+            type="text"
+            placeholder="Search"
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1); // reset to first page when searching
+            }}
+            className="border px-2 py-1 rounded w-full md:w-64"
+          />
+          <Link
+            href="/admin/writer/add"
+            className="bg-main py-2 px-4 rounded-md text-white"
+          >
+            Add
+          </Link>
+        </div>
       </div>
 
       {loading ? (
@@ -86,7 +122,7 @@ const IndexPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {writers.map((writer) => (
+                {currentWriters.map((writer) => (
                   <tr key={writer._id} className="border-t">
                     <td className="py-2">
                       <Image
@@ -99,7 +135,6 @@ const IndexPage: React.FC = () => {
                     </td>
                     <td className="py-2">{writer.title}</td>
                     <td className="py-2">{writer.rating}</td>
-
                     <td className="py-3 px-4 text-right space-x-2">
                       <Link
                         className="btnOrange inline-block"
@@ -122,7 +157,7 @@ const IndexPage: React.FC = () => {
 
           {/* Mobile Cards */}
           <div className="md:hidden flex flex-col gap-4">
-            {writers.map((writer) => (
+            {currentWriters.map((writer) => (
               <div
                 key={writer._id}
                 className="bg-white p-4 shadow rounded-lg flex flex-col sm:flex-row gap-3"
@@ -158,6 +193,24 @@ const IndexPage: React.FC = () => {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Pagination */}
+          <div className="flex justify-between mt-4">
+            <button
+              onClick={prevPage}
+              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <button
+              onClick={nextPage}
+              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+              disabled={indexOfLast >= filteredWriters.length}
+            >
+              Next
+            </button>
           </div>
         </>
       )}
