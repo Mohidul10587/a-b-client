@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { apiUrl } from "@/app/shared/urls";
 import Image from "next/image";
 import Modal from "@/app/admin/components/Modal";
-import { fetchWithTokenRefresh } from "@/app/shared/fetchWithTokenRefresh";
 
 interface Banner {
   img: File | null;
@@ -89,13 +88,11 @@ const IndexPage: React.FC = () => {
     const bannersInfo = banners.map(({ title, link }) => ({ title, link }));
     formData.append("bannersInfo", JSON.stringify(bannersInfo));
 
-    const token = localStorage.getItem("accessToken");
     try {
-      const response = await fetchWithTokenRefresh(`${apiUrl}/banner/create`, {
+      const response = await fetch(`${apiUrl}/banner/create`, {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        credentials: "include",
+
         body: formData,
       });
       if (response.ok) {

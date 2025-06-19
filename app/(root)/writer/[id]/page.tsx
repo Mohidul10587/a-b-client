@@ -2,7 +2,7 @@ import { apiUrl } from "@/app/shared/urls";
 import { fetchSettings } from "@/app/shared/fetchSettingsData";
 import { Metadata, ResolvingMetadata } from "next";
 import { FC } from "react";
-import { Props } from "@/types/pageProps";
+
 import ClientComponent from "./ClientComponent";
 
 // Utility function to fetch all necessary data
@@ -44,7 +44,7 @@ async function getData(slug: string) {
 }
 
 export async function generateMetadata(
-  { params }: Props,
+  { params }: any,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const resolvedParams = await params;
@@ -88,7 +88,7 @@ export async function generateMetadata(
   };
 }
 
-const IndexPage: FC<Props> = async ({ params }) => {
+const IndexPage: FC<any> = async ({ params }) => {
   const resolvedParams = await params;
 
   const writerId = resolvedParams.id;

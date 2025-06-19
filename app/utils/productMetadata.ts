@@ -1,13 +1,8 @@
 import type { Metadata, ResolvingMetadata } from "next";
 import { apiUrl } from "@/app/shared/urls";
 
-type Props = {
-  params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
 export async function generateMetadata(
-  { params, searchParams }: Props,
+  { params, searchParams }: any,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // read route params

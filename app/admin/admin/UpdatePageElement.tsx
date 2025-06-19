@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import { fetchWithTokenRefresh } from "@/app/shared/fetchWithTokenRefresh";
 import { apiUrl } from "@/app/shared/urls";
 import { IBanner } from "@/types/banner";
 import { ICategory, ISubcategory } from "@/types/category";
@@ -103,15 +101,15 @@ const UpdatePageElement: React.FC<PageProps> = ({ data }) => {
   // Handle form submission for updating page element
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const token = localStorage.getItem("accessToken");
+
     try {
-      const response = await fetchWithTokenRefresh(
+      const response = await fetch(
         `${apiUrl}/element/update-page-element/${data._id}`, // Update endpoint
         {
           method: "PUT",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(formData),
         }

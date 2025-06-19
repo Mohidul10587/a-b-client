@@ -25,11 +25,7 @@ const Cart = () => {
   setTimeout(() => setMessage(""), 5000);
   const { totalPrice, totalShippingInside } = calculateCartTotals(cart);
 
-  const {
-    data: userResponse,
-    error: userError,
-    mutate: userMutate,
-  } = useSWR(
+  const { data: userResponse } = useSWR(
     user?._id ? `user/getSingleUserForAddToCartComponent/${user._id}` : null,
     fetcher
   );

@@ -6,13 +6,7 @@ import AddElementModal from "./AddElementModal";
 import PageBuilder from "@/app/admin/element/PageBuilder";
 import PageElementsList from "./PageElementsList";
 
-type PageProps = {
-  props: {
-    id: string;
-  };
-};
-
-const ShowElement: FC<PageProps> = ({ props }) => {
+const ShowElement: FC<any> = ({ props }) => {
   const qureies = props.id;
   const id = qureies[0];
 

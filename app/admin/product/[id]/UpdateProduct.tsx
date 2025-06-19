@@ -1,13 +1,13 @@
 "use client";
 
 import { apiUrl } from "@/app/shared/urls";
-import { fetchWithTokenRefresh } from "@/app/shared/fetchWithTokenRefresh";
+
 import Content from "@/app/admin/components/Content";
 import Modal from "@/app/admin/components/Modal";
 import Photo from "@/app/admin/components/Photo2";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { ICategory, InfoSection } from "@/types/category";
+import { ICategory } from "@/types/category";
 import Meta from "@/app/admin/components/Meta";
 import { IProduct } from "@/types/product";
 import { generateSlug } from "@/app/shared/gennerateSlug";
@@ -35,7 +35,6 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
 
   const [description, setDescription] = useState("");
   const [shortDescription, setShortDescription] = useState("");
-  const [isContentValid, setIsContentValid] = useState(false);
 
   const [category, setCategory] = useState("");
   const [categoryId, setCategoryId] = useState("");
@@ -58,8 +57,6 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
   const [shippingInside, setShippingInside] = useState(50);
   const [shippingOutside, setShippingOutside] = useState(100);
   const [photo, setPhoto] = useState<File | null>(null);
-
-  const [error, setError] = useState<string | null>(null);
 
   const [writers, setWriters] = useState<Writer[]>([]);
   const [product, setProduct] = useState<IProduct | null>(null);
@@ -151,8 +148,6 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
   useEffect(() => {}, [subcategory]);
   // Photo gallery functions starts here
 
-  const token = localStorage.getItem("accessToken");
-
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     openModal("Product updating.. ");
@@ -203,16 +198,11 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
 
     try {
       // Attempt to update the product
-      let response = await fetchWithTokenRefresh(
-        `${apiUrl}/product/update/${productId}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
+      let response = await fetch(`${apiUrl}/product/update/${productId}`, {
+        method: "PUT",
+        credentials: "include",
+        body: formData,
+      });
 
       if (response.ok) {
         openModal("Product updated successfully");

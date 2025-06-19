@@ -14,7 +14,7 @@ const Categories: React.FC<CategoriesProps> = ({ items }) => {
     <div className="relative group">
       <Link
         className="hidden cursor-pointer md:block md:px-4 py-2 rounded-md  hover:text-orange-600 md:hover:bg-white md:group-hover:bg-white  md:hover:text-main transition-colors duration-200"
-        href="/cat"
+        href="/category"
       >
         Categories
       </Link>
@@ -22,7 +22,7 @@ const Categories: React.FC<CategoriesProps> = ({ items }) => {
         {items.map((category) => (
           <div key={category._id} className="p-3">
             <Link
-              href={`/cat/${category.slug}`}
+              href={`/category/${category.slug}`}
               className="flex items-center font-bold text-gray-700 hover:text-gray-500"
             >
               {category.title}

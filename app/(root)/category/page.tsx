@@ -1,4 +1,4 @@
-import Catagories from "@/app/(root)/cat/Catagories";
+import Catagories from "@/app/(root)/category/Catagories";
 import { Metadata } from "next";
 import ElementSection from "@/app/(root)/a-root-comp/ElementSection";
 

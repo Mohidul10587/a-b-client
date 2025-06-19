@@ -149,7 +149,7 @@ const CategoriesItems: React.FC<{
               Saved Items
             </Link>
             <Link
-              href="/cat"
+              href="/category"
               onClick={closePopup}
               className="flex items-center p-2 hover:bg-gray-200"
             >
@@ -244,7 +244,7 @@ const CategoriesItems: React.FC<{
               <div key={category._id} className="group w-full">
                 <div className="flex items-center justify-between px-2 py-1.5">
                   <Link
-                    href={`/cat/${category.slug}`}
+                    href={`/category/${category.slug}`}
                     onClick={closePopup}
                     className="flex items-center gap-2 text-gray-700 hover:text-gray-500"
                   >

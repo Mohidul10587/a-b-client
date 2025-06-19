@@ -27,7 +27,6 @@ const BannerManager: React.FC<BannerManagerProps> = ({ bannerId }) => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const fetchBanner = async (bannerId: string) => {
-    const token = localStorage.getItem("accessToken");
     try {
       const response = await fetch(
         `${apiUrl}/banner/singleBanner/${bannerId}`,
@@ -89,7 +88,6 @@ const BannerManager: React.FC<BannerManagerProps> = ({ bannerId }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const token = localStorage.getItem("accessToken");
 
     if (!title.trim()) {
       setModalMessage("Title is required");

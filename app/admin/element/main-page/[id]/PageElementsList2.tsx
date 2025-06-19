@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { apiUrl } from "@/app/shared/urls";
 import Link from "next/link";
 import LoadingComponent from "@/components/loading";
-import { fetchWithTokenRefresh } from "@/app/shared/fetchWithTokenRefresh";
+
 import EditElementModal from "../../EditElementModal";
 import UpdateElement from "../../UpdateElement";
 
@@ -64,13 +64,13 @@ const PageElementsList: React.FC<PageElementsListProps> = ({
   // Update element status
   const handleToggle = async (elementId: string, currentStatus: boolean) => {
     try {
-      const response = await fetchWithTokenRefresh(
+      const response = await fetch(
         `${apiUrl}/element/updateStatus/${elementId}`,
         {
           method: "PATCH", // Change to PATCH
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
           body: JSON.stringify({ status: !currentStatus }), // Toggle the status
         }
@@ -96,15 +96,10 @@ const PageElementsList: React.FC<PageElementsListProps> = ({
   // Delete element
   const handleDelete = async (elementId: string) => {
     try {
-      const response = await fetchWithTokenRefresh(
-        `${apiUrl}/element/delete/${elementId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
+      const response = await fetch(`${apiUrl}/element/delete/${elementId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
 
       if (!response.ok) {
         throw new Error("Failed to delete element");

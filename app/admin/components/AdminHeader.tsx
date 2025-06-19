@@ -17,7 +17,12 @@ const AdminHeader: React.FC = () => {
         <div className="container">
           <div className="flex justify-between items-center py-1">
             <Link href="/admin" className="outline-none">
-              <Image src={settings?.logo} width={200} height={200} alt="Logo" />
+              <Image
+                src={settings?.logo || "/defaultLogo.jpg"}
+                width={200}
+                height={200}
+                alt="Logo"
+              />
             </Link>
             {/* Menu Icon */}
             <div className="md:hidden">

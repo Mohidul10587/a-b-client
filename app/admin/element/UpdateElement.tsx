@@ -6,7 +6,6 @@ import { IFormData } from "@/types/element";
 import Image from "next/image";
 import { ICategory } from "@/types/category";
 
-import { fetchWithTokenRefresh } from "@/app/shared/fetchWithTokenRefresh";
 import Modal from "@/app/admin/components/Modal";
 import { ISuggestion } from "@/types/suggestion";
 import { IWriter } from "@/types/writer";
@@ -334,16 +333,11 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
       });
       formDataToSubmit.append("images", JSON.stringify(images));
 
-      const response = await fetchWithTokenRefresh(
-        `${apiUrl}/element/updateElement/${id}`,
-        {
-          method: "PUT", // Use PUT for updating
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-          body: formDataToSubmit,
-        }
-      );
+      const response = await fetch(`${apiUrl}/element/updateElement/${id}`, {
+        method: "PUT", // Use PUT for updating
+        credentials: "include",
+        body: formDataToSubmit,
+      });
 
       if (response.ok) {
         setModalMessage("Element updated successfully!");

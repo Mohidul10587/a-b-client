@@ -51,7 +51,6 @@ const IndexPage: React.FC = () => {
   }, [user]);
 
   const handleDelete = async (id: string) => {
-    const token = localStorage.getItem("accessToken");
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this banner?"
     );

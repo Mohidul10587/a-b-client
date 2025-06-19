@@ -3,22 +3,22 @@
 import { useState, useEffect } from "react";
 import { apiUrl } from "@/app/shared/urls";
 import Image from "next/image";
-
 import Link from "next/link";
 import { ISuggestion } from "@/types/suggestion";
 import Modal from "../admin/Modal";
+import LoadingComponent from "@/components/loading";
 
 const IndexPage: React.FC = () => {
   const [suggestions, setSuggestions] = useState<ISuggestion[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
+
   useEffect(() => {
     const fetchSuggestions = async () => {
       try {
         const res = await fetch(`${apiUrl}/suggestion`);
         const data = await res.json();
-
         setSuggestions(data.suggestions);
       } catch (error) {
         console.error("Failed to fetch suggestions:", error);
@@ -26,13 +26,8 @@ const IndexPage: React.FC = () => {
         setLoading(false);
       }
     };
-
     fetchSuggestions();
   }, []);
-
-  const handleEdit = (productId: string) => {
-    // Implement your edit functionality here
-  };
 
   const handleDelete = async (suggestionId: string) => {
     try {
@@ -41,16 +36,10 @@ const IndexPage: React.FC = () => {
       });
 
       if (response.ok) {
-        const data = await response.json(); // Get response JSON with message
-        setModalContent(data.message); // Display message in modal
+        const data = await response.json();
+        setModalContent(data.message);
         setIsModalOpen(true);
-
-        // Update suggestions to remove the deleted suggestion
-        setSuggestions((prevSuggestions) =>
-          prevSuggestions.filter(
-            (suggestion) => suggestion._id !== suggestionId
-          )
-        );
+        setSuggestions((prev) => prev.filter((s) => s._id !== suggestionId));
       } else {
         setModalContent("Failed to delete the suggestion.");
         setIsModalOpen(true);
@@ -62,86 +51,107 @@ const IndexPage: React.FC = () => {
     }
   };
 
-  if (loading) return <p className="text-gray-500">Loading suggestions...</p>;
-
   return (
-    <div className=" container my-4">
-      <div className="flex items-center justify-between mb-4">
+    <div className="container my-6 px-2 sm:px-4">
+      {/* Top Header */}
+      <div className="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
         <h1 className="text-xl font-bold">Suggestions</h1>
         <div>
           <Link
             href="/admin/suggested/add"
-            className="bg-main py-1 px-4 rounded-md text-white"
+            className="bg-main py-2 px-4 rounded-md text-white"
           >
             Add
           </Link>
         </div>
       </div>
-      {suggestions.length === 0 ? (
+
+      {/* Loading */}
+      {loading ? (
+        <LoadingComponent />
+      ) : suggestions.length === 0 ? (
         <p className="text-gray-500">No suggestions found.</p>
       ) : (
         <>
-          {suggestions.map((suggestion) => (
-            <div
-              key={suggestion._id}
-              className="flex items-center justify-between rounded-md bg-white p-2 mb-2"
-            >
-              <div className="flex items-center justify-start gap-2">
-                <Image
-                  src={suggestion?.products[0]?.photo || "/default.jpg"}
-                  alt=""
-                  width={30}
-                  height={30}
-                  className="w-10 h-10 object-cover"
-                  unoptimized
-                />
-                <h2 className="text-base font-medium line-clamp-1">
-                  {suggestion.title}
-                </h2>
-              </div>
+          {/* Desktop Table */}
+          <div className="hidden md:block bg-white rounded shadow overflow-hidden">
+            <table className="w-full text-left">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-4 py-2">Image</th>
+                  <th className="px-4 py-2">Title</th>
+                  <th className="py-2 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {suggestions.map((s) => (
+                  <tr key={s._id} className="border-t">
+                    <td className="px-4 py-2">
+                      <Image
+                        src={s.products[0]?.photo || "/default.jpg"}
+                        alt={s.title}
+                        width={80}
+                        height={60}
+                        className="w-20 h-16 object-cover rounded"
+                      />
+                    </td>
+                    <td className="px-4 py-2">{s.title}</td>
+                    <td className="py-3 px-4 text-right space-x-2">
+                      <Link
+                        href={`/admin/suggested/edit/${s._id}`}
+                        className="btnOrange"
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(s._id)}
+                        className="btnRed"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile Cards */}
+          <div className="md:hidden flex flex-col gap-4">
+            {suggestions.map((s) => (
               <div
-                key={suggestion._id}
-                className="flex items-center justify-end gap-3"
+                key={s._id}
+                className="bg-white rounded shadow p-4 flex flex-col sm:flex-row gap-4"
               >
-                <Link
-                  href={`/admin/suggested/edit/${suggestion._id}`}
-                  onClick={() => handleEdit(suggestion._id)}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="25"
-                    height="25"
-                    viewBox="0 0 24 24"
+                <div className="flex items-center gap-4">
+                  <Image
+                    src={s.products[0]?.photo || "/default.jpg"}
+                    alt={s.title}
+                    width={80}
+                    height={60}
+                    className="w-20 h-16 object-cover rounded"
+                  />
+                  <div>
+                    <p className="font-semibold">{s.title}</p>
+                  </div>
+                </div>
+                <div className="mt-2 flex gap-4">
+                  <Link
+                    href={`/admin/suggested/edit/${s._id}`}
+                    className="btnOrange"
                   >
-                    <g
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                    >
-                      <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                      <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"></path>
-                    </g>
-                  </svg>
-                </Link>
-                <button onClick={() => handleDelete(suggestion._id)}>
-                  <svg
-                    className="text-red-500"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="35"
-                    height="35"
-                    viewBox="0 0 24 24"
+                    Edit
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(s._id)}
+                    className="btnRed"
                   >
-                    <path
-                      fill="currentColor"
-                      d="M7.616 20q-.672 0-1.144-.472T6 18.385V6H5V5h4v-.77h6V5h4v1h-1v12.385q0 .69-.462 1.153T16.384 20zM17 6H7v12.385q0 .269.173.442t.443.173h8.769q.23 0 .423-.192t.192-.424zM9.808 17h1V8h-1zm3.384 0h1V8h-1zM7 6v13z"
-                    ></path>
-                  </svg>
-                </button>
+                    Delete
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </>
       )}
 

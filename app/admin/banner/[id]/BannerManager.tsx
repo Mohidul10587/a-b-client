@@ -2,7 +2,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { apiUrl } from "@/app/shared/urls";
-import { fetchWithTokenRefresh } from "@/app/shared/fetchWithTokenRefresh";
 import Modal from "@/app/admin/components/Modal";
 import Image from "next/image";
 
@@ -27,15 +26,12 @@ const BannerManager: React.FC<BannerManagerProps> = ({ bannerId }) => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const fetchBanner = async (bannerId: string) => {
-    const token = localStorage.getItem("accessToken");
     try {
       const response = await fetch(
         `${apiUrl}/banner/singleBanner/${bannerId}`,
         {
           method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          credentials: "include",
         }
       );
       const data = await response.json();
@@ -91,7 +87,6 @@ const BannerManager: React.FC<BannerManagerProps> = ({ bannerId }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const token = localStorage.getItem("accessToken");
 
     if (!title.trim()) {
       setModalMessage("Title is required");
@@ -124,16 +119,11 @@ const BannerManager: React.FC<BannerManagerProps> = ({ bannerId }) => {
     formData.append("bannersInfo", JSON.stringify(bannersInfo));
 
     try {
-      const response = await fetchWithTokenRefresh(
-        `${apiUrl}/banner/update/${bannerId}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
+      const response = await fetch(`${apiUrl}/banner/update/${bannerId}`, {
+        method: "PUT",
+        credentials: "include",
+        body: formData,
+      });
 
       if (response.ok) {
         setIsSuccess(true);

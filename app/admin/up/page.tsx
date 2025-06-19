@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/app/shared/urls";
-import { fetchWithTokenRefresh } from "@/app/shared/fetchWithTokenRefresh";
 
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
@@ -11,21 +10,17 @@ const ResetPassword = () => {
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
-  const token = localStorage.getItem("accessToken");
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await fetchWithTokenRefresh(
-        `${apiUrl}/admin/update-password`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ email, newPassword }),
-        }
-      );
+      const response = await fetch(`${apiUrl}/admin/update-password`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, newPassword }),
+      });
 
       const data = await response.json();
       setMessage(data.message);

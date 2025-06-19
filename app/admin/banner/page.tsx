@@ -19,14 +19,11 @@ const IndexPage: React.FC = () => {
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
     const fetchBanners = async () => {
       try {
         const response = await fetch(`${apiUrl}/banner/all`, {
           method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
@@ -45,7 +42,6 @@ const IndexPage: React.FC = () => {
   }, []);
 
   const handleDelete = async (id: string) => {
-    const token = localStorage.getItem("accessToken");
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this banner?"
     );
@@ -54,9 +50,7 @@ const IndexPage: React.FC = () => {
     try {
       const response = await fetch(`${apiUrl}/banner/${id}`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        credentials: "include",
       });
 
       if (response.ok) {
@@ -79,51 +73,58 @@ const IndexPage: React.FC = () => {
   }
 
   return (
-    <div className="container my-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="container my-6 px-2 sm:px-4">
+      <div className="flex items-center justify-between mb-6 flex-wrap gap-2">
         <h1 className="text-xl font-bold">Banners</h1>
         <Link
           href="/admin/banner/add"
           className="bg-main py-2 px-4 rounded-md text-white"
         >
-          Add banners
+          Add
         </Link>
       </div>
 
-      <>
-        {banners?.map((banner) => (
-          <div
-            key={banner._id}
-            className="border p-2 bg-white mb-2 rounded-lg shadow hover:shadow-lg transition-shadow duration-200 flex justify-between"
-          >
-            <div className="flex items-center space-x-2">
-              <Image
-                src={banner?.banners[0].img}
-                alt=""
-                width={200}
-                height={200}
-                className="w-20 h-16 object-cover rounded"
-              />
-              <h3 className="text-base font-medium mb-2">{banner.title}</h3>
-            </div>
-            <div className="flex justify-between items-center space-x-2">
-              <Link
-                href={`/admin/banner/${banner._id}`}
-                className="bg-blue-500 text-white py-1 px-3 rounded-md hover:bg-blue-600 transition-colors duration-200"
-              >
-                Edit
-              </Link>
-
-              <button
-                onClick={() => handleDelete(banner._id)}
-                className="bg-red-500 text-white py-1 px-3 rounded-md hover:bg-red-600 transition-colors duration-200"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
-      </>
+      <div className="overflow-x-auto bg-white rounded-lg shadow p-4">
+        <table className="w-full table-auto text-left">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="py-2 px-4">Image</th>
+              <th className="py-2 px-4">Title</th>
+              <th className="py-2 px-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {banners?.map((banner) => (
+              <tr key={banner._id} className="border-b hover:bg-gray-50">
+                <td className="py-3 px-4">
+                  <Image
+                    src={banner?.banners[0]?.img || "/placeholder.jpg"}
+                    alt={banner.title}
+                    width={80}
+                    height={60}
+                    className="w-20 h-16 object-cover rounded-md"
+                  />
+                </td>
+                <td className="py-3 px-4 font-medium">{banner.title}</td>
+                <td className="py-3 px-4 text-right space-x-2">
+                  <Link
+                    href={`/admin/banner/${banner._id}`}
+                    className="btnOrange inline-block"
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(banner._id)}
+                    className="btnRed inline-block"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

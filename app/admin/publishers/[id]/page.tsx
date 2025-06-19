@@ -1,5 +1,5 @@
 "use client";
-import useSWR from "swr";
+
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
@@ -8,7 +8,7 @@ import { generateSlug } from "@/app/shared/gennerateSlug";
 import Content from "../../components/Content";
 import Modal from "../../admin/Modal";
 import Meta from "@/components/Meta";
-import { fetchWithTokenRefresh } from "@/app/shared/fetchWithTokenRefresh";
+import { processContent } from "@/app/shared/processContent";
 
 export interface IBrand {
   _id: string;
@@ -72,18 +72,6 @@ const IndexPage: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    const strippedDescription = formData.description
-      .replace(/(<([^>]+)>)/gi, "")
-      .trim();
-    const finalDescription =
-      strippedDescription.length > 0 ? formData.description : "";
-
-    const strippedShortDescription = formData.shortDescription
-      .replace(/(<([^>]+)>)/gi, "")
-      .trim();
-    const finalShortDescription =
-      strippedShortDescription.length > 0 ? formData.shortDescription : "";
-
     const requiredFields = [
       { value: formData.title, message: "Title is required" },
       { value: formData.img, message: "Photo is required" },
@@ -102,8 +90,11 @@ const IndexPage: React.FC = () => {
     formDataAppend.append("title", formData.title);
     formDataAppend.append("rating", String(formData.rating));
     formDataAppend.append("slug", generateSlug(formData.title));
-    formDataAppend.append("description", finalDescription);
-    formDataAppend.append("shortDescription", finalShortDescription);
+    formDataAppend.append("description", processContent(formData.description));
+    formDataAppend.append(
+      "shortDescription",
+      processContent(formData.shortDescription)
+    );
     formDataAppend.append("img", formData.img);
     formDataAppend.append("video", formData.video?.replace(/\s+/g, ""));
     formDataAppend.append("metaTitle", formData.metaTitle);
@@ -113,17 +104,12 @@ const IndexPage: React.FC = () => {
 
     try {
       openModal("Uploading... ");
-      let response = await fetchWithTokenRefresh(
-        `${apiUrl}/publishers/create`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-          body: formDataAppend,
-        }
-      );
+      let response = await fetch(`${apiUrl}/publishers/create`, {
+        method: "POST",
+        credentials: "include",
+
+        body: formDataAppend,
+      });
 
       if (response.ok) {
         const data = await response.json();

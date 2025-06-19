@@ -51,7 +51,7 @@ const Banner: React.FC<BannerProps> = ({ items }) => {
                 <p>Popular categories on Price in Kenya</p>
               </div>
               <Link
-                href="/cat"
+                href="/category"
                 className="bg-white px-3 py-1.5 font-bold hover:shadow-md rounded-md hidden md:block"
               >
                 All categories

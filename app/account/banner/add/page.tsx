@@ -92,7 +92,6 @@ const IndexPage: React.FC = () => {
     formData.append("bannersInfo", JSON.stringify(bannersInfo));
     formData.append("sellerSlug", user.slug);
 
-    const token = localStorage.getItem("accessToken");
     try {
       const response = await fetch(`${apiUrl}/seller/create`, {
         method: "POST",

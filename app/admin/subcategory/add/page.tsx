@@ -64,16 +64,12 @@ const IndexPage: React.FC = () => {
       ],
     },
   ];
-  const [infoSections, setInfoSections] =
-    useState<InfoSection[]>(initialInfoSections);
 
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
-
   const [modalContent, setModalContent] = useState("");
   const [description, setDescription] = useState("");
   const [shortDescription, setShortDescription] = useState("");
-  const [isSectionIconModalOpen, setIsSectionIconModalOpen] = useState(false);
 
   const [imageType, setImageType] = useState("");
 
@@ -92,12 +88,10 @@ const IndexPage: React.FC = () => {
     queAndAnsArray: [{ title: "", description: "" }],
   });
 
-  const {
-    data: response,
-    error,
-    mutate,
-    isLoading,
-  } = useSWR(`category/allCategoriesForSubCatAddPage`, fetcher);
+  const { data: response, isLoading } = useSWR(
+    `category/allCategoriesForSubCatAddPage`,
+    fetcher
+  );
 
   const openModal = (content: string) => {
     setModalContent(content);
@@ -107,15 +101,6 @@ const IndexPage: React.FC = () => {
   const closeModal = () => {
     setIsSubmitModalOpen(false);
     setIsImageModalOpen(false);
-    setIsSectionIconModalOpen(false);
-  };
-
-  const handleSectionTitleChange = (sectionId: number, value: string) => {
-    setInfoSections(
-      infoSections.map((section) =>
-        section.id === sectionId ? { ...section, sectionTitle: value } : section
-      )
-    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -129,7 +114,6 @@ const IndexPage: React.FC = () => {
     const finalShortDescription = processContent(shortDescription);
     const updatedData = {
       ...data,
-      infoSections: infoSections,
       description: finalDescription,
       shortDescription: finalShortDescription,
     };

@@ -121,7 +121,7 @@ const Search = () => {
                       </Link>
                     ))}
                     {data?.categories?.map((item: any) => (
-                      <Link key={item._id} href={`/cat/${item.slug}`}>
+                      <Link key={item._id} href={`/category/${item.slug}`}>
                         <div className="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer">
                           <Image
                             src={item.photoUrl || "/default.jpg"}

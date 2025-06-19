@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/app/shared/urls";
-import { fetchWithTokenRefresh } from "@/app/shared/fetchWithTokenRefresh";
 
 const UpdateEmail = () => {
   const [email, setEmail] = useState("");
@@ -16,17 +15,14 @@ const UpdateEmail = () => {
     e.preventDefault();
 
     try {
-      const response = await fetchWithTokenRefresh(
-        `${apiUrl}/admin/update-email`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Ensure the token is stored in localStorage
-          },
-          body: JSON.stringify({ email, newEmail, password }), // Include password in the request body
-        }
-      );
+      const response = await fetch(`${apiUrl}/admin/update-email`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, newEmail, password }), // Include password in the request body
+      });
 
       const data = await response.json();
 

@@ -5,9 +5,10 @@ import "suneditor/dist/css/suneditor.min.css";
 import { apiUrl } from "@/app/shared/urls";
 import Photo from "@/app/admin/setting/Photo.settings";
 import Modal from "@/components/admin/Modal";
-import { fetchWithTokenRefresh } from "@/app/shared/fetchWithTokenRefresh";
+
 import Link from "next/link";
 import Keywords from "@/app/admin/setting/Kewords";
+import { processContent } from "@/app/shared/processContent";
 
 // Dynamic import for SunEditor
 const SunEditor = dynamic(() => import("suneditor-react"), { ssr: false });
@@ -61,14 +62,12 @@ const IndexPage: React.FC = () => {
     const fetchSettings = async () => {
       setLoading(true);
       try {
-        const response = await fetchWithTokenRefresh(
+        const response = await fetch(
           `${apiUrl}/settings`,
 
           {
             method: "GET",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            },
+            credentials: "include",
           }
         );
         if (response.ok) {
@@ -158,8 +157,6 @@ const IndexPage: React.FC = () => {
     }
 
     // Strip HTML tags and whitespace from description and set to empty if no text is found
-    const strippedDescription = description.replace(/(<([^>]+)>)/gi, "").trim();
-    const finalDescription = strippedDescription.length > 0 ? description : "";
 
     const formData = new FormData();
     if (logo) formData.append("logo", logo);
@@ -189,28 +186,22 @@ const IndexPage: React.FC = () => {
     formData.append("order", order);
     formData.append("orderText", orderText);
     formData.append("metaDescription", metaDescription);
-    formData.append("description", finalDescription); // Submit empty string
+    formData.append("description", processContent(description)); // Submit empty string
     formData.append("privacyPolicies", privacyPolicies);
     formData.append("termsAndConditions", termsAndConditions);
     formData.append("otherPolicies", otherPolicies);
     formData.append("phone", phone);
     formData.append("tags", String(tags));
 
-    const token = localStorage.getItem("accessToken");
     try {
       setModalContent("Updating the settings...");
       setIsModalOpen(true);
 
-      const response = await fetchWithTokenRefresh(
-        `${apiUrl}/settings/update`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
+      const response = await fetch(`${apiUrl}/settings/update`, {
+        method: "PUT",
+        credentials: "include",
+        body: formData,
+      });
 
       if (response.ok) {
         setModalContent("Updated successfully");

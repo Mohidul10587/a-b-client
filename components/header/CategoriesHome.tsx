@@ -55,7 +55,10 @@ const CategoriesHome: React.FC<{
     <div className="bg-white h-full w-full relative">
       {menuWithCategories?.slice(0, 10).map((menu) => (
         <div key={menu._id} className="group">
-          <Link href="/" className="w-full flex items-center text-sm gap-1 p-2 text-gray-700 hover:bg-gray-100">
+          <Link
+            href="/"
+            className="w-full flex items-center text-sm gap-1 p-2 text-gray-700 hover:bg-gray-100"
+          >
             <Image
               src={menu.img || "/default.jpg"}
               width={40}
@@ -72,7 +75,7 @@ const CategoriesHome: React.FC<{
               {menu?.categories.map((category: ICategory) => (
                 <div key={category._id} className="w-full break-inside-avoid">
                   <Link
-                    href={`/cat/${category.slug}`}
+                    href={`/category/${category.slug}`}
                     className="w-full flex items-center gap-1 mb-1 font-bold px-2 py-1 border-b text-gray-700 hover:text-gray-500"
                   >
                     <Image
@@ -119,7 +122,7 @@ const CategoriesHome: React.FC<{
 
       <Link
         className="flex items-center space-x-2 text-main text-sm px-2"
-        href="/cat"
+        href="/category"
       >
         More Categories
         <svg

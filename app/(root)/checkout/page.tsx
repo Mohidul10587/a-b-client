@@ -83,7 +83,7 @@ const Checkout = () => {
           phone: deliveryInfo.phone,
 
           orderInfoForStore: {
-            cart,
+            cart: cart,
             user: user._id,
             deliveryInfo,
             paidAmount: calculateTotal(),
@@ -114,12 +114,13 @@ const Checkout = () => {
     try {
       const response = await fetch(`${apiUrl}/order/create`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // 👈 This sends cookies with the request
+
         body: JSON.stringify({
-          cart: result,
+          cart: cart,
           user: user._id,
           deliveryInfo,
           paidAmount: calculateTotal(),
@@ -133,7 +134,7 @@ const Checkout = () => {
       if (response.status === 201) {
         const data = await response.json();
         alert(data.message);
-        router.push("/success/123");
+        router.push("/success/thanks");
       } else {
         console.error("Order creation failed");
       }

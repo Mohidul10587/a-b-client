@@ -7,7 +7,6 @@ import Image from "next/image";
 import { ICategory } from "@/types/category";
 import { IWriter } from "../../../types/writer";
 
-import { fetchWithTokenRefresh } from "../../shared/fetchWithTokenRefresh";
 // import { ISuggestion } from "@/types/suggestion";
 
 interface PageProps {
@@ -222,16 +221,11 @@ const PageBuilder: React.FC<PageProps> = ({
         formDataToSubmit.append("images", image);
       });
 
-      const response = await fetchWithTokenRefresh(
-        `${apiUrl}/element/create-page-element`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-          body: formDataToSubmit, // No need for Content-Type here, browser sets it automatically
-        }
-      );
+      const response = await fetch(`${apiUrl}/element/create-page-element`, {
+        method: "POST",
+        credentials: "include",
+        body: formDataToSubmit, // No need for Content-Type here, browser sets it automatically
+      });
 
       if (response.ok) {
         // Display success modal

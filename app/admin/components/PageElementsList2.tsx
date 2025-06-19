@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { apiUrl } from "@/app/shared/urls";
 import Link from "next/link";
 import LoadingComponent from "../../../components/loading";
-import { fetchWithTokenRefresh } from "@/app/shared/fetchWithTokenRefresh";
 
 interface PageElementsListProps {
   id: string;
@@ -47,13 +46,11 @@ const PageElementsList: React.FC<PageElementsListProps> = ({
   // Update element status
   const handleToggle = async (elementId: string, currentStatus: boolean) => {
     try {
-      const response = await fetchWithTokenRefresh(
+      const response = await fetch(
         `${apiUrl}/element/updateStatus/${elementId}`,
         {
           method: "PATCH", // Change to PATCH
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
+          credentials: "include",
           body: JSON.stringify({ status: !currentStatus }), // Toggle the status
         }
       );

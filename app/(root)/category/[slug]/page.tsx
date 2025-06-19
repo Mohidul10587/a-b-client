@@ -4,18 +4,15 @@ import { Metadata, ResolvingMetadata } from "next";
 import { fetchSettings } from "@/app/shared/fetchSettingsData";
 
 import { FC } from "react";
-import { Props } from "@/types/pageProps";
-
-import { fetchElement } from "@/app/shared/fetchElements";
 
 import ClientComponent from "./ClientComponent";
 
 export async function generateMetadata(
-  { params }: Props,
+  { params }: any,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const resolvedParams = await params;
-  const slug = resolvedParams.id;
+  const slug = resolvedParams.slug;
 
   // Fetch the category data
   const { settings, category } = await fetchData(slug);
@@ -55,14 +52,14 @@ export async function generateMetadata(
     //   icon: image,
     // },
     alternates: {
-      canonical: `${clientSideUrl}/cat/${category.slug}`,
+      canonical: `${clientSideUrl}/category/${category.slug}`,
     },
   };
 }
 
-const IndexPage: FC<Props> = async ({ params }) => {
+const IndexPage: FC<any> = async ({ params }) => {
   const resolvedParams = await params;
-  const slug = resolvedParams.id;
+  const slug = resolvedParams.slug;
 
   // Destructure the object returned by getData
   const {

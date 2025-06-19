@@ -126,9 +126,7 @@ const IndexPage: React.FC = () => {
         } else {
           throw new Error("Failed to fetch categories");
         }
-      } catch (error) {
-        
-      }
+      } catch (error) {}
     };
     fetchPublishers();
     fetchSuggestion();
@@ -190,14 +188,11 @@ const IndexPage: React.FC = () => {
       }
     }
 
-    const finalDescription = processContent(description);
-    const finalShortDescription = processContent(shortDescription);
-
     const updatedData = {
       ...data,
 
-      description: finalDescription,
-      shortDescription: finalShortDescription,
+      description: processContent(description),
+      shortDescription: processContent(shortDescription),
     };
 
     try {

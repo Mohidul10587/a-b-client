@@ -46,12 +46,10 @@ const IndexPage: React.FC = () => {
     metaImg: "",
   });
 
-  const {
-    data: response,
-    error,
-    mutate,
-    isLoading,
-  } = useSWR(`writer/singleWriterForWriterEditPage/${id}`, fetcher);
+  const { data: response } = useSWR(
+    `writer/singleWriterForWriterEditPage/${id}`,
+    fetcher
+  );
 
   useEffect(() => {
     if (response?.respondedData) {
@@ -76,13 +74,10 @@ const IndexPage: React.FC = () => {
     if (!data.title) return openModal("Title is required.");
     if (!data.img) return openModal("Photo is required.");
 
-    const finalDescription = processContent(description);
-    const finalShortDescription = processContent(shortDescription);
-
     const updatedData = {
       ...data,
-      description: finalDescription,
-      shortDescription: finalShortDescription,
+      description: processContent(description),
+      shortDescription: processContent(shortDescription),
     };
 
     try {

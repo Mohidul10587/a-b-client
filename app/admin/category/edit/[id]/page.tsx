@@ -14,7 +14,6 @@ import { ICategory } from "../../add/page";
 import { fetcher } from "@/app/shared/fetcher";
 import { processContent } from "@/app/shared/processContent";
 import { apiUrl } from "@/app/shared/urls";
-import QnA from "@/components/QnA";
 
 const IndexPage: React.FC = () => {
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
@@ -233,8 +232,6 @@ const IndexPage: React.FC = () => {
               </div>
             </div>
             <Keywords data={data} setData={setData} />
-
-            <QnA data={data} setData={setData} />
           </div>
         </div>
         <Modal

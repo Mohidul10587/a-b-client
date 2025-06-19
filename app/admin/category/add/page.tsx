@@ -5,7 +5,6 @@ import Modal from "@/components/Modal";
 
 import Image from "next/image";
 import ImageGallery from "@/components/ImageGallery";
-import QnA from "@/components/QnA";
 
 import Keywords from "@/components/Keywords";
 import { processContent } from "@/app/shared/processContent";
@@ -231,8 +230,6 @@ const IndexPage: React.FC = () => {
               </div>
             </div>
             <Keywords data={data} setData={setData} />
-
-            <QnA data={data} setData={setData} />
           </div>
         </div>
         <Modal

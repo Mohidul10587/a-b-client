@@ -3,7 +3,6 @@ import { apiUrl, clientSideUrl } from "@/app/shared/urls";
 import { FC, Key } from "react";
 import { fetchSettings } from "@/app/shared/fetchSettingsData";
 import { headers } from "next/headers";
-import { PropsWithSlagArray } from "@/types/pageProps";
 import { ProductDetails } from "./ProdutDetails";
 import { fetchData } from "@/app/shared/fetchData";
 import { IProduct } from "@/types/product";
@@ -104,7 +103,7 @@ export async function generateStaticParams() {
 }
 
 // Define the server component
-const IndexPage: FC<PropsWithSlagArray> = async ({ params }: any) => {
+const IndexPage: FC<any> = async ({ params }: any) => {
   const resolvedParams = await params;
   const slug = resolvedParams.slug;
   const headersList = await headers();

@@ -50,7 +50,7 @@ const FooterPage = async () => {
               </svg>
             ),
             title: "Categories",
-            link: "/cat",
+            link: "/category",
           },
           {
             icon: (

@@ -33,7 +33,7 @@ const Catagories = async ({ width, height }: CatProps) => {
     <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-2">
       {categories.map((item, index) => (
         <Link
-          href={`/cat/${item.slug}`}
+          href={`/category/${item.slug}`}
           key={index}
           className="group flex items-center justify-center flex-col p-2 border font-bold bg-white"
         >

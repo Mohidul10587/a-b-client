@@ -19,9 +19,6 @@ const DeleteButton: React.FC<ModalProps> = ({
       const response = await fetch(`${apiUrl}/${deleteApiEndPointWithId}`, {
         method: "DELETE",
         credentials: "include",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
       });
       if (response.ok) {
         alert("Successfully deleted");

@@ -2,9 +2,8 @@
 
 import { apiUrl } from "@/app/shared/urls";
 import ProductList from "../ProductList";
-import { Props } from "@/types/pageProps";
 
-const Index: React.FC<Props> = async ({ params }) => {
+const Index: React.FC<any> = async ({ params }) => {
   const resolvedParams = await params;
   const id = resolvedParams.id;
 
