@@ -1,16 +1,22 @@
-import ThirdPartOFHeader from "./ThirdPartOFHeader";
-import SecondPartOfHeader from "./SecondPartOfHeader";
-import FirstPartOfHeder from "./FirstPartOfHeder";
+// Header.tsx (Server Component)
+import {
+  fetchCategories,
+  getPublishers,
+  getWriters,
+} from "@/app/shared/fetchData";
+import HeaderClient from "./HeaderClient"; // Make sure it's exported properly
 
-const Header: React.FC = async () => {
+const Header = async () => {
+  const categories = await fetchCategories();
+  const writers = await getWriters();
+  const publishers = await getPublishers();
+
   return (
-    <div className={` bg-sticky top-0 z-50`}>
-      <div className="container">
-        <FirstPartOfHeder />
-        <SecondPartOfHeader />
-        <ThirdPartOFHeader />
-      </div>
-    </div>
+    <HeaderClient
+      categories={categories}
+      writers={writers}
+      publishers={publishers}
+    />
   );
 };
 

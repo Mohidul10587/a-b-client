@@ -12,7 +12,7 @@ const ThirdPartOFHeader = async () => {
   const publishers = await getPublishers();
 
   return (
-    <div className="flex items-center py-4 bg-white max-w-6xl m-auto">
+    <div className=" items-center py-4 bg-white max-w-6xl m-auto hidden md:flex">
       <div className="group relative">
         <button className="w-24 text-sm  font-medium text-gray-700 hover:text-blue-600 focus:outline-none">
           লেখক

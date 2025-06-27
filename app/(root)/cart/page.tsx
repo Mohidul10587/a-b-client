@@ -12,6 +12,7 @@ import { FormEvent } from "react";
 import Link from "next/link";
 import { getTotalCartCount } from "@/components/AddToCart";
 import { FaHeart, FaTrashAlt } from "react-icons/fa";
+import { cartIcon, leftIcon } from "./icons";
 
 const Cart = () => {
   const router = useRouter();
@@ -238,17 +239,7 @@ const Cart = () => {
             <Link href="/" className="">
               Home
             </Link>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="8"
-              height="8"
-              viewBox="0 0 1024 1024"
-            >
-              <path
-                fill="currentColor"
-                d="M271.653 1023.192c-8.685 0-17.573-3.432-24.238-10.097c-13.33-13.33-13.33-35.144 0-48.474L703.67 508.163L254.08 58.573c-13.33-13.331-13.33-35.145 0-48.475s35.143-13.33 48.473 0L776.38 483.925c13.33 13.33 13.33 35.143 0 48.473l-480.492 480.694c-6.665 6.665-15.551 10.099-24.236 10.099z"
-              />
-            </svg>
+            {leftIcon}
             <Link href="/cart" className="">
               Cart
             </Link>
@@ -258,17 +249,7 @@ const Cart = () => {
           {cart.length === 0 ? (
             <div className="flex flex-col items-center justify-center">
               <div className="flex items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  version="1.1"
-                  viewBox="0 0 1024 1024"
-                  width="100"
-                  height="100"
-                  fill="#aaaaaa"
-                  aria-hidden="true"
-                >
-                  <path d="M356.7 726.2c-30.6 0-55.5 24.8-55.5 55.5 0 30.6 24.8 55.5 55.5 55.4 30.6 0 55.5-24.8 55.5-55.4 0-30.6-24.8-55.5-55.5-55.5z m0 17.1c21.2 0 38.4 17.2 38.4 38.4 0 21.2-17.2 38.4-38.4 38.4-21.2 0-38.4-17.2-38.4-38.4 0-21.2 17.2-38.4 38.4-38.4z m319.1-17.1c-30.6 0-55.5 24.8-55.4 55.5 0 30.6 24.8 55.5 55.4 55.4 30.6 0 55.5-24.8 55.5-55.4 0-30.6-24.8-55.5-55.5-55.5z m0 17.1c21.2 0 38.4 17.2 38.4 38.4 0 21.2-17.2 38.4-38.4 38.4-21.2 0-38.4-17.2-38.4-38.4 0-21.2 17.2-38.4 38.4-38.4z m-552.8-486.9c4.8 0 9.3 0.3 15.4 1.4 9.3 1.6 18.4 4.6 27 9.4 15.4 8.6 27.5 22 35 40.7l1 2.9 0.4 1.3 8.3 45.7 11.1 63.9 24.8 144.8 7.2 42.8c6.1 34.3 38 60 76 61l2.4 0 358.2 0c38.4 0 71-25.1 78.1-59.4l0.4-2.1 50.1-248.1c0.9-4.6 5.4-7.6 10.1-6.7 4.3 0.9 7.2 4.8 6.8 9.1l-0.1 1-50.2 247.8c-7.4 42.8-46.6 74.3-92.7 75.4l-2.5 0.1-358.2 0c-47.1 0-87.5-31.7-95.2-75.2l-24.4-143.5-15.4-88.8-9-50.4-2.4-13.5-0.9-2.2c-5.6-13.9-14.2-23.7-25-30.4l-2.2-1.3c-6.8-3.8-14.2-6.2-21.7-7.5-4.1-0.7-7.3-1-10.4-1.1l-2 0-87.9 0c-4.7 0-8.5-3.8-8.6-8.5 0-4.4 3.3-8 7.6-8.5l1-0.1 87.9 0z m283.6 265.2l0 17.1-58 0 0-17.1 58 0z m92.2 0l0 17.1-58.1 0 0-17.1 58.1 0z m92.1 0l0 17.1-58 0 0-17.1 58 0z m92.2 0l0 17.1-58 0 0-17.1 58 0z m-329.8-155.8l0 17.1-58 0 0-17.1 58 0z m92.2 0l0 17.1-58 0 0-17.1 58 0z m92.1 0l0 17.1-58 0 0-17.1 58 0z m92.2 0l0 17.1-58 0 0-17.1 58 0z m92.2 0l0 17.1-58.1 0 0-17.1 58.1 0z"></path>
-                </svg>
+                {cartIcon}
                 <div>
                   <p className="text-gray-600">Your shopping cart is empty</p>
                   <span>Add your favorite items in it.</span>
@@ -290,73 +271,84 @@ const Cart = () => {
               </Link>
             </div>
           ) : (
-            <div className="flex justify-between">
-              <div className="w-8/12">
+            <div className="md:flex md:justify-between md:gap-8">
+              {/* Cart Items */}
+              <div className="md:w-8/12 space-y-6">
                 {cart.map((item, index) => (
-                  <div key={index}>
-                    <div className="flex border-b border-gray-300 p-4 items-center">
-                      {/* Product Image */}
-                      <input
-                        type="checkbox"
-                        name=""
-                        checked={item.isChecked}
-                        onChange={(e) =>
-                          updateProductCheckedStatus(
-                            item.variantId,
-                            e.target.checked
-                          )
-                        }
-                        className="w-5 h-5 accent-gray-700 rounded-full border-2 border-gray-700 mr-4"
-                        id=""
-                      />
-                      <div className="w-20 h-28 relative flex-shrink-0">
-                        <Image
-                          src={item.img}
-                          alt={item.title}
-                          layout="fill"
-                          objectFit="cover"
-                          className="rounded"
+                  <div
+                    key={index}
+                    className="border-b border-gray-300 pb-4 last:border-0"
+                  >
+                    <div className="md:flex md:items-center md:justify-between">
+                      {/* Left: checkbox + image + details */}
+                      <div className="flex items-center space-x-4">
+                        <input
+                          type="checkbox"
+                          checked={item.isChecked}
+                          onChange={(e) =>
+                            updateProductCheckedStatus(
+                              item.variantId,
+                              e.target.checked
+                            )
+                          }
+                          className="w-5 h-5 accent-gray-700 rounded-full border-2 border-gray-700 mt-2 flex-shrink-0"
+                          aria-label={`Select ${item.title}`}
                         />
-                      </div>
 
-                      {/* item Details */}
-                      <div className="ml-4 flex-grow">
-                        <h3 className="font-semibold text-lg">{item.title}</h3>
-                        <p className="text-sm text-gray-500">{item.author}</p>
-                        <p className="text-red-600 text-sm mt-1">
-                          Only {availableQuantity} copies available
-                        </p>
+                        <div className="w-20 h-28 relative flex-shrink-0 rounded overflow-hidden shadow-sm">
+                          <Image
+                            src={item.img}
+                            alt={item.title}
+                            layout="fill"
+                            objectFit="cover"
+                            className="rounded"
+                          />
+                        </div>
 
-                        {/* Actions */}
-                        <div className="flex items-center mt-2">
-                          <button
-                            className="flex items-center text-gray-600 hover:text-red-600"
-                            onClick={() => deleteItem(item._id, item.variantId)}
-                          >
-                            <FaTrashAlt className="mr-1" />
-                            Remove
-                          </button>
-                          <button className="flex items-center text-gray-600 hover:text-red-600 ml-4">
-                            <FaHeart className="mr-1" />
-                            Wishlist
-                          </button>
+                        <div className="flex flex-col">
+                          <h3 className="font-semibold text-lg text-gray-900">
+                            {item.title}
+                          </h3>
+                          <p className="text-sm text-gray-500">{item.author}</p>
+                          <p className="text-red-600 text-sm mt-1">
+                            Only {availableQuantity} copies available
+                          </p>
+
+                          <div className="flex space-x-6 mt-3 text-gray-600 text-sm">
+                            <button
+                              onClick={() =>
+                                deleteItem(item._id, item.variantId)
+                              }
+                              className="flex items-center gap-1 hover:text-red-600 transition"
+                            >
+                              <FaTrashAlt />
+                              Remove
+                            </button>
+                            <button className="flex items-center gap-1 hover:text-red-600 transition">
+                              <FaHeart />
+                              Wishlist
+                            </button>
+                          </div>
                         </div>
                       </div>
 
-                      {/* Quantity and Price */}
-                      <div className="text-right">
-                        <div className="flex items-center mb-2">
+                      {/* Right: Quantity & Price */}
+                      <div className="mt-4 md:mt-0 text-right flex md:flex-col justify-center items-center gap-x-2 md:items-end md:space-y-2 min-w-[110px]">
+                        <div className="flex items-center border border-gray-300 rounded">
                           <button
-                            className="px-2 py-1 border border-gray-400"
-                            onClick={() => {
-                              decreaseQuantity(item._id, item.variantId);
-                            }}
+                            className="px-3 py-1 text-lg font-semibold hover:bg-gray-100 transition"
+                            onClick={() =>
+                              decreaseQuantity(item._id, item.variantId)
+                            }
+                            aria-label="Decrease quantity"
                           >
-                            -
+                            –
                           </button>
-                          <span className="px-3">{item.quantity}</span>
+                          <span className="px-4 text-lg font-medium">
+                            {item.quantity}
+                          </span>
                           <button
-                            className="px-2 py-1 border border-gray-400"
+                            className="px-3 py-1 text-lg font-semibold hover:bg-gray-100 transition"
                             onClick={() =>
                               increaseQuantity(
                                 item.type,
@@ -365,54 +357,56 @@ const Cart = () => {
                                 item.quantity
                               )
                             }
+                            aria-label="Increase quantity"
                           >
                             +
                           </button>
                         </div>
-                        <p className="font-semibold text-lg">
-                          {item.price * item.quantity} Tk.
+                        <p className="font-semibold text-lg text-gray-900">
+                          {(item.price * item.quantity).toLocaleString()} Tk.
                         </p>
                         <p className="text-gray-400 line-through text-sm">
-                          {item.price * item.quantity} Tk.
+                          {(item.price * item.quantity).toLocaleString()} Tk.
                         </p>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className=" border  w-4/12 max-w-sm p-4 bg-white rounded-xl shadow-md  border-gray-300 sticky top-5">
-                <h2 className="text-lg font-semibold mb-4">Checkout Summary</h2>
-                <div className="space-y-2 text-sm text-gray-700">
+
+              {/* Checkout Summary */}
+              <div className="md:w-4/12 max-w-sm bg-white rounded-xl shadow-md border border-gray-300 p-6 sticky top-5 self-start mt-10 md:mt-0">
+                <h2 className="text-xl font-semibold mb-6 text-gray-900">
+                  Checkout Summary
+                </h2>
+                <div className="space-y-4 text-gray-700 text-sm">
                   <div className="flex justify-between">
                     <span>Subtotal</span>
                     <span>
-                      {settings?.currencySymbol} {"  "}
+                      {settings?.currencySymbol}{" "}
                       {totalPrice.toLocaleString("en-BD")}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span>Online Fee</span>
                     <span>
-                      {" "}
-                      {settings?.currencySymbol} {"  "}
+                      {settings?.currencySymbol}{" "}
                       {totalShippingInside.toLocaleString("en-BD")}
                     </span>
                   </div>
-                  <div className="flex justify-between font-medium">
+                  <div className="flex justify-between font-medium text-gray-900">
                     <span>Total</span>
                     <span>
-                      {" "}
-                      {settings?.currencySymbol} {"  "}
+                      {settings?.currencySymbol}{" "}
                       {(totalPrice + totalShippingInside).toLocaleString(
                         "en-BD"
                       )}
                     </span>
                   </div>
-                  <div className="flex justify-between font-bold text-gray-900 border-t pt-2">
+                  <div className="flex justify-between font-bold text-gray-900 border-t pt-3">
                     <span>Payable Total</span>
                     <span>
-                      {" "}
-                      {settings?.currencySymbol} {"  "}
+                      {settings?.currencySymbol}{" "}
                       {(totalPrice + totalShippingInside).toLocaleString(
                         "en-BD"
                       )}
@@ -420,21 +414,18 @@ const Cart = () => {
                   </div>
                 </div>
 
-                <div className="mt-5 space-y-3">
-                  <button
-                    onClick={() => {
-                      if (sessionStatus === "unauthenticated") {
-                        setIsModalOpen(true);
-                      } else {
-                        router.push("/checkout");
-                      }
-                    }}
-                    className="w-full bg-blue-600 text-white font-medium py-2 rounded-md hover:bg-blue-700 transition flex items-center justify-center gap-2"
-                  >
-                    Proceed to Checkout
-                    <span>→</span>
-                  </button>
-                </div>
+                <button
+                  onClick={() => {
+                    if (sessionStatus === "unauthenticated") {
+                      setIsModalOpen(true);
+                    } else {
+                      router.push("/checkout");
+                    }
+                  }}
+                  className="mt-6 w-full bg-blue-600 hover:bg-blue-700 transition text-white font-semibold py-3 rounded-md flex items-center justify-center gap-2"
+                >
+                  Proceed to Checkout <span>→</span>
+                </button>
               </div>
             </div>
           )}

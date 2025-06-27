@@ -65,7 +65,7 @@ const Search = () => {
   const { settings } = useData();
 
   return (
-    <div className="w-full max-w-xl border border-blue-500 rounded-full">
+    <div className="w-full max-w-xl border border-blue-500 rounded-full hidden md:block">
       <div className="relative w-full" ref={containerRef}>
         <div className="w-full flex bg-white items-center overflow-hidden rounded-full">
           <input
