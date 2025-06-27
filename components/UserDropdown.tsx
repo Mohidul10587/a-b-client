@@ -42,16 +42,18 @@ const DropdownMenu: FC<{ user: any }> = ({ user }) => {
     <div className="relative inline-block text-left z-50">
       <button
         onClick={toggleDropdown}
-        className=" flex items-center gap-2 px-2 py-1 bg-white border rounded-lg shadow-sm hover:bg-gray-100"
+        className=" flex items-center gap-2 px-1 bg-white border rounded-lg shadow-sm hover:bg-gray-100"
       >
         <Image
           src={`${user?.image || "/defaultUser.jpeg"}`}
           width={30}
           height={30}
           alt={"User"}
-          className="rounded-full"
+          className="rounded-full "
         />
-        <span className="truncate">{user?.name || "Mr. User"}</span>
+        <span className="truncate hidden md:block">
+          {user?.name || "Mr. User"}
+        </span>
 
         <FaChevronCircleDown className="hover:text-blue-600" size={18} />
       </button>

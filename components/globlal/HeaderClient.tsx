@@ -35,7 +35,7 @@ const HeaderClient = ({
   };
 
   return (
-    <div className="bg-sticky top-0 z-50 w-full">
+    <div className="bg-sticky top-0 z-50 w-full md:mt-0 mt-1">
       {/* First Part */}
       <div className="bg-main hidden md:block">
         <div className="max-w-6xl mx-auto">
@@ -44,7 +44,7 @@ const HeaderClient = ({
       </div>
 
       {/* Second Part */}
-      <div className="flex items-center justify-between px-2 py-2 md:py-3 max-w-6xl mx-auto w-full">
+      <div className="flex items-center justify-between px-2  md:py-1 max-w-6xl mx-auto w-full">
         <button
           type="button"
           className="text-2xl md:hidden"
@@ -66,12 +66,10 @@ const HeaderClient = ({
         <div className="hidden md:flex flex-1 mx-4">
           <Search />
         </div>
-
-        <div className="flex items-center gap-x-2">
-          <div className="md:hidden">
-            <Search />
-          </div>
-
+        <div className="md:hidden">
+          <Search />
+        </div>
+        <div className="flex items-center gap-x-4">
           <Link href="/cart" className="relative">
             <IoCartOutline className="text-2xl hover:text-blue-600" />
             {numberOfCartProduct > 0 && (
