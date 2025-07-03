@@ -237,7 +237,7 @@ const ProductList: React.FC<{ productsS: IProduct[]; id: string }> = ({
                   <h2 className="text-sm line-clamp-1">{item.title}</h2>
                   <p className="text-sm text-gray-600">
                     {settings?.currencySymbol}{" "}
-                    {new Intl.NumberFormat().format(item.price)}
+                    {new Intl.NumberFormat().format(item.sellingPrice)}
                   </p>
                 </div>
               </Link>
@@ -285,7 +285,7 @@ const ProductList: React.FC<{ productsS: IProduct[]; id: string }> = ({
                     <h3 className="text-sm line-clamp-1">{product.title}</h3>
                     <p className="text-sm text-gray-600">
                       {settings?.currencySymbol}{" "}
-                      {new Intl.NumberFormat().format(product.price)}
+                      {new Intl.NumberFormat().format(product.sellingPrice)}
                     </p>
                   </div>
                 </div>

@@ -105,7 +105,9 @@ const Search = () => {
                           <div className="flex justify-between w-full items-center line-clamp-1">
                             <p className="text-gray-500">
                               {settings?.currencySymbol}{" "}
-                              {new Intl.NumberFormat().format(product.price)}
+                              {new Intl.NumberFormat().format(
+                                product.sellingPrice
+                              )}
                             </p>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"

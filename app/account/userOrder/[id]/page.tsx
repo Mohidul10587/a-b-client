@@ -51,7 +51,7 @@ const OrderDetails = () => {
               <strong>Title:</strong> {product.title}
             </p>
             <p>
-              <strong>Price:</strong> ${product.price}
+              <strong>Price:</strong> ${product.sellingPrice}
             </p>
             <p>
               <strong>Stock Status:</strong> {product.stockStatus}

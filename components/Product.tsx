@@ -15,20 +15,22 @@ const Product: React.FC<IProduct> = ({
   existingQnt,
   featured,
   sele,
-  price,
-  unprice,
+  sellingPrice,
+  regularPrice,
   category,
   stockStatus,
   shippingInside,
   shippingOutside,
 }) => {
-  const formattedPrice = new Intl.NumberFormat().format(price);
-  const formattedUnprice = new Intl.NumberFormat().format(unprice);
+  const formattedPrice = new Intl.NumberFormat().format(sellingPrice);
+  const formattedUnprice = new Intl.NumberFormat().format(regularPrice);
   // Calculate discount percentage
   const discount =
-    unprice > price ? Math.round(((unprice - price) / unprice) * 100) : 0;
-  // Conditional rendering logic for unprice
-  const showUnprice = unprice > price;
+    regularPrice > sellingPrice
+      ? Math.round(((regularPrice - sellingPrice) / regularPrice) * 100)
+      : 0;
+  // Conditional rendering logic for regularPrice
+  const showUnprice = regularPrice > sellingPrice;
   const { settings } = useData();
   return (
     <div className="group relative border bg-white block rounded h-full">
@@ -65,7 +67,7 @@ const Product: React.FC<IProduct> = ({
           <h2 className="line-clamp-2 mb-2 text-base font-semibold text-black">
             {title}
           </h2>
-          {price <= 0 ? (
+          {sellingPrice <= 0 ? (
             <div className="text-sm font-normal">
               {settings?.priceZero || "Currently Unavailable"}
             </div>
@@ -92,8 +94,8 @@ const Product: React.FC<IProduct> = ({
           _id: _id,
           type: "main",
           img: img,
-          price: price,
-          unprice: unprice,
+          sellingPrice: sellingPrice,
+          regularPrice: regularPrice,
           title: title,
           existingQnt: existingQnt,
           shippingInside: shippingInside,

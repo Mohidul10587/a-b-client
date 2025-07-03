@@ -8,7 +8,7 @@ interface Deal {
   title: string;
   link: string;
   img: string;
-  price: string;
+  sellingPrice: string;
   originalPrice?: string;
   discount?: string;
   merchant: string;
@@ -116,7 +116,9 @@ const Table: React.FC<TableProps> = ({ items, title, link }) => {
                 </td>
                 <td className="py-3 px-6 text-sm">
                   <div className="flex items-center">
-                    <span className="font-semibold text-lg">{deal.price}</span>
+                    <span className="font-semibold text-lg">
+                      {deal.sellingPrice}
+                    </span>
                     {deal.originalPrice && (
                       <del className="ml-2 text-gray-400 font-normal">
                         {deal.originalPrice}

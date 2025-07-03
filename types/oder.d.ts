@@ -7,7 +7,7 @@ export interface IOrder {
     [x: string]: ReactNode;
     _id: string;
     title: string;
-    price: number;
+    sellingPrice: number;
     stockStatus: string;
     photo: string;
     link: string;

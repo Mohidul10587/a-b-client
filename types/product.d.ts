@@ -16,8 +16,8 @@ export interface IProduct {
   featured: string;
   existingQnt: number;
   sele: string;
-  price: number;
-  unprice: number;
+  sellingPrice: number;
+  regularPrice: number;
   category: any;
   writer: any;
   stockStatus: string;

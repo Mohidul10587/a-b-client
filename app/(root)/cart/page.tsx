@@ -363,10 +363,12 @@ const Cart = () => {
                           </button>
                         </div>
                         <p className="font-semibold text-lg text-gray-900">
-                          {(item.price * item.quantity).toLocaleString()} Tk.
+                          {(item.sellingPrice * item.quantity).toLocaleString()}{" "}
+                          Tk.
                         </p>
                         <p className="text-gray-400 line-through text-sm">
-                          {(item.price * item.quantity).toLocaleString()} Tk.
+                          {(item.sellingPrice * item.quantity).toLocaleString()}{" "}
+                          Tk.
                         </p>
                       </div>
                     </div>
@@ -464,7 +466,7 @@ function calculateCartTotals(cart: any) {
 
   return checkedProducts.reduce(
     (totals: any, item: any) => {
-      totals.totalPrice += item.price * item.quantity;
+      totals.totalPrice += item.sellingPrice * item.quantity;
       totals.totalShippingInsideWithOffer += item.shippingInside * 1;
       totals.totalShippingOutsideWithOffer += item.shippingOutside * 1;
       totals.totalShippingInside += item.shippingInside * item.quantity;

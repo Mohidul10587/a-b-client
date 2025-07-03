@@ -36,7 +36,7 @@ export const ProductDetails = ({
   settings,
   allProducts,
 }: ProductDetailsProps) => {
-  // Conditional check to hide the section if both price and unprice are invalid
+  // Conditional check to hide the section if both sellingPrice and regularPrice are invalid
 
   const addToCart = (product: any, quantity: number) => {
     const existingCart = localStorage.getItem("cartData");
@@ -49,7 +49,7 @@ export const ProductDetails = ({
       const sortedProduct = {
         _id: product._id,
         img: product.img,
-        price: product.price,
+        sellingPrice: product.sellingPrice,
         title: product.title,
       };
       cart.push({ ...sortedProduct, quantity });
@@ -115,9 +115,9 @@ export const ProductDetails = ({
             {/* Price Section */}
             <div className="space-y-2">
               <p className="text-2xl font-semibold text-red-500">
-                TK. {product.price}{" "}
+                TK. {product.sellingPrice}{" "}
                 <span className="line-through text-gray-400">
-                  TK. {product.price}
+                  TK. {product.sellingPrice}
                 </span>
               </p>
               <p className="text-sm text-green-600">You Save TK. 75 (25%)</p>
@@ -166,7 +166,9 @@ export const ProductDetails = ({
                 onClick={() => {
                   const message = `Hello, I would like to buy ${
                     product.title || "this product"
-                  } (Price: TK. ${product.price || "N/A"}) via WhatsApp.`;
+                  } (Price: TK. ${
+                    product.sellingPrice || "N/A"
+                  }) via WhatsApp.`;
                   const whatsappUrl = `https://wa.me/+8801774361705?text=${encodeURIComponent(
                     message
                   )}`; // Replace 1234567890 with your WhatsApp number

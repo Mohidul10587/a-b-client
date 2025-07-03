@@ -56,7 +56,7 @@ const Checkout = () => {
 
   const result = cart.map((product: any) => ({
     id: product._id,
-    priceWhenSubmitOrder: product.price,
+    priceWhenSubmitOrder: product.sellingPrice,
     quantity: product.quantity,
   }));
 
@@ -145,7 +145,7 @@ const Checkout = () => {
 
   const calculateTotal = () => {
     return cart
-      .reduce((total, item) => total + item.price * item.quantity, 0)
+      .reduce((total, item) => total + item.sellingPrice * item.quantity, 0)
       .toFixed(2);
   };
 
@@ -187,7 +187,7 @@ const Checkout = () => {
                       </div>
                     </div>
                     <p className="font-medium text-lg text-blue-500">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      ${(item.sellingPrice * item.quantity).toFixed(2)}
                     </p>
                   </li>
                 ))}

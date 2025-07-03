@@ -92,7 +92,9 @@ const Search = () => {
                             </h3>
                             <p className="text-sm text-gray-500">
                               {settings?.currencySymbol}{" "}
-                              {new Intl.NumberFormat().format(item.price)}
+                              {new Intl.NumberFormat().format(
+                                item.sellingPrice
+                              )}
                             </p>
                           </div>
                         </div>

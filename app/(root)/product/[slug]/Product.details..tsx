@@ -13,7 +13,7 @@ interface ProductProps {
   featured: string;
   stockStatus: string;
   sele: string;
-  price: number;
+  sellingPrice: number;
   withCompareProductId_leftSide: string;
   categoryId: string;
 }
@@ -25,7 +25,7 @@ const Product: React.FC<ProductProps> = ({
   title,
   featured,
   sele,
-  price,
+  sellingPrice,
   stockStatus,
   withCompareProductId_leftSide,
   categoryId,
@@ -58,7 +58,7 @@ const Product: React.FC<ProductProps> = ({
           <h2 className="line-clamp-2 mb-2 text-base font-semibold text-black">
             {title}
           </h2>
-          {price <= 0 ? (
+          {sellingPrice <= 0 ? (
             <div className="text-sm font-normal">
               {settings?.priceZero || "Currently Unavailable"}
             </div>
@@ -66,7 +66,7 @@ const Product: React.FC<ProductProps> = ({
             <div className="text-sm font-normal flex items-center justify-between">
               <p className="font-bold">
                 {settings?.currencySymbol}{" "}
-                {new Intl.NumberFormat().format(price)}
+                {new Intl.NumberFormat().format(sellingPrice)}
               </p>
               <span className="text-main">{stockStatus}</span>
             </div>

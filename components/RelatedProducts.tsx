@@ -7,7 +7,7 @@ const RelatedProducts = () => {
       id: 1,
       image: "https://example.com/book-cover1.jpg",
       productName: "The Lost Treasure",
-      price: 450,
+      sellingPrice: 450,
       discount: 15,
       author: "Michael Scott",
     },
@@ -15,7 +15,7 @@ const RelatedProducts = () => {
       id: 2,
       image: "https://example.com/book-cover2.jpg",
       productName: "Whispers in the Wind",
-      price: 350,
+      sellingPrice: 350,
       discount: 10,
       author: "Emily Bronte",
     },
@@ -23,7 +23,7 @@ const RelatedProducts = () => {
       id: 3,
       image: "https://example.com/book-cover3.jpg",
       productName: "Journey to the Unknown",
-      price: 550,
+      sellingPrice: 550,
       discount: 20,
       author: "Arthur Conan Doyle",
     },
@@ -31,7 +31,7 @@ const RelatedProducts = () => {
       id: 4,
       image: "https://example.com/book-cover4.jpg",
       productName: "Mysteries of the Ocean",
-      price: 499,
+      sellingPrice: 499,
       discount: 5,
       author: "Jacques Cousteau",
     },
@@ -58,18 +58,18 @@ const RelatedProducts = () => {
                 {product?.discount ? (
                   <span>
                     <span className="line-through text-sm text-gray-600">
-                      TK. {product?.price.toFixed(2)}
+                      TK. {product?.sellingPrice.toFixed(2)}
                     </span>
                     <span className="ml-2 text-[#0397d3] text-sm">
                       TK.{" "}
                       {(
-                        product.price -
-                        (product.price * product.discount) / 100
+                        product.sellingPrice -
+                        (product.sellingPrice * product.discount) / 100
                       ).toFixed(2)}
                     </span>
                   </span>
                 ) : (
-                  <>TK. {product?.price.toFixed(2)}</>
+                  <>TK. {product?.sellingPrice.toFixed(2)}</>
                 )}
               </div>
             </div>

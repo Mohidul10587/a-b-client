@@ -138,7 +138,7 @@ const IndexPage: FC<any> = async ({ params }: any) => {
     const productUrl = `${fullUrl}/product/${slug}`;
 
     // Prepare WhatsApp message
-    const message = `Hello, I am interested in purchasing the following product:\n\nProduct Link: ${productUrl}\nProduct Name: ${product.title}\nPrice: ${settings.currencySymbol} ${product.price}\n\nThank you!`;
+    const message = `Hello, I am interested in purchasing the following product:\n\nProduct Link: ${productUrl}\nProduct Name: ${product.title}\nPrice: ${settings.currencySymbol} ${product.sellingPrice}\n\nThank you!`;
 
     // Encode message for URL
     const encodedMessage = encodeURIComponent(message);

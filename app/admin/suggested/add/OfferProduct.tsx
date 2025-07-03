@@ -96,7 +96,7 @@ const OfferProduct: React.FC<OfferProductProps> = ({ items, onRemove }) => {
                 />
                 <div>
                   <h2 className="text-sm line-clamp-1">{item.title}</h2>
-                  <p className="text-sm text-gray-600">{item.price}</p>
+                  <p className="text-sm text-gray-600">{item.sellingPrice}</p>
                 </div>
               </Link>
               <button

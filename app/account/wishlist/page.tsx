@@ -113,11 +113,15 @@ const Wishlist = () => {
                     <div className="flex items-center space-x-1">
                       <p className="text-gray-500 font-bold">
                         {settings?.currencySymbol}{" "}
-                        {new Intl.NumberFormat().format(item.productId.price)}
+                        {new Intl.NumberFormat().format(
+                          item.productId.sellingPrice
+                        )}
                       </p>
                       <del className="text-gray-500">
                         {settings?.currencySymbol}{" "}
-                        {new Intl.NumberFormat().format(item.productId.unprice)}
+                        {new Intl.NumberFormat().format(
+                          item.productId.regularPrice
+                        )}
                       </del>
                     </div>
                   </div>

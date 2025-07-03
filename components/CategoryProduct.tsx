@@ -34,11 +34,11 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({
       );
     }
 
-    // Sort the filtered products by price
+    // Sort the filtered products by sellingPrice
     if (sortDirection === "asc") {
-      filteredProducts.sort((a, b) => a.price - b.price);
+      filteredProducts.sort((a, b) => a.sellingPrice - b.sellingPrice);
     } else if (sortDirection === "desc") {
-      filteredProducts.sort((a, b) => b.price - a.price);
+      filteredProducts.sort((a, b) => b.sellingPrice - a.sellingPrice);
     }
 
     setDisplayedProducts(filteredProducts.slice(0, visibleCount));

@@ -91,7 +91,7 @@ const ProductList: React.FC<{ products: IProduct[] }> = ({ products }) => {
                     <h3 className="text-sm line-clamp-1">{product.title}</h3>
                     <p className="text-sm text-gray-600">
                       {settings?.currencySymbol}
-                      {product.price}
+                      {product.sellingPrice}
                     </p>
                   </div>
                 </div>

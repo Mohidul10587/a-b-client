@@ -4,7 +4,7 @@ async function fetchColor() {
   try {
     // Fetch color from the API endpoint
     const response = await fetch(
-      `https://price-in-kenya-server-3.onrender.com/settings`
+      `https://sellingPrice-in-kenya-server-3.onrender.com/settings`
     );
 
     // Check if the response is ok (status code in the range 200-299)
@@ -24,7 +24,6 @@ async function fetchColor() {
 
     // Save the updated config file
     fs.writeFileSync(configPath, config, "utf8");
-    
   } catch (error) {
     console.error("Failed to fetch the color:", error);
   }

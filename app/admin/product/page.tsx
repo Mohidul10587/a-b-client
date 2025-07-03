@@ -118,7 +118,7 @@ const IndexPage = () => {
                   />
                 </td>
                 <td className="px-6 py-4">{product.title}</td>
-                <td className="px-6 py-4">৳ {product.price}</td>
+                <td className="px-6 py-4">৳ {product.sellingPrice}</td>
                 <td className="px-6 py-4">{product.writer?.title || "-"}</td>
                 <td className="py-3 px-4 text-right space-x-2">
                   <Link
@@ -171,7 +171,9 @@ const IndexPage = () => {
               />
               <div>
                 <p className="font-semibold">{product.title}</p>
-                <p className="text-sm text-gray-600">৳ {product.price}</p>
+                <p className="text-sm text-gray-600">
+                  ৳ {product.sellingPrice}
+                </p>
                 <p className="text-sm text-gray-500">
                   Writer: {product.writer?.title || "N/A"}
                 </p>

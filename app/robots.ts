@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: "/admin/",
     },
-    sitemap: "https://price-in-kenya-client.vercel.app",
+    sitemap: "https://sellingPrice-in-kenya-client.vercel.app",
   };
 }

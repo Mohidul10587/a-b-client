@@ -113,8 +113,8 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
         type: product.type,
         img: product.img,
         variantId: product.variantId,
-        price: product.price,
-        unprice: product.unprice,
+        sellingPrice: product.sellingPrice,
+        regularPrice: product.regularPrice,
         title: product.title,
         shippingInside: product.shippingInside,
         shippingOutside: product.shippingOutside,
@@ -236,7 +236,8 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
               </p>
               <button
                 disabled={
-                  existingQuantity <= thisProductQuantity || product.price < 1
+                  existingQuantity <= thisProductQuantity ||
+                  product.sellingPrice < 1
                 }
                 onClick={() => increaseQuantity(product._id, product.variantId)}
                 className="bg-blue-600 text-white md:py-2 py-1 px-1"
@@ -257,7 +258,7 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
           ) : (
             <button
               type="button"
-              disabled={existingQuantity < 1 || product.price < 1}
+              disabled={existingQuantity < 1 || product.sellingPrice < 1}
               className="bg-blue-600 w-full font-bold text-center text-white p-1.5 rounded block"
               onClick={() =>
                 addToCart(
@@ -307,8 +308,8 @@ const addToDataBase = async (
     type: storedProduct.type,
     img: storedProduct.img,
     variantId: storedProduct.variantId,
-    price: storedProduct.price,
-    unprice: storedProduct.unprice,
+    sellingPrice: storedProduct.sellingPrice,
+    regularPrice: storedProduct.regularPrice,
     title: storedProduct.title,
     shippingInside: storedProduct.shippingInside,
     shippingOutside: storedProduct.shippingOutside,

@@ -8,7 +8,7 @@ interface Product {
   img?: string;
   title?: string;
   slug: string;
-  price?: number;
+  sellingPrice?: number;
   writer: { title: string };
 }
 
@@ -64,7 +64,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ products }) => {
                         {product.writer?.title || ""}
                       </h3>
                       <p className="text-xs text-gray-500">
-                        TK. {product.price || "N/A"}{" "}
+                        TK. {product.sellingPrice || "N/A"}{" "}
                         {product.originalPrice && (
                           <span className="line-through">
                             TK. {product.originalPrice}

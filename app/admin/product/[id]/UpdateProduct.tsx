@@ -41,10 +41,10 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
   const [subcategory, setSubcategory] = useState("");
 
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const [price, setPrice] = useState(100);
+  const [sellingPrice, setPrice] = useState(100);
   const [rating, setRating] = useState(100);
 
-  const [unprice, setunPrice] = useState(0);
+  const [regularPrice, setunPrice] = useState(0);
   const [stockStatus, setStockStatus] = useState("In Stock");
   const [writer, setWriter] = useState("");
   const [writerId, setWriterId] = useState("");
@@ -117,10 +117,10 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
           setCategory(data.category);
           setCategoryId(data.category._id);
           setSubcategory(data.subCategory);
-          setPrice(data.price);
+          setPrice(data.sellingPrice);
           setRating(data.rating);
 
-          setunPrice(data.unprice);
+          setunPrice(data.regularPrice);
           setStockStatus(data.stockStatus);
           setWriter(data.writer);
           setWriterId(data.writer._id);
@@ -172,10 +172,10 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
     }
     formData.append("category", categoryId);
     formData.append("subCategory", subcategory);
-    formData.append("price", String(price));
+    formData.append("sellingPrice", String(sellingPrice));
     formData.append("rating", String(rating));
 
-    formData.append("unprice", String(unprice));
+    formData.append("regularPrice", String(regularPrice));
     formData.append("stockStatus", stockStatus);
     formData.append("writer", writerId);
     formData.append("featured", featured);
@@ -347,7 +347,7 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
                 <input
                   type="number"
                   placeholder="100"
-                  value={unprice}
+                  value={regularPrice}
                   onChange={(e) => setunPrice(Number(e.target.value))}
                   className="p-2 mt-2 w-full outline-none rounded-md"
                 />
@@ -357,7 +357,7 @@ const UpdateProduct: React.FC<{ productId: string }> = ({ productId }) => {
                 <input
                   type="number"
                   placeholder="100"
-                  value={price}
+                  value={sellingPrice}
                   onChange={(e) => setPrice(Number(e.target.value))}
                   className="p-2 mt-2 w-full outline-none rounded-md"
                 />
