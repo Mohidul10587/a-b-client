@@ -214,11 +214,6 @@ const IndexPage: React.FC = () => {
         </div>
       </div>
 
-      <Modal
-        isOpen={isSubmitModalOpen}
-        onClose={closeModal}
-        content={modalContent}
-      />
       <ImageGallery
         isOpen={isImageModalOpen}
         onClose={closeModal}

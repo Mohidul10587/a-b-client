@@ -1,11 +1,33 @@
-import React from "react";
+"use client";
 
-import UpdateProduct from "./UpdateProduct";
+import useSWR from "swr";
+import { useParams } from "next/navigation";
+import Form from "../Form";
+import { fetcher } from "@/app/shared/fetcher";
 
-const Index: React.FC<any> = async ({ params }) => {
-  const resolvedParams = await params;
-  const id = resolvedParams.id;
-  return <UpdateProduct productId={id} />;
+const IndexPage = () => {
+  const id = useParams().id as string;
+  const { data, isLoading } = useSWR(
+    `product/singleForEditPage/${id}`,
+    fetcher
+  );
+
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <h1 className="text-2xl font-bold">Loading...</h1>
+      </div>
+    );
+  return (
+    <>
+      {data.item && <Form id={id} initialData={data.item} pagePurpose="edit" />}
+      {!data.item && (
+        <div className="flex justify-center items-center h-screen">
+          <h1 className="text-2xl font-bold">No Data Found</h1>
+        </div>
+      )}
+    </>
+  );
 };
 
-export default Index;
+export default IndexPage;

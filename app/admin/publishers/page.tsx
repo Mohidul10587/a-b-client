@@ -1,7 +1,5 @@
 "use client";
-
 import useSWR from "swr";
-import { apiUrl } from "@/app/shared/urls";
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";

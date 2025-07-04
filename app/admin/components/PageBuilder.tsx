@@ -43,7 +43,7 @@ const PageBuilder: React.FC<PageProps> = ({ onClose, page, id }) => {
     images: [],
     width: 20,
     height: 20,
-    suggestionId: "",
+    suggestion: "",
   });
   const [banners, setBanners] = useState<IBanner[]>([]);
   const [selectedImages, setSelectedImages] = useState<string[]>([]); // State for selected images

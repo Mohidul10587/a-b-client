@@ -12,6 +12,23 @@
     @apply bg-red-600 text-white py-1.5 px-4 rounded-md text-sm hover:bg-red-700 transition;
   }
 }
+
+@layer utilities {
+  .animate-slide-down {
+    animation: slideDown 0.3s ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -20%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+}
 table > tbody > tr:nth-child(odd) {
   background-color: #e6ecee;
 }

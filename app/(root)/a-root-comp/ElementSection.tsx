@@ -1,6 +1,5 @@
 import NewBanner from "@/components/NewBanner";
 import ProductBox from "./ProductBox";
-import { apiUrl } from "@/app/shared/urls";
 import Link from "next/link";
 
 interface ElementSectionProps {
@@ -8,7 +7,6 @@ interface ElementSectionProps {
 }
 
 const ElementSection = async ({ elementsData }: ElementSectionProps) => {
-  
   return (
     <div className="container my-4">
       {elementsData?.map((item: any, index: number) => (

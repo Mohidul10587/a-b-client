@@ -156,7 +156,7 @@ const NewBanner: React.FC<BannerProps> = ({ elementItem }) => {
                   src={post.img}
                   width={width}
                   height={height}
-                  alt={post.title}
+                  alt={post.title || ""}
                   quality={100}
                   className={`hover:scale-[1.01] transition-all duration-500 w-full h-full ${
                     padding === 0

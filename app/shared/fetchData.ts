@@ -1,5 +1,5 @@
-import { ICategory, ISubcategory } from "@/types/category";
 import { apiUrl } from "./urls";
+import { ICategory, ISubcategory } from "@/types/category";
 
 interface ICategoryWithSubcategories extends ICategory {
   subcategories: ISubcategory[];

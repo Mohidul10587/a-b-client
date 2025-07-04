@@ -29,5 +29,5 @@ export interface IFormData {
   images: File[];
   width: number;
   height: number;
-  suggestionId: string | null;
+  suggestion: string | null;
 }

@@ -21,7 +21,7 @@ export async function generateMetadata(
     "Category Title";
   const description =
     publisher.metaDescription ||
-    publisher?.description?.replace(/<\/?[^>]+(>|$)/g, "") || // Remove HTML tags from description
+    publisher?.description?.replace(/<\/?[^>]+(>|$)/g, "") || // Remove HTML keywords from description
     `Explore a wide range of products in the ${title} publisher at ${settings.country}.`;
   const image = publisher?.img || "/default-image.png"; // Provide a default image if not available
 

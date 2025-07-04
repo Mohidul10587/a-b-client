@@ -11,8 +11,8 @@ interface MetaProps {
   setMetaDescription: (value: string) => void;
   selectedImage: string | null;
   setSelectedImage: (image: string | null) => void;
-  tags: string[];
-  setTags: (tags: string[]) => void;
+  keywords: string[];
+  setTags: (keywords: string[]) => void;
   metaValue: string;
   setMetaValue: (value: string) => void;
   setMetaImageFile: (value: File | null) => void;
@@ -25,7 +25,7 @@ const Meta: React.FC<MetaProps> = ({
   setMetaDescription,
   selectedImage,
   setSelectedImage,
-  tags,
+  keywords,
   setTags,
   metaValue,
   setMetaValue,
@@ -55,13 +55,13 @@ const Meta: React.FC<MetaProps> = ({
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && metaValue) {
       e.preventDefault();
-      setTags([...tags, metaValue]);
+      setTags([...keywords, metaValue]);
       setMetaValue("");
     }
   };
 
   const removeTag = (index: number) => {
-    setTags(tags.filter((_, i) => i !== index));
+    setTags(keywords.filter((_, i) => i !== index));
   };
 
   return (
@@ -151,7 +151,7 @@ const Meta: React.FC<MetaProps> = ({
       <div className="mt-2">
         <div className="text-gray-700">Meta Keywords</div>
         <div className="flex items-center flex-wrap border p-2 gap-2 bg-white rounded">
-          {tags?.map((tag, index) => (
+          {keywords?.map((tag, index) => (
             <div
               key={index}
               className="flex items-center text-gray-700 border rounded-full px-3 py-1"

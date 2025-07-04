@@ -147,7 +147,7 @@ const HeaderClient = ({
             onClick={() => toggleExpand("categories")}
             links={categories.map((cat) => ({
               label: cat.title,
-              href: `/cat/${cat.slug}`,
+              href: `/category/${cat.slug}`,
             }))}
           />
 
@@ -241,7 +241,7 @@ const MegaMenu = ({
 }) => {
   const menus = [
     { label: "লেখক", items: writers, link: "writer" },
-    { label: "বিষয়", items: categories, link: "cat" },
+    { label: "বিষয়", items: categories, link: "category" },
     { label: "প্রকাশনী", items: publishers, link: "publishers" },
     { label: "ভর্তি প্রস্তুতি", items: categories, link: "publishers" },
     { label: "প্যারালাল TEXT", items: publishers, link: "publishers" },

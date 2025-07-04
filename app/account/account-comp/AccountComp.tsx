@@ -174,7 +174,7 @@ const AccountComponent = () => {
                     Seller product
                   </Link> */}
                   {/* <Link
-                    href="/account/suggested"
+                    href="/account/suggestion"
                     className="flex items-center p-2 hover:bg-gray-200"
                   >
                     <svg

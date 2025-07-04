@@ -23,13 +23,13 @@ const IndexPage: React.FC = () => {
   useEffect(() => {
     const fetchBanners = async () => {
       try {
-        const response = await fetch(`${apiUrl}/banner/all`, {
+        const response = await fetch(`${apiUrl}/banner/allForAdminIndexPage`, {
           method: "GET",
           credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
-          setBanners(data);
+          setBanners(data.items);
         } else {
           setIsError(true);
         }

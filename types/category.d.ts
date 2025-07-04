@@ -19,7 +19,7 @@ export interface ISubcategory {
   metaTitle: string;
   metaDescription: string;
 
-  tags: string[];
+  keywords: string[];
 }
 
 export interface ICategory {

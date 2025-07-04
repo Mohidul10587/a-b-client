@@ -24,14 +24,14 @@ export async function generateMetadata(
     "Category Title";
   const description =
     category.metaDescription ||
-    category?.description?.replace(/<\/?[^>]+(>|$)/g, "") || // Remove HTML tags from description
+    category?.description?.replace(/<\/?[^>]+(>|$)/g, "") || // Remove HTML keywords from description
     `Explore a wide range of products in the ${title} category at ${settings.country}.`;
   const image = category?.img || "/default-image.png"; // Provide a default image if not available
 
   return {
     title,
     description,
-    keywords: [...(category?.tags || [])],
+    keywords: [...(category?.keywords || [])],
     openGraph: {
       title,
       description,

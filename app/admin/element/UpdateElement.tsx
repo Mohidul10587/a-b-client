@@ -58,7 +58,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
     images: [],
     width: 20,
     height: 20,
-    suggestionId: "",
+    suggestion: "",
   });
   const [suggestions, setSuggestions] = useState<ISuggestion[]>([]);
   const [banners, setBanners] = useState<IBanner[]>([]);
@@ -197,7 +197,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
       setFormData((prevFormData) => ({
         ...prevFormData,
         bannerId: null,
-        suggestionId: null,
+        suggestion: null,
       }));
     }
 
@@ -205,7 +205,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
       setFormData((prevFormData) => ({
         ...prevFormData,
         productSectionId: "",
-        suggestionId: null,
+        suggestion: null,
       }));
     }
     if (formData.selectionType === "suggestionSection") {
@@ -223,7 +223,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
     const selectedSuggestionId = event.target.value; // Get selected banner ID
     setFormData((prevFormData) => ({
       ...prevFormData,
-      suggestionId: selectedSuggestionId, // Update the bannerId in formData
+      suggestion: selectedSuggestionId, // Update the bannerId in formData
     }));
   };
 
@@ -236,7 +236,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
       setFormData((prevFormData) => ({
         ...prevFormData,
         bannerId: null,
-        suggestionId: null,
+        suggestion: null,
       }));
     }
 
@@ -244,7 +244,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
       setFormData((prevFormData) => ({
         ...prevFormData,
         productSectionId: "",
-        suggestionId: null,
+        suggestion: null,
       }));
     }
     if (formData.selectionType === "suggestionSection") {
@@ -269,7 +269,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
     }
     if (
       formData.selectionType === "suggestionSection" &&
-      !formData.suggestionId
+      !formData.suggestion
     ) {
       setModalMessage("Select a suggestion please");
       setModalType(true);
@@ -321,7 +321,7 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
       formDataToSubmit.append("selectionType", formData.selectionType);
       formDataToSubmit.append("bannerId", formData.bannerId);
       formDataToSubmit.append("productSectionId", formData.productSectionId);
-      // formDataToSubmit.append("suggestionId", formData.suggestionId);
+      // formDataToSubmit.append("suggestion", formData.suggestion);
 
       // Append existing images (URLs) if they are in string form
       const images: (File | string)[] = [];
@@ -807,8 +807,8 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
                         Select suggestion
                       </label>
                       <select
-                        name="suggestionId"
-                        value={formData.suggestionId || ""} // Set the value based on formData
+                        name="suggestion"
+                        value={formData.suggestion || ""} // Set the value based on formData
                         onChange={handleSuggestionChange} // Use the new handler for banner selection
                         className="w-full px-3 py-2 border border-gray-300 rounded-md"
                       >

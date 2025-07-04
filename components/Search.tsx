@@ -57,7 +57,7 @@ const Search = () => {
   };
 
   const handleDropdownClick = (product: IProduct) => {
-    setSearchProductTitle(product.title);
+    setSearchProductTitle(product.titleEn);
     setIsDropdownVisible(false);
     setSearchText("");
   };
@@ -92,7 +92,7 @@ const Search = () => {
                         <div className="w-16">
                           <Image
                             src={product.img}
-                            alt={product.title}
+                            alt={product.titleEn}
                             width={50}
                             height={16}
                             className="border"
@@ -100,7 +100,7 @@ const Search = () => {
                         </div>
                         <div>
                           <h3 className="text-base font-semibold">
-                            {product.title}
+                            {product.titleEn}
                           </h3>
                           <div className="flex justify-between w-full items-center line-clamp-1">
                             <p className="text-gray-500">

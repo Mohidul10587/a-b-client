@@ -17,7 +17,7 @@ const IndexPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch(`${apiUrl}/product/allForAdmin`);
+        const res = await fetch(`${apiUrl}/product/allForAdminIndexPage`);
         const data = await res.json();
         setProducts(data);
       } catch (error) {
@@ -47,7 +47,7 @@ const IndexPage = () => {
   };
 
   const filteredProducts = products.filter((p) =>
-    p.title.toLowerCase().includes(searchTerm.toLowerCase())
+    p.titleEn.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const indexOfLast = currentPage * postsPerPage;
@@ -113,11 +113,11 @@ const IndexPage = () => {
                     src={product.img}
                     width={50}
                     height={50}
-                    alt={product.title}
+                    alt={product.titleEn}
                     className="rounded"
                   />
                 </td>
-                <td className="px-6 py-4">{product.title}</td>
+                <td className="px-6 py-4">{product.titleEn}</td>
                 <td className="px-6 py-4">৳ {product.sellingPrice}</td>
                 <td className="px-6 py-4">{product.writer?.title || "-"}</td>
                 <td className="py-3 px-4 text-right space-x-2">
@@ -166,11 +166,11 @@ const IndexPage = () => {
                 src={product.img}
                 width={60}
                 height={60}
-                alt={product.title}
+                alt={product.titleEn}
                 className="rounded"
               />
               <div>
-                <p className="font-semibold">{product.title}</p>
+                <p className="font-semibold">{product.titleEn}</p>
                 <p className="text-sm text-gray-600">
                   ৳ {product.sellingPrice}
                 </p>

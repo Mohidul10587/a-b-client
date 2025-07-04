@@ -11,10 +11,9 @@ const Product: React.FC<IProduct> = ({
   _id,
   slug,
   img,
-  title,
+  titleEn,
   existingQnt,
-  featured,
-  sele,
+
   sellingPrice,
   regularPrice,
   category,
@@ -40,20 +39,11 @@ const Product: React.FC<IProduct> = ({
             src={img || "/default.jpg"}
             width={600}
             height={600}
-            alt={title}
+            alt={titleEn || ""}
             quality={100}
             className="h-full w-min cursor-pointer object-cover"
           />
-          {featured && (
-            <p className="absolute left-0 top-0 text-xs bg-main opacity-50 rounded-br leading-none text-white px-2 py-1">
-              {featured}
-            </p>
-          )}
-          {sele && (
-            <p className="absolute right-0 top-0 text-xs bg-main opacity-50 rounded-bl leading-none text-white px-2 py-1">
-              {sele}
-            </p>
-          )}
+
           {discount > 0 && (
             <div className="flex items-center absolute opacity-75 left-0 top-2">
               <p className="bg-white pl-2 pr-3 py-0 text-xs">OFF</p>
@@ -65,7 +55,7 @@ const Product: React.FC<IProduct> = ({
         </div>
         <div className="p-2 block">
           <h2 className="line-clamp-2 mb-2 text-base font-semibold text-black">
-            {title}
+            {titleEn}
           </h2>
           {sellingPrice <= 0 ? (
             <div className="text-sm font-normal">
@@ -96,7 +86,7 @@ const Product: React.FC<IProduct> = ({
           img: img,
           sellingPrice: sellingPrice,
           regularPrice: regularPrice,
-          title: title,
+          titleEn: titleEn,
           existingQnt: existingQnt,
           shippingInside: shippingInside,
           shippingOutside: shippingOutside,

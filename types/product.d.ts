@@ -1,45 +1,70 @@
 // src/types/product.d.ts
 
-export interface IVariant {
-  title: string | null;
-  variantPrice: number;
-  img: string | null | File;
-}
-
 export interface IProduct {
+  // A
+  ISBN: string;
   _id: string;
-  img: string;
-  title: string;
-  slug: string;
-  description: string;
-  shortDescription: string;
-  featured: string;
-  existingQnt: number;
-  sele: string;
-  sellingPrice: number;
-  regularPrice: number;
+
+  // B
+  binding: string;
+
+  // C
   category: any;
-  writer: any;
-  stockStatus: string;
+
+  // D
+  description: string;
+
+  // E
+  edition: string;
+  existingQnt: number;
+
+  // I
+  img: string;
+
+  // K
+  keywords: string[];
+
+  // L
+  language: string;
+
+  // M
+  metaDescription: string;
+  metaImg: string;
+  metaTitle: string;
+
+  // N
+  numberOfPage: number;
+
+  // O
+  orderType: string;
+
+  // P
+  productType: string;
+  publisher: string;
+
+  // R
+  regularPrice: number;
+
+  // S
+  sellingPrice: number;
   shippingInside: number;
   shippingOutside: number;
-  infoSectionsData: InfoSection[];
-  metaTitle: string;
-  metaDescription: string;
-  tags: string[];
-  metaTitle: string;
-  variantTitle: string;
-  variantSectionInfo: IVariant[];
-}
-export interface InfoSection {
-  _id: string;
-  sectionIcon: string;
-  sectionTitle: string;
-  fields: Array<{
-    fieldIcon: string;
-    fieldTitle: string;
-    content: string;
-    _id: string;
-    display?: boolean; // Add display property to the field
-  }>;
+  shortDescription: string;
+  slug: string;
+  stockStatus: string;
+  subTitle: string;
+  subcategory: string;
+  suggestion: string;
+  summary: string;
+
+  // T
+  titleBn: string;
+  titleEn: string;
+  translatorName: string;
+
+  // W
+  writer: any;
+
+  // Y
+  youtubeVideo: string[];
 }

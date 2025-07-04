@@ -7,6 +7,7 @@ import Link from "next/link";
 import Writers from "./Writers";
 import { fetchElement } from "@/app/shared/fetchElements";
 import { getWriters } from "@/app/shared/fetchData";
+
 export const generateMetadata = (): Metadata => {
   return {
     title: "Writers | Price in Kenya",

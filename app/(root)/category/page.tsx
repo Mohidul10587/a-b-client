@@ -1,4 +1,4 @@
-import Catagories from "@/app/(root)/category/Catagories";
+import Categories from "./Categories";
 import { Metadata } from "next";
 import ElementSection from "@/app/(root)/a-root-comp/ElementSection";
 
@@ -20,7 +20,7 @@ const IndexPage: React.FC = async () => {
       <div className="container my-4">
         <h2 className="text-xl font-semibold">Featured</h2>
         <p>Latest deals from Price in Kenya</p>
-        <Catagories width={60} height={60} />
+        <Categories width={60} height={60} />
       </div>
     </div>
   );

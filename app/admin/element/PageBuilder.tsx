@@ -48,7 +48,7 @@ const PageBuilder: React.FC<PageProps> = ({
     position: 0,
     selectionType: "banner",
     bannerId: "",
-    suggestionId: "",
+    suggestion: "",
     productSectionId: "",
     images: [],
     width: 20,
@@ -167,7 +167,7 @@ const PageBuilder: React.FC<PageProps> = ({
     }
     if (
       formData.selectionType === "suggestionSection" &&
-      !formData.suggestionId
+      !formData.suggestion
     ) {
       setModalMessage("Select a suggestion please");
       setModalType("error");
@@ -214,7 +214,7 @@ const PageBuilder: React.FC<PageProps> = ({
       formDataToSubmit.append("selectionType", formData.selectionType);
       formDataToSubmit.append("bannerId", formData.bannerId);
       formDataToSubmit.append("productSectionId", formData.productSectionId);
-      formDataToSubmit.append("suggestionId", "");
+      formDataToSubmit.append("suggestion", "");
 
       // Append images
       formData.images.forEach((image, index) => {
@@ -293,7 +293,7 @@ const PageBuilder: React.FC<PageProps> = ({
     const selectedSuggestionId = event.target.value; // Get selected banner ID
     setFormData((prevFormData) => ({
       ...prevFormData,
-      suggestionId: selectedSuggestionId, // Update the bannerId in formData
+      suggestion: selectedSuggestionId, // Update the bannerId in formData
     }));
   };
   function capitalizeFirstLetter(word: string) {

@@ -10,7 +10,7 @@ interface CatProps {
   height: number;
 }
 
-async function fetchCategories(): Promise<ICategory[]> {
+async function fetchCategories() {
   const response = await fetch(
     `${apiUrl}/category/getAllCategoriesForCatMainPage`,
     {
@@ -26,12 +26,12 @@ async function fetchCategories(): Promise<ICategory[]> {
   return data.respondedData;
 }
 
-const Catagories = async ({ width, height }: CatProps) => {
+const Categories = async ({ width, height }: CatProps) => {
   const categories = await fetchCategories();
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-2">
-      {categories.map((item, index) => (
+      {categories.map((item: any, index: number) => (
         <Link
           href={`/category/${item.slug}`}
           key={index}
@@ -53,4 +53,4 @@ const Catagories = async ({ width, height }: CatProps) => {
   );
 };
 
-export default Catagories;
+export default Categories;

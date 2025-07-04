@@ -1,68 +1,72 @@
-// types/product.d.ts or types/index.ts
+// types/initialData.ts (or types/index.ts if you prefer)
 
-export interface IProduct {
-  publisher: string;
-  summary: string;
-  numberOfPage: number;
-  ISBN: string;
-  edition: string;
-  binding: string;
-  productType: string;
-  translatorName: string;
-  language: string;
-  orderType: string;
-  metaTitle: string;
-  metaDescription: string;
-  tags: string;
-  metaValue: string;
-  title: string;
-  titleEnglish: string;
-  subTitle: string;
-  description: string;
-  shortDescription: string;
-  category: string;
-  sellingPrice: number;
-  regularPrice: number;
-  stockStatus: string;
-  writer: string;
-  youtubeVideo: string;
-  shippingInside: number;
-  shippingOutside: number;
-  img: string;
-  suggestionId: string;
-  metaImg: string;
-  subcategory: string;
-}
+import { IProduct } from "@/types/product";
+
 export const initialData: IProduct = {
-  publisher: "",
-  summary: "",
-  numberOfPage: 0,
+  // A
+  _id: "",
   ISBN: "",
-  edition: "",
+
+  // B
   binding: "",
-  productType: "",
-  translatorName: "",
-  language: "bn",
-  orderType: "",
-  metaTitle: "",
-  metaDescription: "",
-  tags: "",
-  metaValue: "",
-  title: "",
-  titleEnglish: "",
-  subTitle: "",
-  description: "",
-  shortDescription: "",
+
+  // C
   category: "",
-  sellingPrice: 0,
+
+  // D
+  description: "",
+
+  // E
+  edition: "",
+  existingQnt: 0,
+
+  // I
+  img: "",
+
+  // K
+  keywords: [],
+
+  // L
+  language: "bn",
+
+  // M
+  metaDescription: "",
+  metaImg: "",
+  metaTitle: "",
+
+  // N
+  numberOfPage: 0,
+
+  // O
+  orderType: "",
+
+  // P
+  productType: "",
+  publisher: "",
+
+  // R
   regularPrice: 0,
-  stockStatus: "",
-  writer: "",
-  youtubeVideo: "",
+
+  // S
+  sellingPrice: 0,
   shippingInside: 50,
   shippingOutside: 50,
-  img: "",
-  suggestionId: "",
-  metaImg: "",
+  shortDescription: "",
+  slug: "",
+  stockStatus: "",
+  subTitle: "",
   subcategory: "",
+  suggestion: "",
+  summary: "",
+
+  // T
+  titleBn: "",
+  titleEn: "",
+  translatorName: "",
+
+  // W
+  writer: "",
+
+  // Y
+  youtubeVideo: [],
 };

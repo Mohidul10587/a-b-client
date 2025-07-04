@@ -101,7 +101,7 @@ const LayoutTop: FC<{
                   // },
                   // {
                   //   title: "Product Suggestion",
-                  //   link: `/account/suggested`,
+                  //   link: `/account/suggestion`,
                   // },
                   // {
                   //   title: "Seller Setting",

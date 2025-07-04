@@ -8,7 +8,7 @@ interface CarouselItem {
   link: string;
   title: string;
   featured: string;
-  sele: string;
+
   sellingPrice: string;
 }
 

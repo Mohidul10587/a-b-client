@@ -53,17 +53,17 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images || [];
   const metaTitle = item.metaTitle
     ? item.metaTitle
-    : `Buy ${item.title} | ${item.stockStatus} | @${settings.country}`;
+    : `Buy ${item.titleEn} | ${item.stockStatus} | @${settings.country}`;
   const metaDescription =
     item.metaDescription ||
-    `Order ${item.title} from ${settings.country} with fast delivery across ${settings.country} and in-store pickup in ${settings.officeAddress}.`;
+    `Order ${item.titleEn} from ${settings.country} with fast delivery across ${settings.country} and in-store pickup in ${settings.officeAddress}.`;
   const metaImages = [{ url: item.img }, ...previousImages];
   const metaUrl = `${clientSideUrl}/product/${slug}`;
 
   return {
     title: metaTitle,
     description: metaDescription,
-    keywords: Array.isArray(item.tags) ? [...item.tags] : [],
+    keywords: Array.isArray(item.keywords) ? [...item.keywords] : [],
 
     openGraph: {
       title: metaTitle,
@@ -138,7 +138,7 @@ const IndexPage: FC<any> = async ({ params }: any) => {
     const productUrl = `${fullUrl}/product/${slug}`;
 
     // Prepare WhatsApp message
-    const message = `Hello, I am interested in purchasing the following product:\n\nProduct Link: ${productUrl}\nProduct Name: ${product.title}\nPrice: ${settings.currencySymbol} ${product.sellingPrice}\n\nThank you!`;
+    const message = `Hello, I am interested in purchasing the following product:\n\nProduct Link: ${productUrl}\nProduct Name: ${product.titleEn}\nPrice: ${settings.currencySymbol} ${product.sellingPrice}\n\nThank you!`;
 
     // Encode message for URL
     const encodedMessage = encodeURIComponent(message);

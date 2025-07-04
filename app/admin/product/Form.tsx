@@ -10,12 +10,16 @@ import ImageGallery from "@/components/ImageGallery";
 import { processContent } from "@/app/shared/processContent";
 import Image from "next/image";
 import { languages } from "@/app/shared/language";
-type Props = {
-  id?: string;
-  initialData: ILayout;
-  pagePurpose: "add" | "edit";
-};
-const Form: React.FC<Props> = ({ id, initialData, pagePurpose = "add" }) => {
+import { IProduct } from "@/types/product";
+import { req } from "@/app/shared/request";
+import { useData } from "@/app/DataContext";
+
+const Form: React.FC<Props<IProduct>> = ({
+  id,
+  initialData,
+  pagePurpose = "add",
+}) => {
+  const { showModal } = useData();
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [imageType, setImageType] = useState("");
   const [publishers, setPublishers] = useState<any[]>([]);
@@ -30,7 +34,7 @@ const Form: React.FC<Props> = ({ id, initialData, pagePurpose = "add" }) => {
   const [selectedSubcategory, setSelectedSubcategory] = useState<any | null>(
     null
   );
-  const [data, setData] = useState();
+  const [data, setData] = useState(initialData);
 
   const openModal = (content: string) => {
     setModalContent(content);
@@ -150,43 +154,33 @@ const Form: React.FC<Props> = ({ id, initialData, pagePurpose = "add" }) => {
     openModal("Product uploading... ");
 
     const requiredFields = [
-      { value: data.title, message: "Title is required" },
-      { value: data.img, message: "Photo is required" },
-      { value: data.category, message: "Category is required" },
-      { value: data.writer, message: "Writer is required" },
+      { value: data.titleEn, message: "Title is " },
+      { value: data.img, message: "Photo is " },
+      { value: data.category, message: "Category is " },
+      { value: data.writer, message: "Writer is " },
     ];
     for (const field of requiredFields) {
       if (!field.value) {
         openModal(field.message);
-        return; // Stop submission if a required field is missing
+        return; // Stop submission if a  field is missing
       }
     }
 
     const updatedData = {
       ...data,
-
       description: processContent(description),
       shortDescription: processContent(shortDescription),
     };
 
+    const url =
+      pagePurpose === "add" ? "product/create" : `product/update/${id}`;
+    const method = pagePurpose === "add" ? "POST" : `PUT`;
     try {
-      let response = await fetch(`${apiUrl}/product/create`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-type": "Application/json",
-        },
-        body: JSON.stringify(updatedData),
-      });
-
-      if (response.ok) {
-        openModal("Product uploaded successfully");
-      } else {
-        openModal(`Failed to upload product`);
-      }
+      const { res, data: resData } = await req(url, method, updatedData);
+      showModal(resData.message, res.ok ? "success" : "error");
     } catch (error) {
-      console.error("Error submitting form:", error);
-      openModal("Failed to upload product due to an unexpected error");
+      showModal("Failed to upload product due to an unexpected error", "error");
+    } finally {
     }
   };
 
@@ -201,28 +195,30 @@ const Form: React.FC<Props> = ({ id, initialData, pagePurpose = "add" }) => {
               <div className="w-full">
                 <div className="mb-4">
                   <p>
-                    Title Bangla<sup className="text-red-700">*</sup>
-                  </p>
-                  <input
-                    type="text"
-                    placeholder="title"
-                    name="title"
-                    value={data.title}
-                    onChange={handleChange}
-                    className="mt-1 p-2 w-full border rounded-md border-black"
-                  />
-                </div>
-                <div className="mb-4">
-                  <p>
                     Title English<sup className="text-red-700">*</sup>
                   </p>
                   <input
                     type="text"
                     placeholder="title"
-                    name="titleEnglish"
-                    value={data.titleEnglish}
+                    name="titleEn"
+                    value={data.titleEn}
                     onChange={handleChange}
                     className="mt-1 p-2 w-full border rounded-md border-black"
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <p>
+                    Title Bangla <sup className="text-red-700">*</sup>
+                  </p>
+                  <input
+                    type="text"
+                    placeholder="title"
+                    name="titleBn"
+                    value={data.titleBn}
+                    onChange={handleChange}
+                    className="mt-1 p-2 w-full border rounded-md border-black"
+                    required
                   />
                 </div>
 
@@ -240,7 +236,6 @@ const Form: React.FC<Props> = ({ id, initialData, pagePurpose = "add" }) => {
                     value={data.productType}
                     onChange={handleChange}
                     className="mt-1 p-2 w-full border rounded-md border-black"
-                    required
                   >
                     <option value="Fiction">Fiction</option>
                     <option value="Non_Fiction">Non Fiction. </option>
@@ -263,7 +258,6 @@ const Form: React.FC<Props> = ({ id, initialData, pagePurpose = "add" }) => {
                     value={data.subTitle}
                     onChange={handleChange}
                     className="mt-1 p-2 w-full border rounded-md border-black"
-                    required
                   />
                 </div>
 
@@ -281,7 +275,6 @@ const Form: React.FC<Props> = ({ id, initialData, pagePurpose = "add" }) => {
                       value={data.orderType}
                       onChange={handleChange}
                       className="mt-1 p-2 w-full border rounded-md border-black"
-                      required
                     >
                       <option value="buyNow">Buy now </option>
                       <option value="preOrder">Pre Order</option>
@@ -327,7 +320,6 @@ const Form: React.FC<Props> = ({ id, initialData, pagePurpose = "add" }) => {
                       value={data.translatorName}
                       onChange={handleChange}
                       className="mt-1 p-2 w-full border rounded-md border-black"
-                      required
                     />
                   </div>
                   <div className="mb-4">
@@ -344,7 +336,6 @@ const Form: React.FC<Props> = ({ id, initialData, pagePurpose = "add" }) => {
                       value={data.binding}
                       onChange={handleChange}
                       className="mt-1 p-2 w-full border rounded-md border-black"
-                      required
                     >
                       <option value="Hardcover">Hardcover</option>
                       <option value="Paperback">Paperback</option>
@@ -363,7 +354,6 @@ const Form: React.FC<Props> = ({ id, initialData, pagePurpose = "add" }) => {
                       value={data.edition}
                       onChange={handleChange}
                       className="mt-1 p-2 w-full border rounded-md border-black"
-                      required
                     >
                       <option value="1">One</option>
                       <option value="2">Two</option>
@@ -431,7 +421,6 @@ const Form: React.FC<Props> = ({ id, initialData, pagePurpose = "add" }) => {
                       value={data.publisher}
                       name="publisher"
                       onChange={handleChange}
-                      required
                     >
                       <option value="">-- Select a Publisher --</option>
                       {publishers.map((item) => (
@@ -451,7 +440,6 @@ const Form: React.FC<Props> = ({ id, initialData, pagePurpose = "add" }) => {
                     className="w-full p-2 border rounded"
                     onChange={handleCategoryChange}
                     value={selectedCategory?._id || ""}
-                    required
                   >
                     <option value="">-- Select a Category --</option>
                     {categories.map((category: any) => (
@@ -521,24 +509,18 @@ const Form: React.FC<Props> = ({ id, initialData, pagePurpose = "add" }) => {
 
                   <div className="w-full md:w-1/3">
                     <p>Image</p>
-                    <div>
+                    <div className={"rounded"}>
                       <Image
                         src={data.img || "/default.jpg"}
                         width={200}
                         height={150}
                         alt="Image"
-                        className="border border-black "
-                      />
-
-                      <p
-                        className="font-bold mt-2 w-[200px] border border-black p-2 "
+                        className="border border-black rounded"
                         onClick={() => {
                           setIsImageModalOpen(true);
                           setImageType("img");
                         }}
-                      >
-                        {data.img ? "Change Image " : "Choose Image"}
-                      </p>
+                      />
                     </div>
                   </div>
 
@@ -630,7 +612,7 @@ const Form: React.FC<Props> = ({ id, initialData, pagePurpose = "add" }) => {
                     <p>Suggestion</p>
                     <select
                       className="p-2 mt-2 w-full outline-none rounded-md"
-                      value={data.suggestionId}
+                      value={data.suggestion}
                       onChange={handleChange}
                     >
                       {" "}
@@ -652,18 +634,12 @@ const Form: React.FC<Props> = ({ id, initialData, pagePurpose = "add" }) => {
                         width={200}
                         height={150}
                         alt="Image"
-                        className="border border-black "
-                      />
-
-                      <p
-                        className="font-bold mt-2 w-[200px] border border-black p-2 "
+                        className="border border-black rounded"
                         onClick={() => {
                           setIsImageModalOpen(true);
                           setImageType("metaImg");
                         }}
-                      >
-                        {data.metaImg ? "Change Image " : "Choose Image"}
-                      </p>
+                      />
                     </div>
                   </div>
                 </>

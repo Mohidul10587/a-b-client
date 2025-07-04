@@ -6,6 +6,7 @@ import useSWR from "swr";
 import { fetcher } from "./shared/fetcher";
 import { ISettings } from "@/types/settings";
 import { useSession } from "next-auth/react";
+import Modal from "@/components/Modal";
 
 interface User {
   oneClickPayStartedAt: any;
@@ -31,6 +32,8 @@ interface DataContextProps {
   setNumberOfCartProducts: React.Dispatch<React.SetStateAction<number>>;
   thisProductQuantity: number;
   setThisProductQuantity: React.Dispatch<React.SetStateAction<number>>;
+  showModal: (content: string, type?: "success" | "error" | "info") => void;
+  closeModal: () => void;
 }
 
 const DataContext = createContext<DataContextProps | undefined>(undefined);
@@ -114,9 +117,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
               console.error("Error saving cart:", error);
             }
           }
-        } catch (error) {
-          console.error("Error storing user data:", error);
-        }
+        } catch (error) {}
       };
       const userData = {
         name: data.user?.name || "Unknown User",
@@ -128,13 +129,24 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [data?.user]);
 
-  const {
-    data: response,
-    error,
-    mutate,
-    isLoading,
-  } = useSWR(`settings`, fetcher);
+  const { data: response } = useSWR(`settings`, fetcher);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState("");
+  const [modalType, setModalType] = useState<"success" | "error" | "info">(
+    "success"
+  );
+
   const settings = response?.respondedData;
+  const showModal = (
+    content: string,
+    type: "success" | "error" | "info" = "success"
+  ) => {
+    setModalContent(content);
+    setModalType(type);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => setIsModalOpen(false);
   return (
     <DataContext.Provider
       value={{
@@ -145,9 +157,17 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
         setNumberOfCartProducts,
         thisProductQuantity,
         setThisProductQuantity,
+        showModal,
+        closeModal,
       }}
     >
       {children}
+      <Modal
+        isOpen={isModalOpen}
+        content={modalContent}
+        type={modalType}
+        onClose={closeModal}
+      />
     </DataContext.Provider>
   );
 };

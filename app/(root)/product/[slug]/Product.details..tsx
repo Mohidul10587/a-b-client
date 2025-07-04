@@ -24,7 +24,7 @@ const Product: React.FC<ProductProps> = ({
   photo,
   title,
   featured,
-  sele,
+
   sellingPrice,
   stockStatus,
   withCompareProductId_leftSide,
@@ -45,11 +45,6 @@ const Product: React.FC<ProductProps> = ({
           {featured && (
             <p className="absolute left-0 top-0 text-xs bg-main/70 leading-none text-white px-2 py-1">
               {featured}
-            </p>
-          )}
-          {sele && (
-            <p className="absolute right-0 top-0 text-xs bg-main/70 leading-none text-white px-2 py-1">
-              {sele}
             </p>
           )}
         </div>

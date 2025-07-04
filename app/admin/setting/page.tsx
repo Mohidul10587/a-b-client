@@ -14,7 +14,7 @@ import { processContent } from "@/app/shared/processContent";
 const SunEditor = dynamic(() => import("suneditor-react"), { ssr: false });
 
 const IndexPage: React.FC = () => {
-  const [tags, setTags] = useState<string[]>([]);
+  const [keywords, setTags] = useState<string[]>([]);
   const [metaValue, setMetaValue] = useState("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -105,7 +105,7 @@ const IndexPage: React.FC = () => {
           setFbImage(responseData.fbImage || "");
           setFavicon(responseData.favicon || "");
           setPhone(responseData.phone || "");
-          setTags(responseData.tags || []);
+          setTags(responseData.keywords || []);
         }
       } catch (error) {
         console.error("Error fetching settings:", error);
@@ -156,7 +156,7 @@ const IndexPage: React.FC = () => {
       return;
     }
 
-    // Strip HTML tags and whitespace from description and set to empty if no text is found
+    // Strip HTML keywords and whitespace from description and set to empty if no text is found
 
     const formData = new FormData();
     if (logo) formData.append("logo", logo);
@@ -191,7 +191,7 @@ const IndexPage: React.FC = () => {
     formData.append("termsAndConditions", termsAndConditions);
     formData.append("otherPolicies", otherPolicies);
     formData.append("phone", phone);
-    formData.append("tags", String(tags));
+    formData.append("keywords", String(keywords));
 
     try {
       setModalContent("Updating the settings...");
@@ -486,7 +486,7 @@ const IndexPage: React.FC = () => {
                 />
               </div>
               <Keywords
-                tags={tags}
+                keywords={keywords}
                 setTags={setTags}
                 metaValue={metaValue}
                 setMetaValue={setMetaValue}

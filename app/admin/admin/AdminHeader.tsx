@@ -60,7 +60,7 @@ const AdminHeader: React.FC = () => {
               <Link href="/admin/brand">Brand</Link>
               <Link href="/admin/category">Category</Link>
               <Link href="/admin/subCategory">SubCategory</Link>
-              <Link href="/admin/suggested">Suggested</Link>
+              <Link href="/admin/suggestion">Suggested</Link>
               <Link href="/admin/trade-in">Trade</Link>
               <Link href="/admin/setting">Setting</Link>
               <Link href="/admin/element/main-page/home-main">Builder</Link>
