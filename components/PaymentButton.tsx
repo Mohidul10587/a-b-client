@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import axios from "axios";
 import { apiUrl } from "@/app/shared/urls";
 import { useRouter } from "next/navigation";
+import { req } from "@/app/shared/request";
 
 interface PaymentButtonProps {
   amount: number;
@@ -26,20 +26,16 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
 
   const handlePayment = async () => {
     try {
-      const response = await axios.post(
-        `${apiUrl}/payment/initialize-payment`,
-        {
-          amount,
-          name,
-          email,
-          phone,
-          transactionId,
-          redirectUrl,
-        }
-      );
-
-      if (response.data.paymentUrl) {
-        window.location.href = response.data.paymentUrl;
+      const { res, data } = await req("payment/initialize-payment", "POST", {
+        amount,
+        name,
+        email,
+        phone,
+        transactionId,
+        redirectUrl,
+      });
+      if (data.paymentUrl) {
+        window.location.href = data.paymentUrl;
       }
     } catch (error) {}
   };
