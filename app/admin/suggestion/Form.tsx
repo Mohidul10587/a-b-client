@@ -106,7 +106,10 @@ const Form: React.FC<Props> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="container mx-auto p-4 space-y-8">
+    <form
+      onSubmit={handleSubmit}
+      className="container mx-auto  md:p-4 p-2 space-y-8"
+    >
       <h2 className="text-2xl font-semibold text-center">{submitText}</h2>
 
       <input

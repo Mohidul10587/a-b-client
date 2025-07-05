@@ -188,7 +188,7 @@ const Form: React.FC<Props<IProduct>> = ({
 
   return (
     <>
-      <div className="container my-4 flex justify-center">
+      <div className="container md:p-4 p-2 flex justify-center">
         <div className="w-11/12">
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col md:flex-row gap-8">

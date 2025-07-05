@@ -65,7 +65,7 @@ const Form: React.FC<Props<IBanner>> = ({
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto  md:p-4 p-2">
       {/* Title + Submit Button */}
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
         <div className="w-full">

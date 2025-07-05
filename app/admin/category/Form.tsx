@@ -54,7 +54,7 @@ const Form: React.FC<Props<ICategory>> = ({
 
   return (
     <>
-      <div className="container my-4 p-4">
+      <div className="container  md:p-4 p-2">
         <div className="flex flex-col md:flex-row gap-8">
           <div className="w-full md:w-2/3">
             <div className="mb-4">
