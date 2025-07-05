@@ -9,7 +9,6 @@ import {
 } from "react-icons/fa";
 
 import { apiUrl } from "@/app/shared/urls";
-import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -19,6 +18,7 @@ import { useData } from "@/app/DataContext";
 import React from "react";
 import useSWR from "swr";
 import { fetcher } from "@/app/shared/fetcher";
+import { req } from "@/app/shared/request";
 
 const Checkout = () => {
   const router = useRouter();
@@ -73,33 +73,27 @@ const Checkout = () => {
       .slice(2, 11)}`;
 
     try {
-      const response = await axios.post(
-        `${apiUrl}/payment/initialize-payment`,
-        {
-          amount: calculateTotal(),
-          transactionId,
-          name: deliveryInfo.name,
-          email: deliveryInfo.email,
-          phone: deliveryInfo.phone,
+      const { res, data } = await req("payment/initialize-payment", "POST", {
+        amount: calculateTotal(),
+        transactionId,
+        name: deliveryInfo.name,
+        email: deliveryInfo.email,
+        phone: deliveryInfo.phone,
 
-          orderInfoForStore: {
-            cart: cart,
-            user: user._id,
-            deliveryInfo,
-            paidAmount: calculateTotal(),
-            paymentStatus: false,
-            paymentTnxId: transactionId,
-            paymentMethod,
-            status: "Pending",
-          },
+        orderInfoForStore: {
+          cart: cart,
+          user: user._id,
+          deliveryInfo,
+          paidAmount: calculateTotal(),
+          paymentStatus: false,
+          paymentTnxId: transactionId,
+          paymentMethod,
+          status: "Pending",
         },
-        {
-          withCredentials: true,
-        }
-      );
+      });
 
-      if (response.data.paymentUrl) {
-        window.open(response.data.paymentUrl, "_blank");
+      if (data.paymentUrl) {
+        window.open(data.paymentUrl, "_blank");
       }
     } catch (error) {}
   };
