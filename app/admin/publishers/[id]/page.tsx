@@ -135,7 +135,7 @@ const IndexPage: React.FC = () => {
 
   return (
     <>
-      <div className="container my-4">
+      <div className="container p-4">
         <div className="flex flex-col md:flex-row gap-8">
           <div className="w-full md:w-2/3">
             <div className="mb-4">

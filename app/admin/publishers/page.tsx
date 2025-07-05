@@ -115,7 +115,7 @@ const IndexPage: React.FC = () => {
                     <td className="px-4 py-2">{p.title}</td>
                     <td className="py-3 px-4 text-right space-x-2">
                       <Link
-                        href={`/admin/publishers/edit/${p._id}`}
+                        href={`/admin/publishers/${p._id}`}
                         className="btnOrange"
                       >
                         Edit
