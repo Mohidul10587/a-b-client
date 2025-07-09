@@ -10,6 +10,7 @@ const ImageGallery: React.FC<{
   index?: number;
   dynamicBoxIndex?: number;
   dynamicBoxImagesIndex?: number;
+  data: any;
 }> = ({
   isOpen,
   onClose,
