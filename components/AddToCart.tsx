@@ -20,7 +20,7 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
   const router = useRouter();
   const { user, setNumberOfCartProducts, sessionStatus } = useData();
   const [thisProductQuantity, setThisProductQuantity] = useState<number>(0);
-  const [existingQuantity, setExistingQuantity] = useState(0);
+  const [existingQuantity, setExistingQuantity] = useState(10);
   const [productsInCart, setProductsInCart] = useState<any[]>([]);
   const [isProductExisted, setIsProductExisted] = useState<boolean>(false);
 
@@ -38,20 +38,20 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
     mutate,
   } = useSWR(user?._id ? `cart/getUserCart/${user._id}` : null, fetcher);
 
-  const {
-    data: quantityResponse,
-    error: quantityError,
-    mutate: quantityMutate,
-  } = useSWR(
-    `product/getExistingQuantity?type=${product.type}&mainId=${product._id}&variantId=${product.variantId}`,
-    fetcher
-  );
+  // const {
+  //   data: quantityResponse,
+  //   error: quantityError,
+  //   mutate: quantityMutate,
+  // } = useSWR(
+  //   `product/getExistingQuantity?type=${product.type}&mainId=${product._id}&variantId=${product.variantId}`,
+  //   fetcher
+  // );
 
-  useEffect(() => {
-    if (quantityResponse) {
-      setExistingQuantity(quantityResponse.respondedData);
-    }
-  }, [quantityResponse]);
+  // useEffect(() => {
+  //   if (quantityResponse) {
+  //     setExistingQuantity(quantityResponse.respondedData);
+  //   }
+  // }, [quantityResponse]);
 
   const getThisProductQuantity = (productId: string, variantId: string) => {
     if (sessionStatus === "authenticated") {
@@ -94,6 +94,7 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
     setIsProductExistedInDatabase: any,
     setNumberOfCartProducts: any
   ) => {
+    
     if (sessionStatus === "authenticated") {
       addToDataBase(
         user._id as string,
@@ -101,7 +102,6 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
         setIsProductExistedInDatabase,
         setNumberOfCartProducts,
         mutate,
-        quantityMutate,
         product
       );
     } else {
@@ -300,7 +300,7 @@ const addToDataBase = async (
   setIsProductExistedInDatabase: any,
   setNumberOfCartProducts: any,
   mutate: any,
-  quantityMutate: any,
+
   product: any
 ) => {
   const cartItem = {
@@ -341,7 +341,6 @@ const addToDataBase = async (
     const data = await response.json();
     if (response.ok) {
       mutate();
-      quantityMutate();
     }
 
     const total = data.cart.cartItems.reduce(

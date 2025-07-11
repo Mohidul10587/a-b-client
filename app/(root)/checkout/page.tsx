@@ -167,7 +167,7 @@ const Checkout = () => {
                       <div className="relative w-16 h-16">
                         <Image
                           src={item.img}
-                          alt={item.title}
+                          alt={item.title || "Image"}
                           layout="fill"
                           objectFit="cover"
                           className="rounded"

@@ -38,13 +38,13 @@ const HeaderClient = ({
     <div className="bg-sticky top-0 z-50 w-full md:mt-0 mt-1">
       {/* First Part */}
       <div className="bg-main hidden md:block">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto h-12">
           <Image src="/add.webp" height={800} width={1400} alt="ad banner" />
         </div>
       </div>
 
       {/* Second Part */}
-      <div className="flex items-center justify-between px-2  md:py-1 max-w-6xl mx-auto w-full">
+      <div className="flex items-center justify-between  md:py-1 max-w-6xl mx-auto w-full">
         <button
           type="button"
           className="text-2xl md:hidden"
@@ -63,7 +63,7 @@ const HeaderClient = ({
           />
         </Link>
 
-        <div className="hidden md:flex flex-1 mx-4">
+        <div className="hidden md:flex w-96 mx-4">
           <Search />
         </div>
         <div className="md:hidden">

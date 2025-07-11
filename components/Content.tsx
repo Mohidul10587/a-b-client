@@ -5,8 +5,6 @@ import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 
 interface ContentProps {
   onChange: (content: string) => void;
-  required?: boolean;
-
   initialContent?: string;
 }
 
@@ -42,8 +40,6 @@ const editorOptions = {
 
 const Content: React.FC<ContentProps> = ({
   onChange,
-  required,
-
   initialContent = "", // Default value for initialContent
 }) => {
   const [content, setContent] = useState(initialContent);

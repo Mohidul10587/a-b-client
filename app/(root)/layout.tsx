@@ -6,10 +6,10 @@ const RootLayout: React.FC<{ children: React.ReactNode }> = async ({
   children,
 }) => {
   return (
-    <ClientLayout>
+    <>
       <Header />
-      <main> {children}</main>
-    </ClientLayout>
+      {children}
+    </>
   );
 };
 
