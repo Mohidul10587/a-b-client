@@ -2,9 +2,7 @@
 import { useState } from "react"; // Import useState hook for managing menu state
 import Image from "next/image";
 import Link from "next/link";
-
 import { useRouter } from "next/navigation";
-
 import { useData } from "@/app/DataContext";
 
 const AdminHeader: React.FC = () => {

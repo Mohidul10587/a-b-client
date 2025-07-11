@@ -4,7 +4,7 @@ import { IProduct } from "@/types/product";
 
 export const initialData: IProduct = {
   // A
-  _id: "",
+
   ISBN: "",
 
   // B

@@ -67,7 +67,7 @@ const AdminHeader: React.FC = () => {
 
               <button
                 onClick={() => {
-                  handleLogOut("/aAuth");
+                  handleLogOut("/auth");
                 }}
               >
                 Logout

@@ -3,7 +3,7 @@
 export interface IProduct {
   // A
   ISBN: string;
-  _id: string;
+  _id?: string;
 
   // B
   binding: string;

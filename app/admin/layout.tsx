@@ -17,14 +17,14 @@ const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           credentials: "include",
         });
         const data = await response.json();
-        
+
         if (data.success === true) {
           setLoading(false);
         } else {
-          router.push("/aAuth");
+          router.push("/auth");
         }
       } catch (error) {
-        router.push("/aAuth");
+        router.push("/auth");
       }
     };
 

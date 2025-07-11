@@ -36,16 +36,6 @@ const Form: React.FC<Props<IProduct>> = ({
   );
   const [data, setData] = useState(initialData);
 
-  const openModal = (content: string) => {
-    setModalContent(content);
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-    setIsImageModalOpen(false);
-  };
-
   useEffect(() => {
     const fetchPublishers = async () => {
       try {
@@ -151,17 +141,17 @@ const Form: React.FC<Props<IProduct>> = ({
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    openModal("Product uploading... ");
+    showModal("Product uploading... ");
 
     const requiredFields = [
-      { value: data.titleEn, message: "Title is " },
-      { value: data.img, message: "Photo is " },
-      { value: data.category, message: "Category is " },
-      { value: data.writer, message: "Writer is " },
+      { value: data.titleEn, message: "Title is  required" },
+      { value: data.img, message: "Photo is  required" },
+      { value: data.category, message: "Category is  required" },
+      { value: data.writer, message: "Writer is  required" },
     ];
     for (const field of requiredFields) {
       if (!field.value) {
-        openModal(field.message);
+        showModal(field.message, "info");
         return; // Stop submission if a  field is missing
       }
     }
@@ -646,14 +636,10 @@ const Form: React.FC<Props<IProduct>> = ({
               </div>
             </div>
           </form>
-          <Modal
-            isOpen={modalIsOpen}
-            onClose={closeModal}
-            content={modalContent}
-          />
+
           <ImageGallery
             isOpen={isImageModalOpen}
-            onClose={closeModal}
+            onClose={() => setIsImageModalOpen(false)}
             img={imageType}
             setData={setData}
             data={data}

@@ -44,7 +44,7 @@ const Cart = () => {
     email: "",
     phone: "",
     address: "",
-    userId: user._id,
+    userId: user?._id,
     status:
       (paymentMethod === "onCache" && settingsX.defaultStatusOfOnCache) ||
       (paymentMethod === "mobilePay" && settingsX.defaultStatusOfMobilePay) ||
@@ -107,7 +107,7 @@ const Cart = () => {
         return;
       }
 
-      if (user._id && sessionStatus === "authenticated") {
+      if (user?._id && sessionStatus === "authenticated") {
         await updateProductQuantityInDataBase(
           user._id,
           id,
@@ -160,7 +160,7 @@ const Cart = () => {
   };
 
   const deleteItem = async (id: string, variantId: string) => {
-    if (user._id && sessionStatus === "authenticated") {
+    if (user?._id && sessionStatus === "authenticated") {
       const response = await fetch(`${apiUrl}/cart/removeItemFromCart`, {
         credentials: "include",
         method: "DELETE",
@@ -298,7 +298,7 @@ const Cart = () => {
                         <div className="w-20 h-28 relative flex-shrink-0 rounded overflow-hidden shadow-sm">
                           <Image
                             src={item.img}
-                            alt={item.title}
+                            alt={item.title || "Image"}
                             layout="fill"
                             objectFit="cover"
                             className="rounded"

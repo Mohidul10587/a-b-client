@@ -1,3 +1,4 @@
+import { handleLogOut } from "@/app/shared/handleLogOut";
 import { apiUrl } from "@/app/shared/urls";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
@@ -23,21 +24,7 @@ const DropdownMenu: FC<{ user: any }> = ({ user }) => {
     { icon: <FaBook size={18} />, label: "eBook Library" },
     { icon: <FaHeart size={18} />, label: "Wishlist" },
   ];
-  async function handleLogOut() {
-    try {
-      const res = await fetch(`${apiUrl}/user/logout`, {
-        credentials: "include",
-        method: "POST",
-      });
-      if (res.ok) {
-        localStorage.removeItem("user");
-      }
-    } catch (error) {
-      console.error("Failed to log out:", error);
-    }
-    // Redirect to the sign-out callback URL
-    signOut({ callbackUrl: "/auth" });
-  }
+
   return (
     <div className="relative inline-block text-left z-50">
       <button
@@ -76,7 +63,7 @@ const DropdownMenu: FC<{ user: any }> = ({ user }) => {
             </Link>
           ))}
           <div
-            onClick={() => handleLogOut()}
+            onClick={() => handleLogOut("/auth")}
             className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 hover:text-red-600 cursor-pointer"
           >
             <FaSignOutAlt size={18} /> <span>Sign Out</span>

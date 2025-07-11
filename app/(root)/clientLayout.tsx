@@ -36,7 +36,6 @@ const ClientLayout: React.FC<{ children: React.ReactNode }> = ({
   };
   useEffect(() => {
     if (user._id && sessionStatus === "authenticated") {
-      
       if (cartResponse) {
         const total = cartResponse?.respondedData?.reduce(
           (total: number, item: any) => total + item.quantity,
@@ -46,7 +45,6 @@ const ClientLayout: React.FC<{ children: React.ReactNode }> = ({
         setNumberOfCartProducts(total);
       }
     } else {
-      
       setNumberOfCartProducts(getTotalCartCount());
     }
   }, [cartResponse, sessionStatus, setNumberOfCartProducts, user._id]);
@@ -66,9 +64,9 @@ const ClientLayout: React.FC<{ children: React.ReactNode }> = ({
   if (data?.user.isUser || sessionStatus === "unauthenticated") {
     return <div className="flex flex-col">{children}</div>;
   }
-
+  // return <div className="flex flex-col">{children}</div>;
   // Default fallback
-  return <LoadingComponent />;
+  return null;
 };
 
 export default ClientLayout;

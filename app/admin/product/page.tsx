@@ -136,7 +136,7 @@ const IndexPage = () => {
                   </Link>
                   <button
                     className="btnRed"
-                    onClick={() => handleDelete(product._id)}
+                    onClick={() => handleDelete(product._id as string)}
                   >
                     Delete
                   </button>
@@ -194,7 +194,7 @@ const IndexPage = () => {
                 Edit
               </Link>
               <button
-                onClick={() => handleDelete(product._id)}
+                onClick={() => handleDelete(product._id as string)}
                 className="flex-1 bg-red-500 text-white py-2 rounded-md text-sm"
               >
                 Delete

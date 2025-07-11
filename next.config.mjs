@@ -21,7 +21,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "pub-b44118fa674945bca0bd327b3205ebe6.r2.dev", // YouTube's image CDN
+        hostname: "lh3.googleusercontent.com", // YouTube's image CDN
       },
       {
         protocol: "https",
