@@ -1,6 +1,7 @@
 import Auth from "./Auth";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 
 const IndexPage: React.FC = () => {
   return (
@@ -11,7 +12,10 @@ const IndexPage: React.FC = () => {
             <Image src="/logo.png" width={150} height={50} alt="logo" />
           </Link>
           <div className="w-full rounded-xl p-6">
-            <Auth />
+            <Suspense fallback={<div>Loading...</div>}>
+              {" "}
+              <Auth />
+            </Suspense>
           </div>
         </div>
       </div>

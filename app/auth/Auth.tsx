@@ -26,8 +26,6 @@ const Auth = () => {
 
   const handleSignInWithFacebook = () =>
     alert("Oh no! Facebook login is not available yet.");
-  const isEmail = (input: string) => /\S+@\S+\.\S+/.test(input);
-  // utils/authHelpers.ts (or inside the component if you prefer)
   const detectIdentifierType = (value: string): "email" | "phone" | "slug" => {
     const trimmed = value.trim();
 
