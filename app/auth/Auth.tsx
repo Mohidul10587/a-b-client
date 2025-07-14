@@ -1,18 +1,15 @@
 "use client";
 
+import { useData } from "@/app/DataContext";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { useData } from "../DataContext";
-import { apiUrl } from "../shared/urls";
-import { req } from "../shared/request";
-
 const Auth = () => {
   const [activeForm, setActiveForm] = useState<
     "signup" | "login" | "forgotPassword"
   >("login");
 
-  const [emailOrPhone, setEmailOrPhone] = useState("");
+  const [emailOrPhoneOrSlug, setEmailOrPhone] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [submittingState, setSubmittingState] = useState(false);
@@ -30,28 +27,45 @@ const Auth = () => {
   const handleSignInWithFacebook = () =>
     alert("Oh no! Facebook login is not available yet.");
   const isEmail = (input: string) => /\S+@\S+\.\S+/.test(input);
+  // utils/authHelpers.ts (or inside the component if you prefer)
+  const detectIdentifierType = (value: string): "email" | "phone" | "slug" => {
+    const trimmed = value.trim();
 
+    // 1️⃣ Email (simple RFC‑ish check)
+    const emailRegex = /^\S+@\S+\.\S+$/;
+    if (emailRegex.test(trimmed)) return "email";
+
+    // 2️⃣ Phone: accepts +88…, 01…, or any 8‑15 digits, optionally with spaces/dashes
+    const phoneRegex = /^(\+?\d{1,3}[- ]?)?(\d{8,15})$/;
+    if (phoneRegex.test(trimmed.replace(/[-\s]/g, ""))) return "phone";
+
+    // 3️⃣ Slug: letters, numbers, dashes/underscores, 3–30 chars
+    const slugRegex = /^[a-z0-9_-]{3,30}$/i;
+    if (slugRegex.test(trimmed)) return "slug";
+
+    // fallback ‑ mark as slug so you still hit your backend validation
+    return "slug";
+  };
+  const identifierType = detectIdentifierType(emailOrPhoneOrSlug);
   const onLoginSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setSubmittingState(true);
     setError(null);
+
     try {
       const signInResult = await signIn("credentials", {
-        authProvider: isEmail(emailOrPhone.trim()) ? "email" : "phone",
-        identifier: emailOrPhone.trim(),
+        authProvider: identifierType,
+        identifier: emailOrPhoneOrSlug.trim(),
         password,
         operationType: "logIn",
-        redirect: false,
+        redirect: false, // keep control in the component
       });
 
-      if (signInResult?.error) {
-        setError("Invalid credentials. Please try again.");
-      } else {
-        window.location.href = redirectUrl;
-      }
-    } catch (err) {
-      console.error("Login Error:", err);
-      setError("Something went wrong. Please try again later.");
+      if (signInResult?.error) throw new Error(signInResult.error);
+
+      router.push(redirectUrl);
+    } catch (err: any) {
+      setError(err.message || "Something went wrong");
     } finally {
       setSubmittingState(false);
     }
@@ -65,8 +79,8 @@ const Auth = () => {
       // আলাদা signUp API কল বাদ
       const res = await signIn("credentials", {
         name: name,
-        authProvider: isEmail(emailOrPhone.trim()) ? "email" : "phone",
-        identifier: emailOrPhone.trim(),
+        authProvider: identifierType,
+        identifier: emailOrPhoneOrSlug.trim(),
         password,
         operationType: "signUp",
         redirect: false,
@@ -120,13 +134,13 @@ const Auth = () => {
           )}
 
           <div className="mb-2">
-            <label htmlFor="emailOrPhone">Email of Phone</label>
+            <label htmlFor="emailOrPhoneOrSlug">Email or Phone or Slug</label>
             <input
-              id="emailOrPhone"
-              name="emailOrPhone"
+              id="emailOrPhoneOrSlug"
+              name="emailOrPhoneOrSlug"
               type="text"
-              autoComplete="emailOrPhone"
-              value={emailOrPhone}
+              autoComplete="emailOrPhoneOrSlug"
+              value={emailOrPhoneOrSlug}
               onChange={(e) => {
                 setEmailOrPhone(e.target.value);
                 setError(null);
