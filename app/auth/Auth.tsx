@@ -132,7 +132,7 @@ const Auth = () => {
           )}
 
           <div className="mb-2">
-            <label htmlFor="emailOrPhoneOrSlug">Email or Phone or Slug</label>
+            <label htmlFor="emailOrPhoneOrSlug">Email or Phone or Username</label>
             <input
               id="emailOrPhoneOrSlug"
               name="emailOrPhoneOrSlug"
@@ -188,8 +188,8 @@ const Auth = () => {
           }`}
         >
           {activeForm === "login"
-            ? "Log in with Email or Phone"
-            : "Sign up with Email or Phone"}
+            ? "Log in with Email or Phone or Username"
+            : "Sign up with Email or Phone or Username"}
         </button>
       </form>
 
