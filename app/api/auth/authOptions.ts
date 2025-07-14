@@ -1,28 +1,32 @@
-import { NextAuthOptions, Session } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials";
-import Facebook from "next-auth/providers/facebook";
 import { req } from "@/app/shared/request";
-import { cookies } from "next/headers";
 
-// Extend the Session type to include the provider property
+/* ────────────────────────────────────────────────────────────────────────────
+ * 🔄  Type Augmentation
+ * ──────────────────────────────────────────────────────────────────────────*/
 declare module "next-auth" {
-  /** DB থেকে পাওয়া অতিরিক্ত ফিল্ড */
   interface User {
     dbUser?: {
       _id: string;
       name: string;
-      email: string;
+      email?: string;
       image?: string;
       phone?: string;
       role?: string;
+      slug?: string;
       authProvider?: string;
     };
+    slug?: string;
+    refreshToken?: string;
   }
 
   interface Session {
     provider?: string;
-    user: IUser;
+    refreshToken?: string;
+    user: IUser & { slug?: string };
   }
 }
 
@@ -34,47 +38,51 @@ declare module "next-auth/jwt" {
     image?: string;
     phone?: string;
     role?: string;
+    slug?: string;
     provider?: string;
+    refreshToken?: string;
   }
 }
 
+/* ────────────────────────────────────────────────────────────────────────────
+ * ⚙️  Next‑Auth Options
+ * ──────────────────────────────────────────────────────────────────────────*/
 export const authOptions: NextAuthOptions = {
+  /* ────────────── Providers ────────────── */
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
-    Facebook({
+    FacebookProvider({
       clientId: process.env.FACEBOOK_CLIENT_ID as string,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
     }),
-
     CredentialsProvider({
       name: "Credentials",
       credentials: {
         name: { label: "Name", type: "text" },
-        identifier: { label: "Email/Phone", type: "text" },
+        identifier: { label: "Email/Phone/Slug", type: "text" },
         password: { label: "Password", type: "password" },
-        authProvider: { label: "Type (email|phone)", type: "text" },
-        operationType: { label: "Operation Type", type: "text" }, // "signUp" | "login"
+        authProvider: { label: "Type", type: "text" }, // "email" | "phone" | "slug"
+        operationType: { label: "Operation", type: "text" }, // "signUp" | "logIn"
       },
       async authorize(credentials) {
-        // কোন API end‑point কল হবে?
         const route =
           credentials?.operationType === "signUp"
             ? "user/signUpByCredentials"
             : "user/logInByCredentials";
 
-        const { res, data } = await req(route, "POST", {
+        const payload: Record<string, any> = {
           ...credentials,
-          slug: "user",
+          // identifier value mapped to the dynamic provider key (email/phone/slug)
           //@ts-ignore
           [credentials.authProvider]: credentials?.identifier,
-        });
+        };
 
-        if (!res.ok) {
-          throw new Error(data?.message);
-        }
+        const { res, data } = await req(route, "POST", payload);
+
+        if (!res.ok) throw new Error(data?.message);
 
         const { user, refreshToken } = data;
         return {
@@ -84,38 +92,44 @@ export const authOptions: NextAuthOptions = {
           image: user.image,
           phone: user.phone,
           role: user.role,
-          provider: user.authProvider, // "email" | "phone"
-          dbUser: user, // ↙️ jwt কলব্যাকে কাজে লাগবে
+          slug: user.slug,
+          provider: user.authProvider,
+          dbUser: user,
           refreshToken,
         };
       },
     }),
   ],
-  /* -------------------------------------------------
-   next‑auth callbacks — cleaned‑up, one‑time cookie
---------------------------------------------------*/
 
+  /* ────────────── Callbacks ────────────── */
   callbacks: {
-    /* 1️⃣  signIn — only Google needs an upsert */
+    /** 1️⃣ Google sign‑in needs an upsert */
     async signIn({ user, account }) {
       if (account?.provider === "google") {
+        function getEmailUsername(email: string): string | null {
+          if (!email || typeof email !== "string") return null;
+          const [username] = email.split("@");
+          return username || null;
+        }
+
         const { res, data } = await req("user/googleUpsertUser", "POST", {
           name: user.name,
           email: user.email,
           image: user.image,
           authProvider: "google",
+          slug: getEmailUsername(user.email as string),
         });
 
         if (!res.ok) return false;
-        (user as any).dbUser = data.user; // forward to jwt
+
+        (user as any).dbUser = data.user;
         (user as any).refreshToken = data.refreshToken;
       }
       return true;
     },
 
-    /* 2️⃣  jwt — first pass maps DB → token  +  sets refresh‑cookie once  */
+    /** 2️⃣ jwt — map DB → token, persist refreshToken & slug */
     async jwt({ token, user }) {
-      /* first call (after authorize / signIn) → user is defined */
       if (user) {
         const u: any = (user as any).dbUser || user;
 
@@ -125,25 +139,15 @@ export const authOptions: NextAuthOptions = {
         token.image = u.image;
         token.phone = u.phone;
         token.role = u.role ?? "user";
+        token.slug = u.slug ?? token.slug;
         token.provider = u.authProvider ?? token.provider;
-
-        /*  refreshToken present only on credentials‑flow sign‑in  */
-        const rt = (user as any).refreshToken;
-        if (rt) {
-          (await cookies()).set("refreshToken", rt, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-            path: "/",
-            maxAge: 60 * 60 * 24 * 10, // 10 days
-          });
-        }
+        token.refreshToken =
+          (user as any).refreshToken ?? token.refreshToken ?? undefined;
       }
-      /* subsequent jwt calls just return the already‑filled token */
       return token;
     },
 
-    /* 3️⃣  session — send selected token fields to the client */
+    /** 3️⃣ session — expose selected token fields to the client */
     async session({ session, token }) {
       session.user = {
         _id: token.id!,
@@ -152,12 +156,15 @@ export const authOptions: NextAuthOptions = {
         image: token.image,
         phone: token.phone,
         role: token.role as string,
+        slug: token.slug,
       } as any;
 
       session.provider = token.provider;
+      session.refreshToken = token.refreshToken;
       return session;
     },
   },
 
+  /* ────────────── Misc ────────────── */
   secret: process.env.NEXT_AUTH_SECRET,
 };
