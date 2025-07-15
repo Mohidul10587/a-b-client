@@ -25,9 +25,13 @@ export interface IFormData {
   position: number;
   selectionType: string;
   bannerId: any;
-  productSectionId: string;
+  productSectionId: any;
+  suggestionId: any;
   images: File[];
   width: number;
   height: number;
   suggestion: string | null;
+  sellerId: any;
+  selectedOption: string;
+  isSellerElementStatus: boolean;
 }

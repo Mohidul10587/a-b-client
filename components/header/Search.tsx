@@ -129,13 +129,11 @@ const Search = () => {
                             src={item.photoUrl || "/default.jpg"}
                             height={40}
                             width={40}
-                            alt={item.categoryName}
+                            alt={item.title}
                             className="h-12 w-12 rounded"
                           />
                           <div className="flex items-center justify-between w-full">
-                            <h3 className="font-bold text-sm">
-                              {item.categoryName}
-                            </h3>
+                            <h3 className="font-bold text-sm">{item.title}</h3>
                             <p className="text-xs">Categories</p>
                           </div>
                         </div>

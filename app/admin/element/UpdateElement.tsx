@@ -58,7 +58,11 @@ const UpdateElement: FC<PageProps> = ({ id, onClose, setChange, change }) => {
     images: [],
     width: 20,
     height: 20,
+    selectedOption: "",
+    isSellerElementStatus: false,
     suggestion: "",
+    suggestionId: "",
+    sellerId: "",
   });
   const [suggestions, setSuggestions] = useState<ISuggestion[]>([]);
   const [banners, setBanners] = useState<IBanner[]>([]);

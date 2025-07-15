@@ -14,7 +14,7 @@ interface ISubCategory {
 
 interface ICategory {
   _id: string;
-  categoryName: string;
+  title: string;
   slug: string;
   photoUrl?: string; // Add photoUrl as optional
   subCategories: ISubCategory[];
@@ -82,12 +82,12 @@ const CategoriesHome: React.FC<{
                       src={category.photoUrl || "/default.jpg"}
                       width={100}
                       height={100}
-                      alt={category.categoryName}
+                      alt={category.title}
                       loading="lazy"
                       className="w-min h-6 object-cover"
                       quality={100}
                     />
-                    {category.categoryName}
+                    {category.title}
                   </Link>
                   {category.subCategories?.length > 0 && (
                     <div className="">
@@ -103,7 +103,7 @@ const CategoriesHome: React.FC<{
                               src={subcategory.photo || "/default.jpg"}
                               width={100}
                               height={100}
-                              alt={category.categoryName}
+                              alt={category.title}
                               loading="lazy"
                               className="w-min h-4 object-cover"
                               quality={100}
