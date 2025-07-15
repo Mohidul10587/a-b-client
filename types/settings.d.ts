@@ -1,4 +1,5 @@
 export interface ISettings {
+  _id: "";
   logo: string;
   favicon: string;
   loto: string;

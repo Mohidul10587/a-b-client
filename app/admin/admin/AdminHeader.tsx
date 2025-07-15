@@ -7,6 +7,7 @@ import { useData } from "@/app/DataContext";
 
 const AdminHeader: React.FC = () => {
   const { settings } = useData();
+  
   const [menuOpen, setMenuOpen] = useState(false); // State to manage menu open/close
   const router = useRouter();
   return (
