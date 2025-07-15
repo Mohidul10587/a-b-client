@@ -2,7 +2,7 @@ import { apiUrl } from "./urls";
 
 export const req = async (
   url: string,
-  method: "POST" | "PUT" | "PATCH" | "DELETE",
+  method: "POST" | "PUT" | "PATCH" | "DELETE" | "GET",
   payload?: any
 ) => {
   const options: RequestInit = {
@@ -13,7 +13,7 @@ export const req = async (
     },
   };
 
-  if (method !== "DELETE" && payload) {
+  if (method !== "DELETE" && method !== "GET" && payload) {
     options.body = JSON.stringify(payload);
   }
 

@@ -1,9 +1,11 @@
 import { handleLogOut } from "@/app/shared/handleLogOut";
+import { req } from "@/app/shared/request";
 import { apiUrl } from "@/app/shared/urls";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, useState } from "react";
+import { useRouter } from "next/navigation";
+import { FC, useEffect, useState } from "react";
 import {
   FaBook,
   FaChevronCircleDown,
@@ -17,13 +19,34 @@ const DropdownMenu: FC<{ user: any }> = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
-
+  const router = useRouter();
   const menuItems = [
     { icon: <FaUser size={18} />, label: "My Profile" },
     { icon: <FaShoppingBag size={18} />, label: "Orders" },
     { icon: <FaBook size={18} />, label: "eBook Library" },
     { icon: <FaHeart size={18} />, label: "Wishlist" },
   ];
+  useEffect(() => {
+    router.prefetch("/auth");
+  }, []);
+  async function handleLogOut() {
+    try {
+      const { res } = await req(`user/logout`, "POST", {});
+      if (res.ok) {
+        // Sign out without redirect, then manually redirect
+        await signOut({ redirect: false });
+
+        // Redirect to current site's /auth page
+        router.push("/auth");
+        return;
+      }
+    } catch (error) {
+      console.error("Failed to log out:", error);
+    }
+
+    // Fallback redirect
+    router.push("/auth");
+  }
 
   return (
     <div className="relative inline-block text-left z-50">
@@ -63,7 +86,7 @@ const DropdownMenu: FC<{ user: any }> = ({ user }) => {
             </Link>
           ))}
           <div
-            onClick={() => handleLogOut("/auth")}
+            onClick={handleLogOut}
             className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 hover:text-red-600 cursor-pointer"
           >
             <FaSignOutAlt size={18} /> <span>Sign Out</span>

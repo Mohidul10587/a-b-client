@@ -39,13 +39,11 @@ const Form: React.FC<Props<IProduct>> = ({
   useEffect(() => {
     const fetchPublishers = async () => {
       try {
-        const response = await fetch(
-          `${apiUrl}/publishers/allForProductUploadPage`
-        );
+        const response = await fetch(`${apiUrl}/user/allUserForAdmin`);
         if (response.ok) {
           const data = await response.json();
 
-          setPublishers(data.publishers);
+          setPublishers(data.users);
         } else {
           throw new Error("Failed to fetch brands");
         }
@@ -415,7 +413,7 @@ const Form: React.FC<Props<IProduct>> = ({
                       <option value="">-- Select a Publisher --</option>
                       {publishers.map((item) => (
                         <option key={item._id} value={item._id}>
-                          {item.title}
+                          {item.name}
                         </option>
                       ))}
                     </select>

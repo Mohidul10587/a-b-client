@@ -49,7 +49,8 @@ export const DataProvider: React.FC<{
     mutate: userMutate,
     isLoading,
   } = useSWR(`settings`, fetcher);
-  const settings = response?.resData;
+  const settings = response?.item;
+  
   const userId = data?.user?._id;
   const refreshToken = data?.refreshToken;
   useEffect(() => {

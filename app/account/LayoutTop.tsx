@@ -81,58 +81,47 @@ const LayoutTop: FC<{
         </div>
         {user && (
           <>
-            {user.isSeller ? (
+            {user.role === "seller" ? (
               <MenusUser
                 items={[
                   { title: "My order", link: `/account` },
-                  // {
-                  //   title: "Messenger",
-                  //   link: `/account/chat`,
-                  // },
+
                   { title: "Setting", link: `/account/setting` },
                   { title: "Wishlist", link: `/account/wishlist` },
-                  // {
-                  //   title: "Seller dashboard",
-                  //   link: `/account/seller-dashboard`,
-                  // },
-                  // {
-                  //   title: "Seller product",
-                  //   link: `/account/seller-product`,
-                  // },
-                  // {
-                  //   title: "Product Suggestion",
-                  //   link: `/account/suggestion`,
-                  // },
-                  // {
-                  //   title: "Seller Setting",
-                  //   link: `/account/seller-setting`,
-                  // },
-                  // {
-                  //   title: "Seller withdraw",
-                  //   link: `/account/seller-withdraw`,
-                  // },
-                  // {
-                  //   title: "Builder",
-                  //   link: `/account/element/main-page/seller-home`,
-                  // },
-                  // {
-                  //   title: "Banner",
-                  //   link: `/account/banner`,
-                  // },
-                  // {
-                  //   title: "B2B",
-                  //   link: `/account/betterModel`,
-                  // },
+                  {
+                    title: "Seller dashboard",
+                    link: `/account/seller-dashboard`,
+                  },
+                  {
+                    title: "Seller product",
+                    link: `/account/seller-product`,
+                  },
+                  {
+                    title: "Product Suggestion",
+                    link: `/account/suggestion`,
+                  },
+                  {
+                    title: "Seller Setting",
+                    link: `/account/seller-setting`,
+                  },
+                  {
+                    title: "Seller withdraw",
+                    link: `/account/seller-withdraw`,
+                  },
+                  {
+                    title: "Builder",
+                    link: `/account/element/main-page/seller-home`,
+                  },
+                  {
+                    title: "Banner",
+                    link: `/account/banner`,
+                  },
                 ]}
               />
             ) : (
               <MenusUser
                 items={[
                   { title: "My order", link: `/account` },
-                  // {
-                  //   title: "Messenger",
-                  //   link: `/account/chat`,
-                  // },
                   { title: "Setting", link: `/account/setting` },
                   { title: "Wishlist", link: `/account/wishlist` },
                 ]}

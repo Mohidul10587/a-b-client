@@ -50,9 +50,13 @@ const PageBuilder: React.FC<PageProps> = ({
     bannerId: "",
     suggestion: "",
     productSectionId: "",
+    suggestionId: "",
+    sellerId: "",
     images: [],
     width: 20,
     height: 20,
+    selectedOption: "",
+    isSellerElementStatus: true,
   });
 
   const [banners, setBanners] = useState<IBanner[]>([]);
