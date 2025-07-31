@@ -14,9 +14,9 @@ const Wishlist = () => {
 
   // Use SWR to fetch the wishlist data
   const { data, error, mutate } = useSWR(`wishlist/getWishlist`, fetcher);
-
-  const wishlist = data ? data.items : [];
   
+  const wishlist = data?.items ? data.items : [];
+
   const reversedList = [...wishlist].reverse();
 
   const handleDeleteProduct = async (product: string) => {
@@ -64,7 +64,7 @@ const Wishlist = () => {
 
   if (error) return <div>Error loading wishlist.</div>;
   if (!data) return <div>Loading...</div>;
-  
+
   return (
     <div className="container">
       {wishlist.length === 0 ? (
@@ -94,7 +94,7 @@ const Wishlist = () => {
                 >
                   <Image
                     src={item.product.img || "/default.jpg"}
-                    alt={item.product.titleEnglish}
+                    alt={item.product.titleEn}
                     width={80}
                     height={80}
                     className="w-14 h-14 object-cover"

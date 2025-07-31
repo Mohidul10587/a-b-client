@@ -10,7 +10,6 @@ import Modal from "@/components/admin/Modal";
 import { ISuggestion } from "@/types/suggestion";
 import { IFormData } from "@/types/element";
 import { useData } from "@/app/DataContext";
-import { IBrand } from "@/app/admin/publishers/[id]/page";
 
 interface PageProps {
   id: string;

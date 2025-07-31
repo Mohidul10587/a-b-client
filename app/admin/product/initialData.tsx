@@ -41,7 +41,6 @@ export const initialData: IProduct = {
 
   // P
   productType: "",
-  publisher: "",
 
   // R
   regularPrice: 0,
@@ -68,7 +67,6 @@ export const initialData: IProduct = {
 
   // Y
   youtubeVideo: [],
-  titleEnglish: "",
   brand: "",
   display_2: false,
   display: false,

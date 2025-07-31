@@ -81,7 +81,7 @@ const LayoutTop: FC<{
         </div>
         {user && (
           <>
-            {user.role === "seller" ? (
+            {user.role == "seller" ? (
               <MenusUser
                 items={[
                   { title: "My order", link: `/account` },

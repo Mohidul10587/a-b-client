@@ -1,7 +1,7 @@
 // src/types/product.d.ts
 
 export interface IProduct {
-  titleEnglish: string;
+  titleEn: string;
   // A
   ISBN: string;
   _id?: string;
@@ -43,7 +43,6 @@ export interface IProduct {
 
   // P
   productType: string;
-  publisher: string;
 
   // R
   regularPrice: number;

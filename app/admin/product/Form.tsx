@@ -13,13 +13,12 @@ import { languages } from "@/app/shared/language";
 import { IProduct } from "@/types/product";
 import { req } from "@/app/shared/request";
 import { useData } from "@/app/DataContext";
-import { userAgent } from "next/server";
 
-const Form: React.FC<Props<IProduct>> = ({
-  id,
-  initialData,
-  pagePurpose = "add",
-}) => {
+const Form: React.FC<{
+  id?: string;
+  initialData: IProduct;
+  pagePurpose: "add" | "edit";
+}> = ({ id, initialData, pagePurpose = "add" }) => {
   const { user, showModal } = useData();
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [imageType, setImageType] = useState("");
@@ -399,24 +398,26 @@ const Form: React.FC<Props<IProduct>> = ({
                       className="mt-1 p-2 w-full border rounded-md border-black"
                     />
                   </div>
-                  <div className="mb-4">
-                    <p>
-                      Publisher<sup className="text-red-700">*</sup>
-                    </p>
-                    <select
-                      className="mt-1 p-2 w-full border rounded-md border-black"
-                      value={data.publisher}
-                      name="publisher"
-                      onChange={handleChange}
-                    >
-                      <option value="">-- Select a Publisher --</option>
-                      {publishers.map((item) => (
-                        <option key={item._id} value={item._id}>
-                          {item.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  {user.role === "admin" && (
+                    <div className="mb-4">
+                      <p>
+                        Sellers<sup className="text-red-700">*</sup>
+                      </p>
+                      <select
+                        className="mt-1 p-2 w-full border rounded-md border-black"
+                        value={data.seller}
+                        name="seller"
+                        onChange={handleChange}
+                      >
+                        <option value="">-- Select a seller --</option>
+                        {publishers.map((item) => (
+                          <option key={item._id} value={item._id}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                 </div>
                 <div className="mb-4">
                   <label htmlFor="category" className="block mb-2 font-medium">
