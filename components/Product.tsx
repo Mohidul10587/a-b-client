@@ -82,7 +82,6 @@ const Product: React.FC<IProduct> = ({
       <AddToCart
         product={{
           _id: _id,
-          type: "main",
           img: img,
           sellingPrice: sellingPrice,
           regularPrice: regularPrice,
@@ -90,8 +89,6 @@ const Product: React.FC<IProduct> = ({
           existingQnt: existingQnt,
           shippingInside: shippingInside,
           shippingOutside: shippingOutside,
-          variantId: _id,
-          commissionForSeller: category?.commissionForSeller,
         }}
       />
     </div>
