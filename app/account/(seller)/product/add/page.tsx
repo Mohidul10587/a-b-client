@@ -1,14 +1,11 @@
 "use client";
-import { apiUrl } from "@/app/shared/urls";
 import React from "react";
-
 import { useData } from "@/app/DataContext";
 import Form from "@/app/admin/product/Form";
 import { initialData } from "@/app/admin/product/initialData";
 
-const UpdateProduct = () => {
+const Page = () => {
   const { user } = useData();
-  return <Form initialData={initialData} pagePurpose={"edit"} />;
+  return <Form initialData={initialData} pagePurpose={"add"} />;
 };
-
-export default UpdateProduct;
+export default Page;

@@ -13,7 +13,7 @@ interface ICounts {
   productsCount: number;
   categoriesCount: number;
   writersCount: number;
-  publishersCount: number;
+  sellersCount: number;
   usersCount: number;
 }
 
@@ -85,8 +85,8 @@ const IndexPage: React.FC = () => {
             <p>{counts?.writersCount}</p>
           </div>
           <div className="bg-gradient-to-r from-emerald-500 to-emerald-900 rounded-md px-2 py-4 text-center block space-y-3 text-white">
-            <h1 className="font-bold text-xl">Publishers</h1>
-            <p>{counts?.publishersCount}</p>
+            <h1 className="font-bold text-xl">Sellers</h1>
+            <p>{counts?.sellersCount}</p>
           </div>
           <div className="bg-gradient-to-r from-emerald-500 to-emerald-900 rounded-md px-2 py-4 text-center block space-y-3 text-white">
             <h1 className="font-bold text-xl">Users</h1>

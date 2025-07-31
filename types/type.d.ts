@@ -51,71 +51,48 @@ interface ISubcategory {
   parentCategory: string;
   queAndAnsArray: QnA[];
 }
+
 interface IUser {
   _id: string;
-  address: string;
-  birthday: string;
-  city: string;
-  coins: number;
-  coinsTakingDate: string;
-  companyEmail: string;
-  companyName: string;
-  companyPhone: string;
-  contactInfo: string;
-  country: string;
-  coverPhoto?: string;
-  createdAt: string;
-  deliveryOption: string;
-  deliveryAddresses: {
-    _id: ReactNode;
-    name: string;
-    lastName: string;
-    address: string;
-    phone: string;
-    email: string;
-    region: { title: string; _id: string };
-    userCity: { title: string; _id: string };
-  }[];
+  username?: string;
   email?: string;
-  facebook: string;
-  friday_openingHours: string;
-  gender: string;
-  gmail: string;
-  image?: string;
+  phone?: string;
+  gmail?: string;
+  password?: string;
+  role: "user" | "admin" | "seller" | "customerManager";
+  name: string;
+  slug: string;
   isSeller: boolean;
   isUser: boolean;
-  linkedin: string;
-  lastName: string;
-  monday_openingHours: string;
-  name: string;
-  notifications: {
-    _id: string;
-    type: "message" | "order" | "offer";
-    title: string;
-    description: string;
-    date: string;
-    isRead: boolean;
-    link: string;
-    img: string;
-  }[];
-
-  oneClickPayStartedAt: string;
-  password: string;
-  phone?: string | null;
-  img?: string;
-  postalCode: string;
-  region: any;
-  saturday_openingHours: string;
-  skype: string;
-  slug: string;
-  role: string;
-  street: string;
-  sunday_openingHours: string;
-  thursday_openingHours: string;
-  toDaysCoins: number;
-  tuesday_openingHours: string;
-  twitter: string;
-  userCity: any;
-  wednesday_openingHours: string;
+  birthday: string;
+  gender: string;
+  address: string;
+  companyName: string;
+  companyEmail: string;
+  companyPhone: string;
+  facebook: string;
   whatsapp: string;
+  coverImg: string;
+  image?: string;
+  img?: string;
+  display?: boolean;
+
+  lastLoginAt: Date;
+}
+
+type ModalType = "success" | "error" | "info" | "warning" | "loading";
+
+interface IBrand {
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  shortDescription: string;
+  rating: number;
+  img: File | string;
+  video: string;
+  metaTitle: string;
+  metaDescription: string;
+  metaImg: File | string;
+  keywords: string[];
 }

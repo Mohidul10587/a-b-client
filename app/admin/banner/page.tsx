@@ -140,13 +140,13 @@ const IndexPage: React.FC = () => {
                 <td className="py-3 px-4 text-right space-x-2">
                   <Link
                     href={`/admin/banner/${banner._id}`}
-                    className="btnOrange inline-block"
+                    className="btnO inline-block"
                   >
                     Edit
                   </Link>
                   <button
                     onClick={() => handleDelete(banner._id)}
-                    className="btnRed inline-block"
+                    className="btnR inline-block"
                   >
                     Delete
                   </button>

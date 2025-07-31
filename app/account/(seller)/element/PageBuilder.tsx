@@ -7,7 +7,6 @@ import { ICategory } from "@/types/category";
 import { ISuggestion } from "@/types/suggestion";
 import { useData } from "@/app/DataContext";
 import { IFormData } from "@/types/element";
-import { IBrand } from "@/app/admin/publishers/[id]/page";
 
 interface PageProps {
   onClose: () => void;

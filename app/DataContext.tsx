@@ -5,11 +5,10 @@ import { useSession } from "next-auth/react";
 import { ISettings } from "@/types/settings";
 import { getTotalCartCount } from "@/components/AddToCart";
 import { fetcher } from "./shared/fetcher";
-import { defaultUser } from "./shared/defaultUser";
 import Modal from "@/components/Modal";
 import { useMergeLocalProducts } from "./hooks/useMergeLocalProducts";
 import { req } from "./shared/request";
-type infoType = "success" | "error" | "info";
+
 interface DataContextProps {
   user: IUser;
   userMutate: KeyedMutator<any>;
@@ -20,7 +19,7 @@ interface DataContextProps {
   setNumberOfCartProducts: React.Dispatch<React.SetStateAction<number>>;
   thisProductQuantity: number;
   setThisProductQuantity: React.Dispatch<React.SetStateAction<number>>;
-  showModal: (content: string, type?: "success" | "error" | "info") => void;
+  showModal: (content: string, type?: ModalType) => void;
   closeModal: () => void;
 }
 
@@ -32,17 +31,15 @@ export const DataProvider: React.FC<{
   const [numberOfCartProduct, setNumberOfCartProducts] = useState<number>(0);
   const [thisProductQuantity, setThisProductQuantity] = useState<number>(0);
   const { data, status } = useSession();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
-  const [modalType, setModalType] = useState<infoType>("success");
+  const [modalType, setModalType] = useState<ModalType>("success");
   const total = useMergeLocalProducts();
+  
 
   useEffect(() => {
-    if (total !== null) {
-      setNumberOfCartProducts(total);
-    } else {
-      setNumberOfCartProducts(getTotalCartCount());
-    }
+    setNumberOfCartProducts(total);
   }, [total]);
   const {
     data: response,
@@ -50,7 +47,7 @@ export const DataProvider: React.FC<{
     isLoading,
   } = useSWR(`settings`, fetcher);
   const settings = response?.item;
-  
+
   const userId = data?.user?._id;
   const refreshToken = data?.refreshToken;
   useEffect(() => {
@@ -62,10 +59,7 @@ export const DataProvider: React.FC<{
       });
     })();
   }, [userId, refreshToken]);
-  const showModal = (
-    content: string,
-    type: "success" | "error" | "info" = "success"
-  ) => {
+  const showModal = (content: string, type: ModalType = "success") => {
     setModalContent(content);
     setModalType(type);
     setIsModalOpen(true);

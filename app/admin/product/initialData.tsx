@@ -4,7 +4,6 @@ import { IProduct } from "@/types/product";
 
 export const initialData: IProduct = {
   // A
-
   ISBN: "",
 
   // B
@@ -42,7 +41,6 @@ export const initialData: IProduct = {
 
   // P
   productType: "",
-  publisher: "",
 
   // R
   regularPrice: 0,
@@ -69,4 +67,8 @@ export const initialData: IProduct = {
 
   // Y
   youtubeVideo: [],
+  brand: "",
+  display_2: false,
+  display: false,
+  seller: "",
 };

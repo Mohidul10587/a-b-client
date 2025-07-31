@@ -3,7 +3,7 @@
 import { useData } from "@/app/DataContext";
 import { fetcher } from "@/app/shared/fetcher";
 import { apiUrl } from "@/app/shared/urls";
-import { useRouter } from "next/navigation";
+import { IProduct } from "@/types/product";
 import { FC, useEffect, useState } from "react";
 import useSWR from "swr";
 
@@ -17,7 +17,6 @@ export const getTotalCartCount = (): number => {
 };
 
 const AddToCart: FC<{ product: any }> = ({ product }) => {
-  const router = useRouter();
   const { user, setNumberOfCartProducts, sessionStatus } = useData();
   const [thisProductQuantity, setThisProductQuantity] = useState<number>(0);
   const [existingQuantity, setExistingQuantity] = useState(10);
@@ -38,28 +37,13 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
     mutate,
   } = useSWR(user?._id ? `cart/getUserCart/${user._id}` : null, fetcher);
 
-  // const {
-  //   data: quantityResponse,
-  //   error: quantityError,
-  //   mutate: quantityMutate,
-  // } = useSWR(
-  //   `product/getExistingQuantity?type=${product.type}&mainId=${product._id}&variantId=${product.variantId}`,
-  //   fetcher
-  // );
-
-  // useEffect(() => {
-  //   if (quantityResponse) {
-  //     setExistingQuantity(quantityResponse.respondedData);
-  //   }
-  // }, [quantityResponse]);
-
-  const getThisProductQuantity = (productId: string, variantId: string) => {
+  const getThisProductQuantity = (productId: string) => {
     if (sessionStatus === "authenticated") {
       let itemOfCart = {
         quantity: 0,
       };
       itemOfCart = cartResponse?.respondedData.find(
-        (i: any) => i._id === productId && i.variantId === variantId
+        (i: any) => i._id === productId
       );
       return itemOfCart?.quantity || 0;
     } else {
@@ -69,9 +53,7 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
         let item = {
           quantity: 0,
         };
-        item = cart.find(
-          (i: any) => i._id === productId && i.variantId === variantId
-        );
+        item = cart.find((i: any) => i._id === productId);
 
         return item?.quantity || 0;
       }
@@ -83,8 +65,7 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
   const [isProductExistedInDatabase, setIsProductExistedInDatabase] =
     useState<boolean>(
       !!cartResponse?.respondedData?.find(
-        (item: any) =>
-          item._id === product._id && item.variantId === product.variantId
+        (item: any) => item._id === product._id
       )
     );
 
@@ -94,7 +75,6 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
     setIsProductExistedInDatabase: any,
     setNumberOfCartProducts: any
   ) => {
-    
     if (sessionStatus === "authenticated") {
       addToDataBase(
         user._id as string,
@@ -110,18 +90,13 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
 
       const sortedProduct = {
         _id: product._id,
-        type: product.type,
         img: product.img,
-        variantId: product.variantId,
         sellingPrice: product.sellingPrice,
         regularPrice: product.regularPrice,
         title: product.title,
         shippingInside: product.shippingInside,
         shippingOutside: product.shippingOutside,
         seller: "67585335633e858a3d323e59",
-        // commissionForSeller: product.commissionForSeller,
-        commissionForSeller: 500,
-
         existingQnt: product.existingQnt,
         isChecked: true,
       };
@@ -129,19 +104,17 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
 
       localStorage.setItem("cartData", JSON.stringify(cart));
       setNumberOfCartProducts(getTotalCartCount());
-      setThisProductQuantity(
-        getThisProductQuantity(product._id, product.variantId)
-      );
+      setThisProductQuantity(getThisProductQuantity(product._id));
       setIsProductExisted(true);
     }
   };
 
-  const increaseQuantity = (id: string, variantId: string) => {
+  const increaseQuantity = (id: string) => {
     if (user._id && sessionStatus === "authenticated") {
       updateProductQuantityInDataBase(
         user._id as string,
         id,
-        variantId,
+
         "increase",
         setNumberOfCartProducts,
         setThisProductQuantity,
@@ -152,23 +125,21 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
       const existingCart = localStorage.getItem("cartData");
       const cart: any[] = existingCart ? JSON.parse(existingCart) : [];
       const updatedCart = cart.map((item) =>
-        item._id === id && item.variantId === variantId
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
+        item._id === id ? { ...item, quantity: item.quantity + 1 } : item
       );
 
       localStorage.setItem("cartData", JSON.stringify(updatedCart));
       setNumberOfCartProducts(getTotalCartCount());
-      setThisProductQuantity(getThisProductQuantity(id, variantId));
+      setThisProductQuantity(getThisProductQuantity(id));
     }
   };
 
-  const decreaseQuantity = (id: string, variantId: string) => {
+  const decreaseQuantity = (id: string) => {
     if (user._id && sessionStatus === "authenticated") {
       updateProductQuantityInDataBase(
         user._id as string,
         id,
-        variantId,
+
         "decrease",
         setNumberOfCartProducts,
         setThisProductQuantity,
@@ -188,25 +159,19 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
 
       localStorage.setItem("cartData", JSON.stringify(updatedCart));
       setNumberOfCartProducts(getTotalCartCount());
-      setThisProductQuantity(getThisProductQuantity(id, variantId));
+      setThisProductQuantity(getThisProductQuantity(id));
     }
   };
   useEffect(() => {
     const productsInCartInLocalStorage = localStorage.getItem("cartData");
     const productsInCart = JSON.parse(productsInCartInLocalStorage as string);
-    setThisProductQuantity(
-      getThisProductQuantity(product._id, product.variantId)
-    );
+    setThisProductQuantity(getThisProductQuantity(product._id as string));
     setIsProductExisted(
-      !!productsInCart?.find(
-        (item: any) =>
-          item._id === product._id && item.variantId === product.variantId
-      )
+      !!productsInCart?.find((item: any) => item._id === product._id)
     );
     setIsProductExistedInDatabase(
       !!cartResponse?.respondedData?.find(
-        (item: any) =>
-          item._id === product._id && item.variantId === product.variantId
+        (item: any) => item._id === product._id
       )
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -219,7 +184,7 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
             <div className="flex w-full rounded overflow-hidden items-center">
               <button
                 type="button"
-                onClick={() => decreaseQuantity(product._id, product.variantId)}
+                onClick={() => decreaseQuantity(product._id as string)}
                 className="bg-blue-600 text-white md:py-2 px-1 py-1"
               >
                 <svg
@@ -239,7 +204,7 @@ const AddToCart: FC<{ product: any }> = ({ product }) => {
                   existingQuantity <= thisProductQuantity ||
                   product.sellingPrice < 1
                 }
-                onClick={() => increaseQuantity(product._id, product.variantId)}
+                onClick={() => increaseQuantity(product._id as string)}
                 className="bg-blue-600 text-white md:py-2 py-1 px-1"
               >
                 <svg
@@ -305,9 +270,9 @@ const addToDataBase = async (
 ) => {
   const cartItem = {
     _id: storedProduct._id,
-    type: storedProduct.type,
+
     img: storedProduct.img,
-    variantId: storedProduct.variantId,
+
     sellingPrice: storedProduct.sellingPrice,
     regularPrice: storedProduct.regularPrice,
     title: storedProduct.title,
@@ -332,9 +297,7 @@ const addToDataBase = async (
       body: JSON.stringify({
         userId,
         cartItem,
-        type: product.type,
         mainId: product._id,
-        variantId: product.variantId,
       }),
     });
 
@@ -351,9 +314,7 @@ const addToDataBase = async (
     // Check if the added item exists in the cart
 
     const isProductInCart = data.cart.cartItems.some(
-      (item: any) =>
-        item._id === storedProduct._id &&
-        item.variantId === storedProduct.variantId
+      (item: any) => item._id === storedProduct._id
     );
 
     setIsProductExistedInDatabase(isProductInCart);
@@ -371,7 +332,6 @@ const addToDataBase = async (
 const updateProductQuantityInDataBase = async (
   userId: string,
   productId: string,
-  variantId: string,
   operationType: "increase" | "decrease",
   setNumberOfCartProducts: any,
   setThisProductQuantity: any,
@@ -388,7 +348,7 @@ const updateProductQuantityInDataBase = async (
           "Content-Type": "application/json",
         },
 
-        body: JSON.stringify({ userId, productId, variantId, operationType }),
+        body: JSON.stringify({ userId, productId, operationType }),
       }
     );
 
@@ -403,7 +363,7 @@ const updateProductQuantityInDataBase = async (
     );
     mutate();
     setNumberOfCartProducts(total);
-    setThisProductQuantity(getThisProductQuantity(productId, variantId));
+    setThisProductQuantity(getThisProductQuantity(productId));
 
     return data;
   } catch (error) {

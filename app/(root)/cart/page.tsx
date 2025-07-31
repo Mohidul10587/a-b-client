@@ -13,13 +13,15 @@ import Link from "next/link";
 import { getTotalCartCount } from "@/components/AddToCart";
 import { FaHeart, FaTrashAlt } from "react-icons/fa";
 import { cartIcon, leftIcon } from "./icons";
+import { req } from "@/app/shared/request";
 
 const Cart = () => {
   const router = useRouter();
   const [isUpdating, setIsUpdating] = useState(false);
   const [message, setMessage] = useState("");
   const [availableQuantity, setAvailableQuantity] = useState(0);
-  const { setNumberOfCartProducts, user, sessionStatus, settings } = useData();
+  const { setNumberOfCartProducts, user, showModal, sessionStatus, settings } =
+    useData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("onCache");
   const [cart, setCart] = useState<any[]>([]);
@@ -81,16 +83,15 @@ const Cart = () => {
   }, [cartResponse?.respondedData, sessionStatus, totalShippingInside]);
 
   const increaseQuantity = async (
-    type: string,
     id: string,
-    variantId: string,
+
     itemQuantity: number
   ) => {
     if (isUpdating) return;
     setIsUpdating(true);
     try {
       const response = await fetch(
-        `${apiUrl}/product/getExistingQuantity?type=${type}&mainId=${id}&variantId=${variantId}`
+        `${apiUrl}/product/getExistingQuantity?mainId=${id}`
       );
       if (!response.ok) {
         console.error("Failed to fetch quantity");
@@ -111,16 +112,13 @@ const Cart = () => {
         await updateProductQuantityInDataBase(
           user._id,
           id,
-          variantId,
           "increase",
           setNumberOfCartProducts,
           mutate
         );
       } else {
         const updatedCart = cart.map((item) =>
-          item._id === id && item.variantId === variantId
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
+          item._id === id ? { ...item, quantity: item.quantity + 1 } : item
         );
         setCart(updatedCart);
         localStorage.setItem("cartData", JSON.stringify(updatedCart));
@@ -135,12 +133,11 @@ const Cart = () => {
     }
   };
 
-  const decreaseQuantity = (id: string, variantId: string) => {
+  const decreaseQuantity = (id: string) => {
     if (user._id && sessionStatus === "authenticated") {
       updateProductQuantityInDataBase(
         user._id,
         id,
-        variantId,
         "decrease",
         setNumberOfCartProducts,
         mutate
@@ -148,9 +145,7 @@ const Cart = () => {
     } else {
       const updatedCart = cart
         .map((item) =>
-          item._id === id && item.variantId === variantId
-            ? { ...item, quantity: item.quantity - 1 }
-            : item
+          item._id === id ? { ...item, quantity: item.quantity - 1 } : item
         )
         .filter((item) => item.quantity > 0); // Remove items with 0 quantity
       setCart(updatedCart);
@@ -161,20 +156,14 @@ const Cart = () => {
 
   const deleteItem = async (id: string, variantId: string) => {
     if (user?._id && sessionStatus === "authenticated") {
-      const response = await fetch(`${apiUrl}/cart/removeItemFromCart`, {
-        credentials: "include",
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          SameSite: "None",
-        },
-        body: JSON.stringify({
-          userId: user._id,
-          productId: id,
-          variantId: variantId,
-        }),
-      });
-      if (response.ok) {
+      const { res, data } = await req(
+        `cart/removeItemFromCart?userId=${user._id}&productId=${id}`,
+        "DELETE",
+        {}
+      );
+      if (res.ok) {
+        showModal(data.message, res.ok ? "success" : "error");
+        setNumberOfCartProducts(data.totalQuantityInTheCart);
         mutate();
       }
     } else {
@@ -337,9 +326,7 @@ const Cart = () => {
                         <div className="flex items-center border border-gray-300 rounded">
                           <button
                             className="px-3 py-1 text-lg font-semibold hover:bg-gray-100 transition"
-                            onClick={() =>
-                              decreaseQuantity(item._id, item.variantId)
-                            }
+                            onClick={() => decreaseQuantity(item._id)}
                             aria-label="Decrease quantity"
                           >
                             –
@@ -351,9 +338,8 @@ const Cart = () => {
                             className="px-3 py-1 text-lg font-semibold hover:bg-gray-100 transition"
                             onClick={() =>
                               increaseQuantity(
-                                item.type,
                                 item._id,
-                                item.variantId,
+
                                 item.quantity
                               )
                             }
@@ -486,36 +472,26 @@ function calculateCartTotals(cart: any) {
 const updateProductQuantityInDataBase = async (
   userId: string,
   productId: string,
-  variantId: string,
   operationType: "increase" | "decrease",
   setNumberOfCartProducts: any,
   mutate: any
 ) => {
   try {
-    const response = await fetch(
-      `${apiUrl}/cart/updateProductQuantityInDataBase`,
+    const { res, data } = await req(
+      `cart/updateProductQuantityInDataBase`,
+      "POST",
       {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({ userId, productId, variantId, operationType }),
+        userId,
+        productId,
+        operationType,
       }
     );
-
-    const data = await response.json();
-
-    if (!response.ok) {
+    if (!res.ok) {
       throw new Error(data.message || "Failed to add item to cart");
     }
-    const total = data.cart.cartItems.reduce(
-      (total: number, item: any) => total + item.quantity,
-      0
-    );
+
     mutate();
-    setNumberOfCartProducts(total);
+    setNumberOfCartProducts(data.totalQuantityInTheCart);
 
     return data;
   } catch (error) {

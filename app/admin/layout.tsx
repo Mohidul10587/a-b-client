@@ -2,34 +2,24 @@
 import AdminHeader from "@/app/admin/components/AdminHeader";
 import AdminFooter from "@/app/admin/components/AdminFooter";
 import { useEffect, useState } from "react";
-import { apiUrl } from "../shared/urls";
 import { useRouter } from "next/navigation";
+import { useData } from "../DataContext";
 
 const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { user, sessionStatus } = useData();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkAdminStatus = async () => {
-      try {
-        let response = await fetch(`${apiUrl}/user/checkStuff`, {
-          method: "GET",
-          credentials: "include",
-        });
-        const data = await response.json();
+    if (sessionStatus === "loading") return;
 
-        if (data.success === true) {
-          setLoading(false);
-        } else {
-          router.push("/auth");
-        }
-      } catch (error) {
-        router.push("/auth");
-      }
-    };
+    if (sessionStatus === "unauthenticated" || user?.role !== "admin") {
+      router.push("/auth");
+    } else {
+      setLoading(false);
+    }
+  }, [sessionStatus, user, router]);
 
-    checkAdminStatus();
-  }, [router]);
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -37,6 +27,7 @@ const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       </div>
     );
   }
+
   return (
     <div className="min-h-screen flex flex-col">
       <AdminHeader />

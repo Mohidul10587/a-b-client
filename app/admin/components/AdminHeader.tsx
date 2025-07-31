@@ -45,7 +45,7 @@ const AdminHeader: React.FC = () => {
             </div>
             {/* Menu Items */}
             <div
-              className={`md:flex md:text-white md:space-x-6 ${
+              className={`md:flex items-center md:text-white md:space-x-6 px-2 ${
                 menuOpen
                   ? "absolute w-40 space-y-2 p-4 right-0 flex flex-col bg-white text-black top-10"
                   : "hidden"
@@ -59,7 +59,6 @@ const AdminHeader: React.FC = () => {
               <Link href="/admin/writer">Writer</Link>
               <Link href="/admin/category">Category</Link>
               <Link href="/admin/subcategory">Subcategory</Link>
-              <Link href="/admin/publishers">Publishers</Link>
               <Link href="/admin/users">Users</Link>
               <Link href="/admin/suggestion">Suggested</Link>
               <Link href="/admin/setting">Setting</Link>
@@ -67,6 +66,7 @@ const AdminHeader: React.FC = () => {
               <Link href="/admin/element/main-page/home-main">Builder</Link>
 
               <button
+                className="btnR"
                 onClick={() => {
                   handleLogOut("/auth");
                 }}

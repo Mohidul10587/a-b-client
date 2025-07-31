@@ -1,18 +1,21 @@
 // src/types/product.d.ts
 
 export interface IProduct {
+  titleEn: string;
   // A
   ISBN: string;
   _id?: string;
 
   // B
   binding: string;
-
+  brand: any;
   // C
   category: any;
 
   // D
   description: string;
+  display_2: boolean;
+  display: boolean;
 
   // E
   edition: string;
@@ -40,12 +43,12 @@ export interface IProduct {
 
   // P
   productType: string;
-  publisher: string;
 
   // R
   regularPrice: number;
 
   // S
+  seller: any;
   sellingPrice: number;
   shippingInside: number;
   shippingOutside: number;
