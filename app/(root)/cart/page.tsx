@@ -134,7 +134,7 @@ const Cart = () => {
   };
 
   const decreaseQuantity = (id: string) => {
-    if (user._id && sessionStatus === "authenticated") {
+    if (user?._id && sessionStatus === "authenticated") {
       updateProductQuantityInDataBase(
         user._id,
         id,
