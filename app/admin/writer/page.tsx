@@ -137,13 +137,13 @@ const IndexPage: React.FC = () => {
                     <td className="py-2">{writer.rating}</td>
                     <td className="py-3 px-4 text-right space-x-2">
                       <Link
-                        className="btnOrange inline-block"
+                        className="btnO inline-block"
                         href={`/admin/writer/${writer._id}`}
                       >
                         Edit
                       </Link>
                       <button
-                        className="btnRed inline-block"
+                        className="btnR inline-block"
                         onClick={() => deleteWriter(writer._id)}
                       >
                         Delete

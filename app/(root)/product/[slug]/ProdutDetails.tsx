@@ -19,6 +19,7 @@ import {
 } from "react-icons/fa";
 import { AiOutlineHeart } from "react-icons/ai";
 import RelatedProducts from "./RelatedProducts";
+import WishListButton from "@/components/WishListButton";
 
 interface ProductDetailsProps {
   product: any;
@@ -157,10 +158,14 @@ export const ProductDetails = ({
                 <FaShoppingCart />
                 <span>Add to Cart</span>
               </button>
-              <button className="bg-pink-500 text-white flex items-center justify-center space-x-2 py-2 px-4 rounded shadow hover:bg-pink-600 w-full">
-                <AiOutlineHeart />
+              <WishListButton
+                className="bg-pink-500 text-white flex items-center justify-center space-x-2 py-2 px-4 rounded shadow hover:bg-pink-600 w-full"
+                apiEndPoint={"wishlist/addToWishlist"}
+                productId={product._id}
+              >
                 <span>Save for Later</span>
-              </button>
+              </WishListButton>
+
               <button
                 className="bg-green-500 text-white flex items-center justify-center space-x-2 py-2 px-4 rounded shadow hover:bg-green-600 w-full"
                 onClick={() => {

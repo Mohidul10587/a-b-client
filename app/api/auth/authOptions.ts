@@ -26,7 +26,7 @@ declare module "next-auth" {
   interface Session {
     provider?: string;
     refreshToken?: string;
-    user: IUser & { slug?: string };
+    user: IUser;
   }
 }
 
@@ -41,6 +41,8 @@ declare module "next-auth/jwt" {
     slug?: string;
     provider?: string;
     refreshToken?: string;
+    isUser?: boolean;
+    isSeller?: boolean;
   }
 }
 
@@ -143,6 +145,8 @@ export const authOptions: NextAuthOptions = {
         token.provider = u.authProvider ?? token.provider;
         token.refreshToken =
           (user as any).refreshToken ?? token.refreshToken ?? undefined;
+        token.isUser = u.isUser; // fallback if missing
+        token.isSeller = u.isSeller; // fallback if missing
       }
       return token;
     },
@@ -157,6 +161,8 @@ export const authOptions: NextAuthOptions = {
         phone: token.phone,
         role: token.role as string,
         slug: token.slug,
+        isUser: token.isUser,
+        isSeller: token.isSeller,
       } as any;
 
       session.provider = token.provider;

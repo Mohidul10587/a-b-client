@@ -2,7 +2,7 @@
 
 import useSWR from "swr";
 import { useParams } from "next/navigation";
-import Form from "../Form";
+import Form from "../../Form";
 import { fetcher } from "@/app/shared/fetcher";
 
 const IndexPage = () => {

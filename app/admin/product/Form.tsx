@@ -13,18 +13,17 @@ import { languages } from "@/app/shared/language";
 import { IProduct } from "@/types/product";
 import { req } from "@/app/shared/request";
 import { useData } from "@/app/DataContext";
+import { userAgent } from "next/server";
 
 const Form: React.FC<Props<IProduct>> = ({
   id,
   initialData,
   pagePurpose = "add",
 }) => {
-  const { showModal } = useData();
+  const { user, showModal } = useData();
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [imageType, setImageType] = useState("");
   const [publishers, setPublishers] = useState<any[]>([]);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalContent, setModalContent] = useState("");
   const [writers, setWriters] = useState<IWriter[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [suggestions, setSuggestions] = useState<ISuggestion[]>([]);
@@ -97,7 +96,8 @@ const Form: React.FC<Props<IProduct>> = ({
     fetchSuggestion();
     fetchWriters();
     fetchCategories();
-  }, []);
+    setData({ ...data, seller: user._id });
+  }, [user]);
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const categoryId = e.target.value;
@@ -120,7 +120,6 @@ const Form: React.FC<Props<IProduct>> = ({
         (sub: any) => sub._id === subcategoryId
       ) || null;
     setSelectedSubcategory(subcategory);
-
     setData({ ...data, subcategory: subcategoryId });
   };
 

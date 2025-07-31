@@ -5,7 +5,6 @@ import { useSession } from "next-auth/react";
 import { ISettings } from "@/types/settings";
 import { getTotalCartCount } from "@/components/AddToCart";
 import { fetcher } from "./shared/fetcher";
-import { defaultUser } from "./shared/defaultUser";
 import Modal from "@/components/Modal";
 import { useMergeLocalProducts } from "./hooks/useMergeLocalProducts";
 import { req } from "./shared/request";
@@ -32,6 +31,7 @@ export const DataProvider: React.FC<{
   const [numberOfCartProduct, setNumberOfCartProducts] = useState<number>(0);
   const [thisProductQuantity, setThisProductQuantity] = useState<number>(0);
   const { data, status } = useSession();
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [modalType, setModalType] = useState<infoType>("success");
@@ -50,7 +50,7 @@ export const DataProvider: React.FC<{
     isLoading,
   } = useSWR(`settings`, fetcher);
   const settings = response?.item;
-  
+
   const userId = data?.user?._id;
   const refreshToken = data?.refreshToken;
   useEffect(() => {

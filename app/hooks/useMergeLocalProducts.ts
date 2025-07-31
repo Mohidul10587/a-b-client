@@ -7,8 +7,9 @@ export function useMergeLocalProducts(): number | null {
   const [total, setTotal] = useState<number | null>(null);
 
   useEffect(() => {
-    if (status !== "authenticated") return;
     const cartData = localStorage.getItem("cartData");
+    if (status !== "authenticated" || !cartData) return;
+
     const products = JSON.parse(cartData as string);
 
     fetch(`${apiUrl}/cart/create`, {

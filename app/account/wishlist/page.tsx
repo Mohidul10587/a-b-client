@@ -4,30 +4,25 @@ import Image from "next/image";
 import useSWR from "swr";
 import { apiUrl } from "@/app/shared/urls";
 import { useData } from "@/app/DataContext";
+import { fetcher } from "@/app/shared/fetcher";
 
 // Fetcher function for SWR
-const fetcher = (url: string) =>
-  fetch(url, { credentials: "include" }).then((res) => res.json());
 
 const Wishlist = () => {
   const { settings } = useData();
   // Retrieve the user ID from local storage
-  const id =
-    typeof window !== "undefined" ? localStorage.getItem("myId") : null;
 
   // Use SWR to fetch the wishlist data
-  const { data, error, mutate } = useSWR(
-    id ? `${apiUrl}/wishlist` : null,
-    fetcher
-  );
+  const { data, error, mutate } = useSWR(`wishlist/getWishlist`, fetcher);
 
-  const wishlist = data?.wishlist?.items || [];
+  const wishlist = data ? data.items : [];
+  
   const reversedList = [...wishlist].reverse();
 
-  const handleDeleteProduct = async (productId: string) => {
+  const handleDeleteProduct = async (product: string) => {
     try {
       const response = await fetch(
-        `${apiUrl}/wishlist/deleteSingle/${productId}`,
+        `${apiUrl}/wishlist/deleteSingle/${product}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -41,9 +36,7 @@ const Wishlist = () => {
           ...data,
           wishlist: {
             ...data.wishlist,
-            items: wishlist.filter(
-              (item: any) => item.productId._id !== productId
-            ),
+            items: wishlist.filter((item: any) => item.product._id !== product),
           },
         });
       }
@@ -71,7 +64,7 @@ const Wishlist = () => {
 
   if (error) return <div>Error loading wishlist.</div>;
   if (!data) return <div>Loading...</div>;
-
+  
   return (
     <div className="container">
       {wishlist.length === 0 ? (
@@ -92,42 +85,42 @@ const Wishlist = () => {
           <div>
             {reversedList.map((item: any) => (
               <div
-                key={item.productId._id}
+                key={item.product._id}
                 className="flex items-center justify-between rounded-md bg-white p-2 mb-2"
               >
                 <Link
-                  href={`/${item.productId.slug}`}
+                  href={`/${item.product.slug}`}
                   className="flex items-center justify-start gap-2"
                 >
                   <Image
-                    src={item.productId.photo || "/default.jpg"}
-                    alt={item.productId.title}
+                    src={item.product.img || "/default.jpg"}
+                    alt={item.product.titleEnglish}
                     width={80}
                     height={80}
                     className="w-14 h-14 object-cover"
                   />
                   <div>
                     <h3 className="text-lg line-clamp-1 text-gray-700">
-                      {item.productId.title}
+                      {item.product.title}
                     </h3>
                     <div className="flex items-center space-x-1">
                       <p className="text-gray-500 font-bold">
                         {settings?.currencySymbol}{" "}
                         {new Intl.NumberFormat().format(
-                          item.productId.sellingPrice
+                          item.product.sellingPrice
                         )}
                       </p>
                       <del className="text-gray-500">
                         {settings?.currencySymbol}{" "}
                         {new Intl.NumberFormat().format(
-                          item.productId.regularPrice
+                          item.product.regularPrice
                         )}
                       </del>
                     </div>
                   </div>
                 </Link>
                 <div className="flex items-center md:justify-end justify-center gap-3">
-                  <Link href={`/${item.productId.slug}`}>
+                  <Link href={`/${item.product.slug}`}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="25"
@@ -140,9 +133,7 @@ const Wishlist = () => {
                       />
                     </svg>
                   </Link>
-                  <button
-                    onClick={() => handleDeleteProduct(item.productId._id)}
-                  >
+                  <button onClick={() => handleDeleteProduct(item.product._id)}>
                     <svg
                       className="text-red-500"
                       xmlns="http://www.w3.org/2000/svg"

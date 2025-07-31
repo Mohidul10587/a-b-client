@@ -90,11 +90,11 @@ const LayoutTop: FC<{
                   { title: "Wishlist", link: `/account/wishlist` },
                   {
                     title: "Seller dashboard",
-                    link: `/account/seller-dashboard`,
+                    link: `/account/dashboard`,
                   },
                   {
                     title: "Seller product",
-                    link: `/account/seller-product`,
+                    link: `/account/product`,
                   },
                   {
                     title: "Product Suggestion",
@@ -102,11 +102,11 @@ const LayoutTop: FC<{
                   },
                   {
                     title: "Seller Setting",
-                    link: `/account/seller-setting`,
+                    link: `/account/s-setting`,
                   },
                   {
                     title: "Seller withdraw",
-                    link: `/account/seller-withdraw`,
+                    link: `/account/withdraw`,
                   },
                   {
                     title: "Builder",

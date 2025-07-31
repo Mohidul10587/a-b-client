@@ -112,13 +112,13 @@ const IndexPage: React.FC = () => {
                     <td className="py-3 px-4 text-right space-x-2">
                       <Link
                         href={`/admin/category/edit/${p._id}`}
-                        className="btnOrange"
+                        className="btnO"
                       >
                         Edit
                       </Link>
                       <button
                         onClick={() => handleDelete(p._id)}
-                        className="btnRed"
+                        className="btnR"
                       >
                         Delete
                       </button>
@@ -149,16 +149,10 @@ const IndexPage: React.FC = () => {
                   </div>
                 </div>
                 <div className="mt-2 flex gap-4">
-                  <Link
-                    href={`/admin/category/edit/${p._id}`}
-                    className="btnOrange"
-                  >
+                  <Link href={`/admin/category/edit/${p._id}`} className="btnO">
                     Edit
                   </Link>
-                  <button
-                    onClick={() => handleDelete(p._id)}
-                    className="btnRed"
-                  >
+                  <button onClick={() => handleDelete(p._id)} className="btnR">
                     Delete
                   </button>
                 </div>
